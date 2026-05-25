@@ -9,7 +9,6 @@
 <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
 
 <style>
-
 *{
 margin:0;
 padding:0;
@@ -352,121 +351,86 @@ text-align:center;
 color:#64748b;
 font-size:13px;
 }
-
 </style>
 </head>
 
 <body>
 
 <header>
-
 <div class="logo">
 ECC <span>INSTITUTIONAL AI</span>
 </div>
-
 <div class="status">
 <div class="dot"></div>
 <div>LIVE MARKET</div>
 <div id="clock"></div>
 </div>
-
 </header>
 
 <div class="container">
-
 <div>
-
 <div class="card chart-card">
-
 <div class="topbar">
-
 <div>
-
 <div class="pair" id="pairName">BTCUSDT</div>
-
 <div class="price green" id="livePrice">0.00</div>
-
 </div>
-
 <div class="timeframes">
-
 <button class="tf active">1m</button>
 <button class="tf">5m</button>
 <button class="tf">15m</button>
 <button class="tf">1H</button>
-
 </div>
-
 </div>
-
 <div id="chart"></div>
-
 </div>
 
 <div class="card">
-
 <h2>📊 ECC Institutional Indicators</h2>
-
 <div class="indicators">
-
 <div class="ind">
 <h4>RSI</h4>
 <p id="rsi">0</p>
 </div>
-
 <div class="ind">
 <h4>MACD</h4>
 <p id="macd">0</p>
 </div>
-
 <div class="ind">
 <h4>ATR</h4>
 <p id="atr">0</p>
 </div>
-
 <div class="ind">
 <h4>EMA20</h4>
 <p id="ema20">0</p>
 </div>
-
 </div>
 
 <div class="bias">
-
 <div class="bias-row">
 <span>1H Bias</span>
 <span id="bias1h">Neutral</span>
 </div>
-
 <div class="bias-row">
 <span>15M Momentum</span>
 <span id="bias15m">Neutral</span>
 </div>
-
 <div class="bias-row">
 <span>5M Entry</span>
 <span id="bias5m">Neutral</span>
 </div>
-
 <div class="bias-row">
 <span>Smart Money</span>
 <span id="smc">Waiting</span>
 </div>
-
 </div>
-
 </div>
 
 <div class="card">
-
 <h2>📜 Institutional Trade Journal</h2>
-
 <div class="journal">
-
 <table>
-
 <thead>
-
 <tr>
 <th>Time</th>
 <th>Pair</th>
@@ -476,34 +440,23 @@ ECC <span>INSTITUTIONAL AI</span>
 <th>SL</th>
 <th>Conf</th>
 </tr>
-
 </thead>
-
 <tbody id="journalBody"></tbody>
-
 </table>
-
 </div>
-
 </div>
-
 </div>
 
 <div>
-
 <div class="card">
-
 <h2>🎯 ECC AI SIGNAL GENERATOR</h2>
-
 <div class="pair-grid">
-
-<button class="pair-btn active" onclick="changePair('btcusdt')">BTC</button>
-<button class="pair-btn" onclick="changePair('ethusdt')">ETH</button>
-<button class="pair-btn" onclick="changePair('bnbusdt')">BNB</button>
-<button class="pair-btn" onclick="changePair('xrpusdt')">XRP</button>
-<button class="pair-btn" onclick="changePair('solusdt')">SOL</button>
-<button class="pair-btn" onclick="changePair('XAUUSD')">XAU</button>
-
+<button class="pair-btn active" onclick="changePair('btcusdt', event)">BTC</button>
+<button class="pair-btn" onclick="changePair('ethusdt', event)">ETH</button>
+<button class="pair-btn" onclick="changePair('bnbusdt', event)">BNB</button>
+<button class="pair-btn" onclick="changePair('xrpusdt', event)">XRP</button>
+<button class="pair-btn" onclick="changePair('solusdt', event)">SOL</button>
+<button class="pair-btn" onclick="changePair('XAUUSD', event)">XAU</button>
 </div>
 
 <button class="analyze" onclick="analyzeMarket()">
@@ -511,71 +464,48 @@ ECC <span>INSTITUTIONAL AI</span>
 </button>
 
 <div class="signal-box">
-
-<div class="signal yellow" id="signalText">
-WAIT
-</div>
-
-<div class="reason" id="reason">
-Waiting market confluence...
-</div>
-
+<div class="signal yellow" id="signalText">WAIT</div>
+<div class="reason" id="reason">Waiting market confluence...</div>
 <div class="grid">
-
 <div class="small">
 <div class="label">ENTRY</div>
 <div class="val" id="entry">0</div>
 </div>
-
 <div class="small">
 <div class="label">TAKE PROFIT</div>
 <div class="val green" id="tp">0</div>
 </div>
-
 <div class="small">
 <div class="label">STOP LOSS</div>
 <div class="val red" id="sl">0</div>
 </div>
-
 <div class="small">
 <div class="label">CONFIDENCE</div>
 <div class="val" id="conf">0%</div>
-
 <div class="progress">
 <div class="fill" id="fill"></div>
 </div>
-
 </div>
-
 </div>
-
 </div>
-
 </div>
 
 <div class="card">
-
 <h2>📌 ECC Smart Money Levels</h2>
-
 <div class="level res">
 <span>Resistance</span>
 <span id="resistance">0</span>
 </div>
-
 <div class="level fair">
 <span>Fair Value</span>
 <span id="fairValue">0</span>
 </div>
-
 <div class="level sup">
 <span>Support</span>
 <span id="support">0</span>
 </div>
-
 </div>
-
 </div>
-
 </div>
 
 <footer>
@@ -583,316 +513,265 @@ ECC INSTITUTIONAL AI ENGINE — SMART MONEY LIVE TRADING SYSTEM
 </footer>
 
 <script>
+const FINNHUB_API = "d8a77ahr01qplfv20fl0d8a77ahr01qplfv20flg";
 
-const FINNHUB_API="YOUR_FINNHUB_API_KEY";
-
-let currentPair='btcusdt';
-let closes=[];
-let highs=[];
-let lows=[];
+let currentPair = 'btcusdt';
+let closes = [];
+let highs = [];
+let lows = [];
 let ws;
+let goldInterval;
 
-const chart=LightweightCharts.createChart(document.getElementById('chart'),{
-layout:{
-background:{color:'#0f172a'},
-textColor:'#d1d4dc'
+const chart = LightweightCharts.createChart(document.getElementById('chart'), {
+layout: {
+background: { color: '#0f172a' },
+textColor: '#d1d4dc'
 },
-grid:{
-vertLines:{color:'#1e293b'},
-horzLines:{color:'#1e293b'}
+grid: {
+vertLines: { color: '#1e293b' },
+horzLines: { color: '#1e293b' }
 },
-crosshair:{
-mode:1
-},
-rightPriceScale:{
-borderColor:'#1e293b'
-},
-timeScale:{
-borderColor:'#1e293b'
-}
+crosshair: { mode: 1 },
+rightPriceScale: { borderColor: '#1e293b' },
+timeScale: { borderColor: '#1e293b' }
 });
 
-const candleSeries=chart.addCandlestickSeries({
-upColor:'#22c55e',
-downColor:'#ef4444',
-borderVisible:false,
-wickUpColor:'#22c55e',
-wickDownColor:'#ef4444'
+const candleSeries = chart.addCandlestickSeries({
+upColor: '#22c55e',
+downColor: '#ef4444',
+borderVisible: false,
+wickUpColor: '#22c55e',
+wickDownColor: '#ef4444'
 });
 
-function EMA(data,period){
-
-const k=2/(period+1);
-
-let ema=data[0];
-
-for(let i=1;i<data.length;i++){
-
-ema=data[i]*k+ema*(1-k);
-
+function EMA(data, period) {
+if (data.length === 0) return 0;
+const k = 2 / (period + 1);
+let ema = data[0];
+for (let i = 1; i < data.length; i++) {
+ema = data[i] * k + ema * (1 - k);
 }
-
 return ema;
-
 }
 
-function RSI(period=14){
-
-if(closes.length<period+1)return 50;
-
-let gains=0;
-let losses=0;
-
-for(let i=closes.length-period;i<closes.length;i++){
-
-const diff=closes[i]-closes[i-1];
-
-if(diff>=0){
-gains+=diff;
-}else{
-losses+=Math.abs(diff);
+function RSI(period = 14) {
+if (closes.length < period + 1) return 50;
+let gains = 0;
+let losses = 0;
+for (let i = closes.length - period; i < closes.length; i++) {
+const diff = closes[i] - closes[i - 1];
+if (diff >= 0) {
+gains += diff;
+} else {
+losses += Math.abs(diff);
+}
+}
+const rs = gains / (losses || 1);
+return 100 - (100 / (1 + rs));
 }
 
-}
-
-const rs=gains/(losses||1);
-
-return 100-(100/(1+rs));
-
-}
-
-function ATR(period=14){
-
-if(highs.length<period)return 0;
-
-let trs=[];
-
-for(let i=1;i<highs.length;i++){
-
-const tr=Math.max(
-highs[i]-lows[i],
-Math.abs(highs[i]-closes[i-1]),
-Math.abs(lows[i]-closes[i-1])
+function ATR(period = 14) {
+if (highs.length < period) return 0;
+let trs = [];
+for (let i = 1; i < highs.length; i++) {
+const tr = Math.max(
+highs[i] - lows[i],
+Math.abs(highs[i] - closes[i - 1]),
+Math.abs(lows[i] - closes[i - 1])
 );
-
 trs.push(tr);
-
+}
+if(trs.length === 0) return 0;
+return trs.slice(-period).reduce((a, b) => a + b, 0) / Math.min(period, trs.length);
 }
 
-return trs.slice(-period).reduce((a,b)=>a+b,0)/period;
-
+function MACD() {
+if (closes.length < 26) return 0;
+const ema12 = EMA(closes.slice(-12), 12);
+const ema26 = EMA(closes.slice(-26), 26);
+return ema12 - ema26;
 }
 
-function MACD(){
+function updateIndicators(price) {
+const currentCloses = closes.length > 0 ? [...closes, price] : [price];
 
-if(closes.length<30)return 0;
+const rsi = RSI();
+const atr = ATR() || (price * 0.001); 
+const macd = MACD();
+const ema20 = EMA(currentCloses.slice(-20), 20);
 
-const ema12=EMA(closes.slice(-12),12);
+document.getElementById('rsi').innerText = rsi.toFixed(2);
+document.getElementById('atr').innerText = atr.toFixed(2);
+document.getElementById('macd').innerText = macd.toFixed(2);
+document.getElementById('ema20').innerText = ema20.toFixed(2);
 
-const ema26=EMA(closes.slice(-26),26);
+document.getElementById('support').innerText = (price - atr * 1.5).toFixed(2);
+document.getElementById('resistance').innerText = (price + atr * 1.5).toFixed(2);
+document.getElementById('fairValue').innerText = (ema20).toFixed(2);
 
-return ema12-ema26;
+const bias1h = price > ema20 ? 'Bullish' : 'Bearish';
+const bias15m = rsi > 50 ? 'Bullish' : 'Bearish';
+const bias5m = macd > 0 ? 'Bullish' : 'Bearish';
 
+document.getElementById('bias1h').innerText = bias1h;
+document.getElementById('bias15m').innerText = bias15m;
+document.getElementById('bias5m').innerText = bias5m;
+
+if (price > ema20 && rsi > 53) {
+document.getElementById('smc').innerText = 'Accumulation';
+} else if (price < ema20 && rsi < 47) {
+document.getElementById('smc').innerText = 'Distribution';
+} else {
+document.getElementById('smc').innerText = 'Neutral';
+}
 }
 
-function updateIndicators(price){
+function connectBinance(symbol) {
+if (ws) ws.close();
+closes = []; highs = []; lows = [];
 
-const rsi=RSI();
-const atr=ATR();
-const macd=MACD();
-const ema20=EMA(closes.slice(-20),20);
+ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@kline_1m`);
 
-document.getElementById('rsi').innerText=rsi.toFixed(2);
-document.getElementById('atr').innerText=atr.toFixed(2);
-document.getElementById('macd').innerText=macd.toFixed(2);
-document.getElementById('ema20').innerText=ema20.toFixed(2);
+ws.onmessage = (event) => {
+const msg = JSON.parse(event.data);
+const k = msg.k;
+const close = parseFloat(k.c);
+const high = parseFloat(k.h);
+const low = parseFloat(k.l);
 
-document.getElementById('support').innerText=(price-atr*1.5).toFixed(2);
-
-document.getElementById('resistance').innerText=(price+atr*1.5).toFixed(2);
-
-document.getElementById('fairValue').innerText=(ema20).toFixed(2);
-
-const bias1h=price>ema20?'Bullish':'Bearish';
-
-const bias15m=rsi>50?'Bullish':'Bearish';
-
-const bias5m=macd>0?'Bullish':'Bearish';
-
-document.getElementById('bias1h').innerText=bias1h;
-document.getElementById('bias15m').innerText=bias15m;
-document.getElementById('bias5m').innerText=bias5m;
-
-if(price>ema20 && rsi>55){
-
-document.getElementById('smc').innerText='Accumulation';
-
-}else if(price<ema20 && rsi<45){
-
-document.getElementById('smc').innerText='Distribution';
-
-}else{
-
-document.getElementById('smc').innerText='Neutral';
-
-}
-
-}
-
-function connectBinance(symbol){
-
-if(ws) ws.close();
-
-closes=[];
-highs=[];
-lows=[];
-
-ws=new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@kline_1m`);
-
-ws.onmessage=(event)=>{
-
-const msg=JSON.parse(event.data);
-
-const k=msg.k;
-
-const candle={
-time:Math.floor(k.t/1000),
-open:parseFloat(k.o),
-high:parseFloat(k.h),
-low:parseFloat(k.l),
-close:parseFloat(k.c)
+const candle = {
+time: Math.floor(k.t / 1000),
+open: parseFloat(k.o),
+high: high,
+low: low,
+close: close
 };
 
 candleSeries.update(candle);
+document.getElementById('livePrice').innerText = close.toFixed(2);
 
-const close=parseFloat(k.c);
-
-document.getElementById('livePrice').innerText=close.toFixed(2);
-
+// SINKRONISASI LOGIKA LILIN: simpan hanya saat candle 1 menit resmi ditutup (close)
+if (k.x) {
 closes.push(close);
-highs.push(parseFloat(k.h));
-lows.push(parseFloat(k.l));
+highs.push(high);
+lows.push(low);
 
-if(closes.length>500){
-closes.shift();
-highs.shift();
-lows.shift();
+if (closes.length > 300) {
+closes.shift(); highs.shift(); lows.shift();
+}
 }
 
 updateIndicators(close);
-
 };
-
 }
 
-async function connectGold(){
+async function connectGold() {
+if (ws) ws.close();
+if (goldInterval) clearInterval(goldInterval);
+closes = []; highs = []; lows = [];
 
-if(ws) ws.close();
+const fetchGoldPrice = async () => {
+try {
+const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=OANDA:XAU_USD&token=${FINNHUB_API}`);
+const data = await res.json();
+if(!data.c) return;
+const price = data.c;
 
-setInterval(async()=>{
-
-try{
-
-const res=await fetch(`https://finnhub.io/api/v1/quote?symbol=OANDA:XAU_USD&token=${FINNHUB_API}`);
-
-const data=await res.json();
-
-const price=data.c;
-
-document.getElementById('livePrice').innerText=price.toFixed(2);
+document.getElementById('livePrice').innerText = price.toFixed(2);
 
 closes.push(price);
+highs.push(data.h || price);
+lows.push(data.l || price);
 
-if(closes.length>500){
-closes.shift();
+if (closes.length > 300) {
+closes.shift(); highs.shift(); lows.shift();
 }
+
+candleSeries.update({
+time: Math.floor(Date.now() / 1000),
+open: data.o || price,
+high: data.h || price,
+low: data.l || price,
+close: price
+});
 
 updateIndicators(price);
+} catch (e) {
+console.log("Error Fetching Gold API:", e);
+}
+};
 
-}catch(e){
-
-console.log(e);
-
+await fetchGoldPrice(); 
+goldInterval = setInterval(fetchGoldPrice, 4000); 
 }
 
-},3000);
+function analyzeMarket() {
+const price = parseFloat(document.getElementById('livePrice').innerText);
+const rsi = parseFloat(document.getElementById('rsi').innerText);
+const atr = parseFloat(document.getElementById('atr').innerText) || (price * 0.001);
+const macd = parseFloat(document.getElementById('macd').innerText);
+const ema20 = parseFloat(document.getElementById('ema20').innerText);
+const smc = document.getElementById('smc').innerText;
 
+let bullishPoints = 0;
+let bearishPoints = 0;
+
+// Sistem pembobotan independen terpisah antara Bullish dan Bearish
+if (rsi > 53) bullishPoints += 25;
+if (rsi < 47) bearishPoints += 25;
+
+if (macd > 0) bullishPoints += 25;
+if (macd <= 0) bearishPoints += 25;
+
+if (price > ema20) bullishPoints += 25;
+if (price <= ema20) bearishPoints += 25;
+
+if (smc === 'Accumulation') bullishPoints += 25;
+if (smc === 'Distribution') bearishPoints += 25;
+
+let signal = 'WAIT';
+let reason = 'Market Confluence tidak mencukupi';
+let color = 'yellow';
+let confidence = 0;
+
+if (bullishPoints >= 75) {
+signal = 'BUY';
+reason = 'Confluence Bullish Kuat + Akumulasi Institusional Berjalan';
+color = 'green';
+confidence = bullishPoints;
+} else if (bearishPoints >= 75) {
+signal = 'SELL';
+reason = 'Confluence Bearish Kuat + Distribusi Institusional Berjalan';
+color = 'red';
+confidence = bearishPoints;
+} else {
+confidence = Math.max(bullishPoints, bearishPoints);
 }
 
-function analyzeMarket(){
+const tp = signal === 'BUY' ? price + (atr * 2) : price - (atr * 2);
+const sl = signal === 'BUY' ? price - (atr * 1.5) : price + (atr * 1.5);
 
-const price=parseFloat(document.getElementById('livePrice').innerText);
+document.getElementById('signalText').innerText = signal;
+document.getElementById('signalText').className = 'signal ' + color;
+document.getElementById('reason').innerText = reason;
+document.getElementById('entry').innerText = price.toFixed(2);
+document.getElementById('tp').innerText = tp.toFixed(2);
+document.getElementById('sl').innerText = sl.toFixed(2);
+document.getElementById('conf').innerText = confidence + '%';
+document.getElementById('fill').style.width = confidence + '%';
+document.getElementById('fill').style.background = color === 'green' ? '#22c55e' : (color === 'red' ? '#ef4444' : '#facc15');
 
-const rsi=parseFloat(document.getElementById('rsi').innerText);
-
-const atr=parseFloat(document.getElementById('atr').innerText);
-
-const macd=parseFloat(document.getElementById('macd').innerText);
-
-let score=0;
-
-if(rsi>55) score+=25;
-if(macd>0) score+=25;
-if(price>parseFloat(document.getElementById('ema20').innerText)) score+=25;
-if(document.getElementById('smc').innerText==='Accumulation') score+=25;
-
-let signal='WAIT';
-let reason='No strong confluence';
-let color='yellow';
-
-if(score>=75){
-
-signal='BUY';
-reason='Strong bullish confluence + smart money accumulation';
-color='green';
-
-}else if(score<=25){
-
-signal='SELL';
-reason='Strong bearish confluence + institutional distribution';
-color='red';
-
+addJournal(signal, price, tp, sl, confidence);
 }
 
-const tp=signal==='BUY'
-? price+(atr*2)
-: price-(atr*2);
+function addJournal(signal, entry, tp, sl, score) {
+const tbody = document.getElementById('journalBody');
+const row = document.createElement('tr');
+let badge = 'badge-wait';
+if (signal === 'BUY') badge = 'badge-buy';
+if (signal === 'SELL') badge = 'badge-sell';
 
-const sl=signal==='BUY'
-? price-atr
-: price+atr;
-
-document.getElementById('signalText').innerText=signal;
-document.getElementById('signalText').className='signal '+color;
-
-document.getElementById('reason').innerText=reason;
-
-document.getElementById('entry').innerText=price.toFixed(2);
-
-document.getElementById('tp').innerText=tp.toFixed(2);
-
-document.getElementById('sl').innerText=sl.toFixed(2);
-
-document.getElementById('conf').innerText=score+'%';
-
-document.getElementById('fill').style.width=score+'%';
-
-addJournal(signal,price,tp,sl,score);
-
-}
-
-function addJournal(signal,entry,tp,sl,score){
-
-const tbody=document.getElementById('journalBody');
-
-const row=document.createElement('tr');
-
-let badge='badge-wait';
-
-if(signal==='BUY') badge='badge-buy';
-if(signal==='SELL') badge='badge-sell';
-
-row.innerHTML=`
+row.innerHTML = `
 <td>${new Date().toLocaleTimeString()}</td>
 <td>${currentPair.toUpperCase()}</td>
 <td><span class="${badge}">${signal}</span></td>
@@ -901,44 +780,42 @@ row.innerHTML=`
 <td>${sl.toFixed(2)}</td>
 <td>${score}%</td>
 `;
-
 tbody.prepend(row);
-
 }
 
-function changePair(pair){
+function changePair(pair, event) {
+if (goldInterval) clearInterval(goldInterval);
 
-document.querySelectorAll('.pair-btn').forEach(btn=>{
+document.querySelectorAll('.pair-btn').forEach(btn => {
 btn.classList.remove('active');
 });
 
+if (event && event.target) {
 event.target.classList.add('active');
+} else {
+const buttons = document.querySelectorAll('.pair-grid .pair-btn');
+buttons.forEach(btn => {
+if(btn.innerText.toLowerCase() === pair.replace('usdt','').toLowerCase()) {
+btn.classList.add('active');
+}
+});
+}
 
-currentPair=pair;
+currentPair = pair;
+document.getElementById('pairName').innerText = pair.toUpperCase();
 
-document.getElementById('pairName').innerText=pair.toUpperCase();
-
-if(pair==='XAUUSD'){
-
+if (pair === 'XAUUSD') {
 connectGold();
-
-}else{
-
+} else {
 connectBinance(pair);
-
+}
 }
 
-}
-
-setInterval(()=>{
-
-document.getElementById('clock').innerText=
-new Date().toLocaleTimeString();
-
-},1000);
+setInterval(() => {
+document.getElementById('clock').innerText = new Date().toLocaleTimeString();
+}, 1000);
 
 connectBinance('btcusdt');
-
 </script>
 
 </body>

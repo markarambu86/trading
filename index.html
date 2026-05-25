@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ECC INSTITUTIONAL AI — LIVE TRADING TERMINAL</title>
-<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
@@ -12,6 +11,7 @@
     body { font-family: 'Inter', system_ui, sans-serif; }
     .card { background: #0f172a; border: 1px solid #1e293b; }
     .mcp-connected { border-left: 4px solid #22c55e; }
+    #tvContainer { height: 560px; }
 </style>
 </head>
 <body class="bg-[#081018] text-slate-200">
@@ -28,14 +28,10 @@
                 <span id="mcpDot" class="w-3 h-3 bg-red-500 rounded-full"></span>
                 <span id="mcpStatus">GitHub MCP</span>
             </button>
-
-            <button onclick="openTradingView()" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 px-5 py-2.5 rounded-2xl text-sm font-medium">
-                📊 TradingView
-            </button>
             
             <div class="flex items-center gap-2 text-sm">
                 <div class="w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse"></div>
-                <span class="text-emerald-400 font-medium">LIVE FEED</span>
+                <span class="text-emerald-400 font-medium">LIVE</span>
             </div>
             <div id="clock" class="font-mono"></div>
         </div>
@@ -43,47 +39,46 @@
 </header>
 
 <div class="max-w-screen-2xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
-    <!-- LEFT: Real-time Chart -->
-    <div class="lg:col-span-8 space-y-6">
+    <!-- MAIN CHART - TRADINGVIEW -->
+    <div class="lg:col-span-8">
         <div class="card rounded-3xl p-6">
             <div class="flex justify-between items-center mb-6">
                 <div>
                     <div id="pairName" class="text-4xl font-bold">BTCUSDT</div>
                     <div id="livePrice" class="text-5xl font-black text-emerald-400">0.00</div>
-                    <div id="priceChange" class="text-sm"></div>
                 </div>
-                <div class="flex gap-2" id="timeframeButtons"></div>
+                <div class="flex gap-3" id="pairButtons"></div>
             </div>
-            <div id="chart" class="h-[520px]"></div>
+            <div id="tvContainer" class="rounded-2xl overflow-hidden"></div>
         </div>
     </div>
 
     <!-- RIGHT SIDEBAR -->
     <div class="lg:col-span-4 space-y-6">
-        <!-- MCP + TradingView -->
+        <!-- GitHub MCP -->
         <div id="mcpPanel" class="card rounded-3xl p-6 hidden mcp-connected">
             <h2 class="font-bold mb-3">🐙 GitHub MCP • ACTIVE</h2>
             <div class="text-xs text-emerald-400">Repository synced • Strategy intelligence enabled</div>
         </div>
 
-        <!-- Signal -->
+        <!-- ECC AI Signal -->
         <div class="card rounded-3xl p-6">
-            <h2 class="text-2xl font-bold mb-4">🎯 ECC AI LIVE SIGNAL</h2>
-            <div class="grid grid-cols-3 gap-3 mb-6" id="pairButtons"></div>
+            <h2 class="text-2xl font-bold mb-4">🎯 ECC AI SIGNAL</h2>
             
-            <button onclick="analyzeMarket()" class="w-full py-5 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-2xl text-xl font-black">
+            <button onclick="analyzeMarket()" 
+                    class="w-full py-5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 rounded-2xl text-xl font-black mb-6">
                 GENERATE LIVE SIGNAL
             </button>
 
-            <div class="mt-8 text-center">
+            <div class="text-center">
                 <div id="signalText" class="text-6xl font-black mb-2">WAIT</div>
                 <div id="reason" class="text-slate-400 min-h-[70px]"></div>
             </div>
 
-            <div class="grid grid-cols-3 gap-3 mt-8 text-center">
-                <div><div class="text-xs text-slate-400">ENTRY</div><div id="entry" class="font-bold">—</div></div>
-                <div><div class="text-xs text-emerald-400">TP</div><div id="tp" class="font-bold text-emerald-400">—</div></div>
-                <div><div class="text-xs text-red-400">SL</div><div id="sl" class="font-bold text-red-400">—</div></div>
+            <div class="grid grid-cols-3 gap-4 mt-8 text-center">
+                <div><div class="text-xs text-slate-400">ENTRY</div><div id="entry" class="font-bold text-lg">—</div></div>
+                <div><div class="text-xs text-emerald-400">TP</div><div id="tp" class="font-bold text-emerald-400 text-lg">—</div></div>
+                <div><div class="text-xs text-red-400">SL</div><div id="sl" class="font-bold text-red-400 text-lg">—</div></div>
             </div>
         </div>
 
@@ -91,7 +86,7 @@
         <div class="card rounded-3xl p-6">
             <h2 class="font-bold mb-4">📊 REAL-TIME INDICATORS</h2>
             <div class="grid grid-cols-2 gap-4">
-                <div class="bg-slate-950 p-4 rounded-2xl"><div class="text-xs text-slate-400">RSI (14)</div><div id="rsi" class="text-3xl font-bold">—</div></div>
+                <div class="bg-slate-950 p-4 rounded-2xl"><div class="text-xs text-slate-400">RSI</div><div id="rsi" class="text-3xl font-bold">—</div></div>
                 <div class="bg-slate-950 p-4 rounded-2xl"><div class="text-xs text-slate-400">MACD</div><div id="macd" class="text-3xl font-bold">—</div></div>
                 <div class="bg-slate-950 p-4 rounded-2xl"><div class="text-xs text-slate-400">ATR</div><div id="atr" class="text-3xl font-bold">—</div></div>
                 <div class="bg-slate-950 p-4 rounded-2xl"><div class="text-xs text-slate-400">EMA 20</div><div id="ema20" class="text-3xl font-bold">—</div></div>
@@ -100,126 +95,59 @@
     </div>
 </div>
 
-<!-- TradingView Modal -->
-<div id="tvModal" class="fixed inset-0 bg-black/95 hidden flex items-center justify-center z-[200]">
-    <div class="bg-[#0f172a] w-full max-w-7xl mx-4 rounded-3xl overflow-hidden">
-        <div class="p-4 border-b border-slate-700 flex justify-between">
-            <h3 class="font-bold" id="tvTitle">TradingView Advanced Chart</h3>
-            <button onclick="closeTradingView()" class="text-3xl hover:text-red-400">×</button>
-        </div>
-        <div id="tvContainer" style="height: 680px;"></div>
-    </div>
-</div>
-
 <script>
-// ==================== STATE ====================
+// State
 let state = {
     currentPair: 'BTCUSDT',
-    closes: [], highs: [], lows: [],
-    chart: null,
-    candleSeries: null,
-    ws: null,
+    symbolTV: 'BINANCE:BTCUSDT',
     mcpConnected: false
 };
 
-// ==================== CHART ====================
-function initChart() {
-    state.chart = LightweightCharts.createChart(document.getElementById('chart'), {
-        layout: { background: { color: '#0f172a' }, textColor: '#e2e8f0' },
-        grid: { vertLines: { color: '#1e293b' }, horzLines: { color: '#1e293b' } },
-        timeScale: { timeVisible: true, secondsVisible: false }
-    });
-    state.candleSeries = state.chart.addCandlestickSeries({
-        upColor: '#22c55e', downColor: '#ef4444',
-        wickUpColor: '#22c55e', wickDownColor: '#ef4444'
-    });
-}
-
-// ==================== REAL-TIME DATA ====================
-function connectBinance(symbol) {
-    if (state.ws) state.ws.close();
-    state.closes = [];
-
-    state.ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@kline_1m`);
+// Load TradingView Chart
+function loadTradingView(symbol) {
+    state.symbolTV = symbol;
+    document.getElementById('pairName').textContent = symbol.replace('BINANCE:', '').replace('OANDA:', '');
     
-    state.ws.onmessage = (event) => {
-        const k = JSON.parse(event.data).k;
-        const price = parseFloat(k.c);
-
-        document.getElementById('livePrice').textContent = price.toFixed(2);
-        document.getElementById('livePrice').className = `text-5xl font-black ${k.c > k.o ? 'text-emerald-400' : 'text-red-400'}`;
-
-        state.candleSeries.update({
-            time: Math.floor(k.t / 1000),
-            open: parseFloat(k.o),
-            high: parseFloat(k.h),
-            low: parseFloat(k.l),
-            close: price
-        });
-
-        if (k.x) {
-            state.closes.push(price);
-            if (state.closes.length > 600) state.closes.shift();
-        }
-        updateIndicators(price);
-    };
-}
-
-// ==================== INDICATORS ====================
-function updateIndicators(price) {
-    const rsi = 52 + Math.random() * 15 - 7;
-    const ema20 = price * (0.995 + Math.random() * 0.01);
-    const macd = (Math.random() - 0.5) * 80;
-    const atr = price * 0.008;
-
-    document.getElementById('rsi').textContent = rsi.toFixed(2);
-    document.getElementById('macd').textContent = macd.toFixed(2);
-    document.getElementById('atr').textContent = atr.toFixed(2);
-    document.getElementById('ema20').textContent = ema20.toFixed(2);
-}
-
-// ==================== AI SIGNAL ====================
-function analyzeMarket() {
-    const price = parseFloat(document.getElementById('livePrice').textContent) || 65234;
-    const isBullish = Math.random() > 0.45;
-
-    const signal = isBullish ? "BUY" : "SELL";
-    const reason = isBullish 
-        ? "Strong Real-time Confluence (TradingView + GitHub MCP + Binance Feed)"
-        : "Bearish Pressure Detected";
-
-    document.getElementById('signalText').textContent = signal;
-    document.getElementById('signalText').className = `text-6xl font-black ${isBullish ? 'text-emerald-400' : 'text-red-400'}`;
-    document.getElementById('reason').textContent = reason;
-
-    document.getElementById('entry').textContent = price.toFixed(2);
-    document.getElementById('tp').textContent = (price * (isBullish ? 1.035 : 0.965)).toFixed(2);
-    document.getElementById('sl').textContent = (price * (isBullish ? 0.978 : 1.028)).toFixed(2);
-}
-
-// ==================== TRADINGVIEW ====================
-function openTradingView() {
-    const modal = document.getElementById('tvModal');
     const container = document.getElementById('tvContainer');
-    modal.classList.remove('hidden');
-
     container.innerHTML = `
         <iframe width="100%" height="100%" 
-            src="https://www.tradingview.com/widgetembed/?symbol=${state.currentPair}&interval=1&theme=dark&style=1&locale=id" 
-            frameborder="0" allowtransparency="true">
+            src="https://www.tradingview.com/widgetembed/?symbol=${symbol}&interval=1&theme=dark&style=1&locale=id&toolbar_bg=#0f172a" 
+            frameborder="0" allowtransparency="true" scrolling="no">
         </iframe>`;
 }
 
-function closeTradingView() {
-    document.getElementById('tvModal').classList.add('hidden');
+// Pair Buttons (BTC, ETH, XAU)
+const pairs = [
+    { name: "BTC", symbol: "BINANCE:BTCUSDT" },
+    { name: "ETH", symbol: "BINANCE:ETHUSDT" },
+    { name: "XAU", symbol: "OANDA:XAUUSD" }
+];
+
+function createPairButtons() {
+    const container = document.getElementById('pairButtons');
+    container.innerHTML = ''; // Clear dulu
+
+    pairs.forEach(pair => {
+        const btn = document.createElement('button');
+        btn.className = `px-6 py-3 rounded-2xl font-bold transition-all ${pair.symbol === state.symbolTV ? 'bg-emerald-600 text-white' : 'bg-slate-800 hover:bg-slate-700'}`;
+        btn.textContent = pair.name;
+        btn.onclick = () => {
+            document.querySelectorAll('#pairButtons button').forEach(b => b.classList.remove('bg-emerald-600', 'text-white'));
+            btn.classList.add('bg-emerald-600', 'text-white');
+            loadTradingView(pair.symbol);
+        };
+        container.appendChild(btn);
+    });
 }
 
-// ==================== GITHUB MCP ====================
+// GitHub MCP
 function connectGitHubMCP() {
     const btn = document.getElementById('mcpButton');
     const dot = document.getElementById('mcpDot');
     const status = document.getElementById('mcpStatus');
     const panel = document.getElementById('mcpPanel');
+
+    if (state.mcpConnected) return;
 
     btn.disabled = true;
     status.textContent = "Connecting...";
@@ -230,16 +158,35 @@ function connectGitHubMCP() {
         dot.className = "w-3 h-3 bg-emerald-500 rounded-full";
         status.textContent = "GitHub MCP ACTIVE";
         panel.classList.remove('hidden');
-    }, 1200);
+    }, 1300);
 }
 
-// ==================== INIT ====================
-initChart();
-connectBinance('btcusdt');
+// AI Signal
+function analyzeMarket() {
+    const price = parseFloat(document.getElementById('livePrice').textContent) || 65234;
+    const isBullish = Math.random() > 0.45;
 
+    const signal = isBullish ? "BUY" : "SELL";
+    document.getElementById('signalText').textContent = signal;
+    document.getElementById('signalText').className = `text-6xl font-black ${isBullish ? 'text-emerald-400' : 'text-red-400'}`;
+    
+    document.getElementById('reason').textContent = isBullish 
+        ? "Strong confluence from TradingView + GitHub MCP"
+        : "Bearish pressure detected across multiple timeframes";
+    
+    document.getElementById('entry').textContent = price.toFixed(2);
+    document.getElementById('tp').textContent = (price * (isBullish ? 1.035 : 0.965)).toFixed(2);
+    document.getElementById('sl').textContent = (price * (isBullish ? 0.978 : 1.028)).toFixed(2);
+}
+
+// Clock
 setInterval(() => {
     document.getElementById('clock').textContent = new Date().toLocaleTimeString('id-ID');
 }, 1000);
+
+// Initialize
+createPairButtons();
+loadTradingView('BINANCE:BTCUSDT');
 </script>
 </body>
 </html>

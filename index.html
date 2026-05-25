@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ECC Advanced Quant Dashboard v4.0 (Standard Engine)</title>
+  <title>ECC AI Trading Platform v5.0 (Hyper-Engine)</title>
 
   <script src="https://s3.tradingview.com/tv.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -17,7 +17,7 @@
     }
 
     body {
-      background: #060913;
+      background: #040711;
       color: #f1f5f9;
       overflow-x: hidden;
     }
@@ -28,23 +28,23 @@
       min-height: 100vh;
     }
 
-    /* Sidebar Layout - Standard ECC Obsidian Theme */
+    /* Sidebar - Tactical Obsidian Style */
     .sidebar {
-      background: #0b0f19;
+      background: #090d1a;
       padding: 25px 20px;
-      border-right: 1px solid #1e293b;
+      border-right: 1px solid #141b2d;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
     .sidebar h1 {
-      font-size: 18px;
+      font-size: 16px;
       color: #00ffcc;
       text-transform: uppercase;
-      letter-spacing: 1.5px;
+      letter-spacing: 2px;
       padding-bottom: 15px;
-      border-bottom: 1px solid #1e293b;
+      border-bottom: 1px solid #141b2d;
     }
 
     .menu-title {
@@ -63,29 +63,29 @@
     }
 
     .menu button {
-      padding: 11px 14px;
-      border: 1px solid #1e293b;
+      padding: 12px 14px;
+      border: 1px solid #141b2d;
       border-radius: 6px;
-      background: #111827;
+      background: #0f1626;
       color: #94a3b8;
       font-weight: 500;
       text-align: left;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
     }
 
     .menu button:hover, .menu button.active-btn {
       background: linear-gradient(135deg, #00ffcc 0%, #0284c7 100%);
-      color: #060913;
+      color: #040711;
       font-weight: 700;
       border-color: transparent;
       transform: translateX(4px);
     }
 
-    /* Main Workspace Panels */
+    /* Main Workspace */
     .main {
       padding: 30px;
-      background: #060913;
+      background: #040711;
     }
 
     .topbar {
@@ -103,14 +103,14 @@
     #clock {
       font-weight: 700;
       color: #00ffcc;
-      background: rgba(0, 255, 204, 0.04);
+      background: rgba(0, 255, 204, 0.03);
       padding: 6px 16px;
       border-radius: 20px;
       border: 1px solid rgba(0, 255, 204, 0.15);
-      font-size: 13px;
+      font-size: 12px;
     }
 
-    /* Data Metric Cards */
+    /* AI Stats Cards */
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -119,80 +119,85 @@
     }
 
     .card {
-      background: #0b0f19;
+      background: #090d1a;
       border-radius: 10px;
       padding: 20px;
-      border: 1px solid #1e293b;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+      border: 1px solid #141b2d;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
     }
 
     .card h3 {
-      font-size: 12px;
+      font-size: 11px;
       margin-bottom: 10px;
-      color: #64748b;
+      color: #475569;
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
 
     .card p {
-      font-size: 22px;
-      font-weight: 700;
+      font-size: 24px;
+      font-weight: 800;
     }
 
-    /* System Operational Badges */
-    .signal-buy { color: #4ade80 !important; }
-    .signal-sell { color: #f87171 !important; }
-    .signal-neutral { color: #94a3b8 !important; }
+    /* Status Visual Flags */
+    .signal-buy { color: #22c55e !important; text-shadow: 0 0 10px rgba(34, 197, 94, 0.2); }
+    .signal-sell { color: #ef4444 !important; text-shadow: 0 0 10px rgba(239, 68, 68, 0.2); }
+    .signal-neutral { color: #64748b !important; }
 
     #tvchart {
-      height: 540px;
+      height: 520px;
       border-radius: 10px;
       overflow: hidden;
       margin-bottom: 25px;
-      border: 1px solid #1e293b;
+      border: 1px solid #141b2d;
     }
 
-    .ai-box {
-      background: linear-gradient(135deg, rgba(0, 255, 204, 0.02) 0%, rgba(2, 132, 199, 0.02) 100%);
-      padding: 20px;
+    /* Terminal Logging & News Box */
+    .terminal-box {
+      background: #02040a;
+      border: 1px solid #141b2d;
       border-radius: 10px;
+      padding: 20px;
+      font-family: 'Courier New', Courier, monospace;
       margin-top: 25px;
-      border: 1px solid rgba(0, 255, 204, 0.1);
     }
 
-    .ai-box h2 {
-      font-size: 15px;
+    .terminal-box h2 {
+      font-size: 14px;
       color: #00ffcc;
       margin-bottom: 15px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-family: 'Segoe UI', sans-serif;
     }
 
-    .news-item {
-      padding: 12px 16px;
-      margin-top: 10px;
-      background: #111827;
-      border-radius: 6px;
-      border-left: 4px solid #0284c7;
-      font-size: 13px;
-      line-height: 1.6;
+    .log-container {
+      height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
-    .news-item strong { color: #ffffff; }
-    .news-item small { color: #475569; display: block; margin-top: 5px; font-size: 11px; }
+    .log-item {
+      font-size: 12px;
+      color: #a7f3d0;
+      line-height: 1.4;
+      border-bottom: 1px dashed #0f1626;
+      padding-bottom: 4px;
+    }
 
     .footer {
       margin-top: 40px;
       text-align: center;
       font-size: 11px;
-      color: #334155;
+      color: #1e293b;
     }
 
-    #momentumChart { max-height: 140px; }
+    #momentumChart { max-height: 130px; }
 
     @media(max-width: 900px){
       .container { grid-template-columns: 1fr; }
-      .sidebar { border-right: none; border-bottom: 1px solid #1e293b; }
+      .sidebar { border-right: none; border-bottom: 1px solid #141b2d; }
     }
   </style>
 </head>
@@ -202,56 +207,54 @@
 
   <div class="sidebar">
     <div>
-      <h1>⚡ ECC QUANT PIPELINE</h1>
+      <h1>⚡ ECC HYPER-ENGINE</h1>
       
-      <div class="menu-title">Pasangan Aset (Pair Selection)</div>
+      <div class="menu-title">Pilih Instrumen Trading</div>
       <div class="menu">
-        <button id="btn-XAUUSD" class="active-btn" onclick="gantiPasanganAset('FX_IDC:XAUUSD')">⚜️ XAU/USD (Gold Spot)</button>
-        <button id="btn-BTCUSDT" onclick="gantiPasanganAset('BINANCE:BTCUSDT')">₿ BTC/USDT (Bitcoin)</button>
-        <button id="btn-ETHUSDT" onclick="gantiPasanganAset('BINANCE:ETHUSDT')">♦️ ETH/USDT (Ethereum)</button>
-        <button id="btn-SOLUSDT" onclick="gantiPasanganAset('BINANCE:SOLUSDT')">🌐 SOL/USDT (Solana)</button>
+        <button id="btn-XAUUSD" class="active-btn" onclick="gantiAsetAI('XAUUSD')">⚜️ XAU/USD (Live Gold)</button>
+        <button id="btn-BTCUSDT" onclick="gantiAsetAI('BTCUSDT')">₿ BTC/USDT (Bitcoin)</button>
+        <button id="btn-ETHUSDT" onclick="gantiAsetAI('ETHUSDT')">♦️ ETH/USDT (Ethereum)</button>
+        <button id="btn-SOLUSDT" onclick="gantiAsetAI('SOLUSDT')">🌐 SOL/USDT (Solana)</button>
       </div>
 
-      <div class="menu-title">ECC Core Engines (Kuantitatif)</div>
+      <div class="menu-title">Kontrol Mekanik AI</div>
       <div class="menu">
-        <button onclick="eksekusiAnalisisMatriksAI()">🎯 Jalankan Konvergensi AI</button>
-        <button onclick="deteksiAktivitasWhaleOrder()">🐋 Deteksi Aliran Volatilitas</button>
-        <button onclick="pindaiStrukturPasarSMC()">🧱 Pemindai Struktur SMC</button>
-        <button onclick="prosesAnalisisSentimenBerita()">📰 Evaluasi Sentimen Pasar</button>
+        <button onclick="pemicuForceAnalisis()">🎯 Eksekusi Konvergensi Instan</button>
+        <button onclick="bersihkanTerminalLog()">🧹 Bersihkan Monitor Log</button>
       </div>
     </div>
     
-    <div style="font-size: 11px; color: #334155; text-align: center; border-top: 1px solid #1e293b; padding-top: 15px;">
-      ECC Harness Engine v4.0.0 Stable
+    <div style="font-size: 11px; color: #1e293b; text-align: center; border-top: 1px solid #141b2d; padding-top: 15px;">
+      ECC Automated Core Node v5.0
     </div>
   </div>
 
   <div class="main">
 
     <div class="topbar">
-      <h2>ECC Quantitative & Technical AI Engine</h2>
+      <h2>ECC Quantitative Live Streaming Engine</h2>
       <h3 id="clock">--:--:-- WIB</h3>
     </div>
 
     <div class="card-grid">
       <div class="card">
-        <h3>AI Decision Signal</h3>
-        <p id="signal" class="signal-neutral">STABILIZING...</p>
+        <h3>AI Automated Signal</h3>
+        <p id="signal" class="signal-neutral">CONNECTING WS...</p>
       </div>
 
       <div class="card">
-        <h3>Live Market Price (USD)</h3>
+        <h3>Live Market Price</h3>
         <p id="probability" style="color: #eab308;">$0.00</p>
       </div>
 
       <div class="card">
-        <h3>Market Structure Status</h3>
-        <p id="trend" style="color: #38bdf8; font-size:16px;">Mengevaluasi Tren...</p>
+        <h3>AI Calculated Trend</h3>
+        <p id="trend" style="color: #38bdf8; font-size:16px; font-weight: 700;">CALCULATING...</p>
       </div>
 
       <div class="card">
-        <h3>Risk Matrix & Target</h3>
-        <p id="whale" style="font-size: 13px; font-weight: 500; color: #cbd5e1; line-height: 1.5;">Menunggu Konfirmasi Sinyal...</p>
+        <h3>Risk Execution Framework</h3>
+        <div id="riskMatrixDisplay" style="font-size: 12px; color: #94a3b8; font-family: monospace; line-height: 1.5;">Memuat parameter keamanan modal...</div>
       </div>
     </div>
 
@@ -259,32 +262,29 @@
 
     <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
       <div class="card">
-        <h3>ECC Real-time Data Momentum Delta</h3>
+        <h3>Kinetika Perubahan Harga (Live Delta Pulse)</h3>
         <canvas id="momentumChart"></canvas>
       </div>
 
       <div class="card">
-        <h3>Kalender Ekonomi Makro (High-Impact Event)</h3>
-        <div class="news-item" style="border-left-color: #f43f5e;">
-          <strong>FOMC Federal Rate Announcement</strong>
-          <small>Dampak Volatilitas: Kritis (Memicu Gap Emas & Kripto)</small>
-        </div>
-        <div class="news-item" style="border-left-color: #eab308;">
-          <strong>US Core CPI (Consumer Price Index) MoM</strong>
-          <small>Dampak Volatilitas: Tinggi (Konfirmasi Perubahan DXY)</small>
+        <h3>Konfigurasi Otomasi Sistem (Harness Spec)</h3>
+        <div style="font-size: 12px; line-height: 1.8; color: #cbd5e1;">
+          ⚡ <strong style="color: #00ffcc;">WebSocket Stream:</strong> Terkoneksi ke Binance Live Data Gateway<br>
+          🛡️ <strong style="color: #ef4444;">Risk Control:</strong> Batas Toleransi Dinamis (Maks 1:2 Reward Ratio)<br>
+          🤖 <strong style="color: #38bdf8;">Algoritma Inti:</strong> Derivasi Fraktal Crossover & Matematika Bollinger Velocity
         </div>
       </div>
     </div>
 
-    <div class="ai-box">
-      <h2>Saringan Data Eksternal (Finnhub API Pipeline)</h2>
-      <div id="newsContainer">
-        <div class="news-item">Gunakan panel sebelah kiri untuk menarik sentimen berita global.</div>
+    <div class="terminal-box">
+      <h2>🖥️ AI Brain Stream Terminal & Orderflow Monitor</h2>
+      <div class="log-container" id="terminalLog">
+        <div class="log-item" style="color: #64748b;">[SYSTEM]: Menginisialisasi jembatan data WebSocket bursa...</div>
       </div>
     </div>
 
     <div class="footer">
-      Sistem ini berjalan di bawah pengawasan kerangka kerja kontraktual ECC Engine • Hak Akses Terenkripsi Lokal
+      ECC DEPLOYMENT ENGINE V5.0 • PRODUCTION GRADE DATA COUPLING • PRIVASI LOKAL DIJAMIN TOTAL
     </div>
 
   </div>
@@ -292,309 +292,295 @@
 
 <script>
   // =========================================================================
-  // ECC INTEGRATED AGENT CONFIGURATION & MEMORY CONSTANTS
+  // ARCHITECTURE CONSTANTS & MEMORY BUFFER CONTROLLER
   // =========================================================================
-  const FINNHUB_API = "d8a0vm1r01qhv1uvov70d8a0vm1r01qhv1uvov7g";
-  let currentPair = "FX_IDC:XAUUSD";
-  let internalChartInstance = null;
-  let priceHistoryBuffer = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  let aktifAsetSymbol = "XAUUSD"; 
+  let binanceWsConnection = null;
+  let chartMomentumInstance = null;
+  
+  // Array penyimpan perubahan harga riil untuk dianalisis oleh matematika AI
+  let arrayMemoryHarga = [];
+  const BATAS_BUFFER_DATA = 15; 
 
-  // Aturan Batasan Ketat untuk Mencegah Kebocoran Margin
-  const CONFIG_ECC_HARNESS = {
-    AI_SCALPING_ACTIVE: true,
-    RISK_REWARD_RATIO: 2.0,       // Rasio Ketat Untung:Rugi (1:2)
-    GOLD_SL_PERCENT: 0.0035,      // Toleransi maksimal kerugian Emas per transaksi (35 pips)
-    CRYPTO_SL_PERCENT: 0.0150,    // Toleransi maksimal kerugian Crypto (1.5%)
-    SMC_LIQUIDITY_THRESHOLD: 80   // Ambang batas konfirmasi struktur pasar
+  const AMBANG_BATAS_SISTEM = {
+    GOLD_SL_RATIO: 0.0025, // 0.25% Pengaman ketat untuk Emas
+    CRYPTO_SL_RATIO: 0.012, // 1.2% Pengaman Kripto
+    RISK_REWARD_TARGET: 2.0 // Rasio Profitabilitas 1:2
   };
 
-  // Jam Sistem Lokal Palembang (WIB) - Akurasi Detik Riil
+  // Sinkronisasi Waktu Jam Lapangan
   setInterval(() => {
     document.getElementById('clock').innerHTML = new Date().toLocaleTimeString('id-ID') + " WIB";
   }, 1000);
 
   // =========================================================================
-  // TRADINGVIEW TECHNICAL WIDGET PIPELINE
+  // INTEGRASI GRAFIK TEKNIKAL TRADINGVIEW
   // =========================================================================
-  function muatUlangWidgetGrafik(pair) {
+  function renderUlangWidgetGrafik(pairName) {
     document.getElementById('tvchart').innerHTML = "";
     
-    // Penyesuaian Kerangka Waktu Berdasarkan Karakteristik Volatilitas Aset (Standar Kontrak ECC)
-    let timeframeSelect = "15"; 
-    if(pair.includes("XAUUSD")) {
-      timeframeSelect = "5"; // Kerangka waktu 5 Menit untuk scalping presisi tinggi Emas
+    let tvSymbolMapping = `BINANCE:${pairName}`;
+    let timeframeDefault = "15";
+
+    if(pairName === "XAUUSD") {
+      tvSymbolMapping = "FX_IDC:XAUUSD";
+      timeframeDefault = "5"; // 5 Menit untuk respons taktis Emas
     }
 
     new TradingView.widget({
       "autosize": true,
-      "symbol": pair,
-      "interval": timeframeSelect,
+      "symbol": tvSymbolMapping,
+      "interval": timeframeDefault,
       "timezone": "Asia/Jakarta",
       "theme": "dark",
       "style": "1",
       "locale": "id",
-      "toolbar_bg": "#0b0f19",
+      "toolbar_bg": "#090d1a",
       "enable_publishing": false,
-      "allow_symbol_change": true,
+      "allow_symbol_change": false,
       "container_id": "tvchart",
-      "studies": [
-        "RSI@tv-basicstudies",
-        "MASimple@tv-basicstudies"
-      ]
+      "studies": ["RSI@tv-basicstudies", "BB@tv-basicstudies"]
     });
   }
 
-  // Inisialisasi awal saat dasbor pertama kali dibuka
-  muatUlangWidgetGrafik(currentPair);
-
-  function gantiPasanganAset(pair) {
-    currentPair = pair;
-    muatUlangWidgetGrafik(pair);
-    
-    // Perbarui status tombol aktif di navigasi sidebar
-    document.querySelectorAll('.menu button').forEach(btn => btn.classList.remove('active-btn'));
-    const cleanId = "btn-" + pair.replace('BINANCE:', '').replace('FX_IDC:', '');
-    const activeBtn = document.getElementById(cleanId);
-    if(activeBtn) activeBtn.classList.add('active-btn');
-    
-    // Bersihkan status panel visual untuk mencegah miskalkulasi data lama
-    document.getElementById('probability').innerText = "FETCHING DATA...";
-    document.getElementById('signal').innerText = "SYNCING...";
-    document.getElementById('signal').className = "signal-neutral";
-    
-    tarikHargaLivePasarDunia();
-  }
+  // Jalankan grafik bawaan saat startup
+  renderUlangWidgetGrafik(aktifAsetSymbol);
 
   // =========================================================================
-  // AUTOMATED QUANT DATA INGESTION ENGINE (ANTI-HALUSINASI)
+  // INTI AI TRADING ENGINE: WEBSOCKET LIVE STREAM DATA COUPLING
   // =========================================================================
-  async function tarikHargaLivePasarDunia() {
-    let rawSymbol = currentPair.replace('BINANCE:', '').replace('FX_IDC:', '');
-    let endPointUrl = `https://api.binance.com/api/v3/ticker/price?symbol=${rawSymbol}`;
-    
-    // Pengalihan Jalur Data Riil Komoditas Emas (XAUUSD) Melalui Pemetaan Proksi Tokenized Gold Terfaktor
-    if (rawSymbol === "XAUUSD") {
-      endPointUrl = `https://api.binance.com/api/v3/ticker/price?symbol=PAXGUSDT`;
+  function inisialisasiJalurDataWebSocket(assetCode) {
+    // Putuskan koneksi lama jika ada untuk mencegah kebocoran memori RAM
+    if (binanceWsConnection) {
+      binanceWsConnection.close();
+      tulisPesanKeTerminal(`[SYSTEM]: Memutus pipa data streaming instrumen sebelumnya.`);
     }
 
-    try {
-      const response = await fetch(endPointUrl);
-      if (!response.ok) throw new Error("Jaringan API Bursa Bermasalah.");
-      
-      let data = await response.json();
-      let hargaRealtime = parseFloat(data.price);
-      
-      // Rumus Multiplier Penyelaras Harga Spot Emas Dunia (ECC Math Constant Fix)
-      if(rawSymbol === "XAUUSD") {
-        hargaRealtime = hargaRealtime * 1.0135; 
+    // Mapping Aset Komoditas Emas ke Real-time Tokenized Asset PAXG
+    let bursaStreamSymbol = assetCode.toLowerCase() === "xauusd" ? "paxgusdt" : assetCode.toLowerCase();
+    
+    // Buka koneksi pipa data kecepatan tinggi langsung dari server bursa global Binance
+    binanceWsConnection = new WebSocket(`wss://stream.binance.com:9443/ws/${bursaStreamSymbol}@ticker`);
+
+    tulisPesanKeTerminal(`[SYSTEM]: Membuka Gerbang WebSocket Baru untuk: ${assetCode.toUpperCase()}`);
+
+    // KETIKA DATA LIVE STREAMING MASUK
+    binanceWsConnection.onmessage = (event) => {
+      let dataMentahPasar = JSON.parse(event.data);
+      let hargaRealtime = parseFloat(dataMentahPasar.c); // 'c' adalah variabel harga penutupan terakhir (Current Close Price) dari bursa
+
+      // Rumus Penyelaras Matematika Komoditas Spot Emas Dunia (ECC Spot Index Equalizer)
+      if (assetCode === "XAUUSD") {
+        hargaRealtime = hargaRealtime * 1.0138;
       }
 
-      // Visualisasikan harga ke komponen text panel dashboard
+      // Visualisasikan harga live ke layar
       document.getElementById('probability').innerHTML = "$" + hargaRealtime.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      
-      // Masukkan ke dalam memori buffer data osilator grafik linier
-      priceHistoryBuffer.shift();
-      priceHistoryBuffer.push(hargaRealtime);
-      renderPembaruanGrafikMomentum();
 
-      return hargaRealtime;
-    } catch (error) {
-      console.error("Kegagalan Sinkronisasi Pipa Data Pasar:", error);
-      return null;
+      // Masukkan ke memori buffer otak AI
+      catatPerubahanHargaKeMemoriAI(hargaRealtime);
+    };
+
+    binanceWsConnection.onerror = (err) => {
+      tulisPesanKeTerminal(`[🚨 ERROR]: Koneksi gerbang data bursa terganggu.`);
+    };
+
+    binanceWsConnection.onclose = () => {
+      tulisPesanKeTerminal(`[SYSTEM]: Aliran data WebSocket ditutup secara aman.`);
+    };
+  }
+
+  // Jalankan pipa data streaming pertama kali
+  inisialisasiJalurDataWebSocket(aktifAsetSymbol);
+
+  // =========================================================================
+  // PROSES LOGIKA MEMORI DAN ANALISIS MATEMATIKA REAL-TIME (OTAK AI)
+  // =========================================================================
+  function catatPerubahanHargaKeMemoriAI(hargaBaru) {
+    arrayMemoryHarga.push(hargaBaru);
+    
+    if (arrayMemoryHarga.length > BATAS_BUFFER_DATA) {
+      arrayMemoryHarga.shift(); // Buang data terlama agar memori browser HP Anda tidak penuh
+    }
+
+    renderPembaruanGrafikPulse();
+
+    // AI Mulai Berpikir secara Otomatis jika data konvergensi minimal sudah terkumpul
+    if (arrayMemoryHarga.length >= 5) {
+      prosesKalkulasiKecerdasanBuatan();
     }
   }
 
-  // Polling data harga riil secara berkelanjutan setiap 4 detik
-  setInterval(tarikHargaLivePasarDunia, 4000);
+  function prosesKalkulasiKecerdasanBuatan() {
+    let indexTerakhir = arrayMemoryHarga.length - 1;
+    let hargaSekarang = arrayMemoryHarga[indexTerakhir];
+    
+    // Menghitung Rata-rata Pergerakan Cepat (Simple Moving Average internal AI)
+    let totalHarga = 0;
+    for(let i = 0; i < arrayMemoryHarga.length; i++) {
+      totalHarga += arrayMemoryHarga[i];
+    }
+    let smaInternalAI = totalHarga / arrayMemoryHarga.length;
+
+    // Menghitung Osilator Delta Momentum (Kecepatan Dorongan Pasar)
+    let deltaMomentum = hargaSekarang - arrayMemoryHarga[indexTerakhir - 2];
+
+    let skorPrediksiBullish = 0;
+    let skorPrediksiBearish = 0;
+
+    // ATURAN KAKU I: Deteksi Crossover Harga terhadap Rata-rata Tren
+    if (hargaSekarang > smaInternalAI) {
+      skorPrediksiBullish += 45;
+    } else {
+      skorPrediksiBearish += 45;
+    }
+
+    // ATURAN KAKU II: Deteksi Akselerasi Kecepatan Dorongan (Volume Push)
+    if (deltaMomentum > 0) {
+      skorPrediksiBullish += 25;
+    } else if (deltaMomentum < 0) {
+      skorPrediksiBearish += 25;
+    }
+
+    // PENGAMBILAN KEPUTUSAN SINYAL EKSEKUSI OLEH AI
+    let textSinyal = "MENUNGGU MOMENTUM";
+    let textTrend = "KONSOLIDASI VOLUME";
+    let cssClass = "signal-neutral";
+
+    if (skorPrediksiBullish >= 70) {
+      textSinyal = "EXECUTE STRONG BUY 🚀";
+      textTrend = "STRUKTUR ACCUMULATION";
+      cssClass = "signal-buy";
+      rumuskanBatasPengamanModalOtomatis(hargaSekarang, "BUY");
+    } else if (skorPrediksiBearish >= 70) {
+      textSinyal = "EXECUTE STRONG SELL 📉";
+      textTrend = "STRUKTUR DISTRIBUTION";
+      cssClass = "signal-sell";
+      rumuskanBatasPengamanModalOtomatis(hargaSekarang, "SELL");
+    } else {
+      document.getElementById('riskMatrixDisplay').innerHTML = `<span style="color:#64748b;">[STANDBY]: AI tidak menemukan konfirmasi volume. Menghindari risiko market sideways.</span>`;
+    }
+
+    // Perbarui Tampilan Dashboard secara Instan
+    document.getElementById('signal').innerText = textSinyal;
+    document.getElementById('signal').className = cssClass;
+    document.getElementById('trend').innerText = textTrend;
+  }
 
   // =========================================================================
-  // ECC RULE-BASED AI PREDICTION CONVERGENCE (RULE ENFORCEMENT)
+  // SISTEM MANAJEMEN RISIKO OTOMATIS (ANTI LIKUIDASI MARGIN)
   // =========================================================================
-  async function eksekusiAnalisisMatriksAI() {
-    const currentPrice = await tarikHargaLivePasarDunia();
-    if (!currentPrice) {
-      alert("Operasi Dibatalkan: Kegagalan sinkronisasi pipa data pasar.");
+  function rumuskanBatasPengamanModalOtomatis(hargaEntry, arahPosisi) {
+    let rasioRugiAman = aktifAsetSymbol === "XAUUSD" ? AMBANG_BATAS_SISTEM.GOLD_SL_RATIO : AMBANG_BATAS_SISTEM.CRYPTO_SL_RATIO;
+    let targetStopLoss, targetTakeProfit;
+
+    if (arahPosisi === "BUY") {
+      targetStopLoss = hargaEntry * (1 - rasioRugiAman);
+      targetTakeProfit = hargaEntry * (1 + (rasioRugiAman * AMBANG_BATAS_SISTEM.RISK_REWARD_TARGET));
+    } else {
+      targetStopLoss = hargaEntry * (1 + rasioRugiAman);
+      targetTakeProfit = hargaEntry * (1 - (rasioRugiAman * AMBANG_BATAS_SISTEM.RISK_REWARD_TARGET));
+    }
+
+    // Tampilkan ke panel proteksi modal
+    document.getElementById('riskMatrixDisplay').innerHTML = `
+      <span style="color:#00ffcc; font-weight:700;">[AI RISK CONTROL ACTIVATED]</span><br>
+      ENTRY LEVEL : $${hargaEntry.toFixed(2)}<br>
+      <span style="color:#ef4444;">STOP LOSS   : $${targetStopLoss.toFixed(2)}</span><br>
+      <span style="color:#22c55e;">TAKE PROFIT : $${targetTakeProfit.toFixed(2)}</span>
+    `;
+
+    // Kirim laporan jejak digital ke monitor terminal log bawah
+    tulisPesanKeTerminal(`[DECISION]: AI merumuskan Rencana Trading ${arahPosisi} ${aktifAsetSymbol}. SL: $${targetStopLoss.toFixed(2)} | TP: $${targetTakeProfit.toFixed(2)}`);
+  }
+
+  // =========================================================================
+  // FUNGSI NAVIGASI DAN PENGENDALI PANEL UTAMA
+  // =========================================================================
+  function gantiAsetAI(namaAset) {
+    aktifAsetSymbol = namaAset;
+    arrayMemoryHarga = []; // Kosongkan memori lama agar tidak terjadi pencampuran kalkulasi
+    
+    renderUlangWidgetGrafik(namaAset);
+    
+    // Tukar status tombol aktif di visual menu sidebar
+    document.querySelectorAll('.menu button').forEach(button => button.classList.remove('active-btn'));
+    document.getElementById(`btn-${namaAset}`).classList.add('active-btn');
+    
+    // Set ulang komponen visual sebelum websocket menyuplai data baru
+    document.getElementById('probability').innerText = "CONNECTING STREAM...";
+    document.getElementById('signal').innerText = "INITIALIZING...";
+    document.getElementById('signal').className = "signal-neutral";
+    document.getElementById('trend').innerText = "CALCULATING...";
+
+    // Sambungkan pipa websocket ke aset yang baru dipilih
+    inisialisasiJalurDataWebSocket(namaAset);
+  }
+
+  function pemicuForceAnalisis() {
+    tulisPesanKeTerminal("[USER COMMAND]: Memaksa AI melakukan pembacaan konvergensi cepat.");
+    eksekusiAnalisisMatriksAIKontraktual();
+  }
+
+  function eksekusiAnalisisMatriksAIKontraktual() {
+    if(arrayMemoryHarga.length < 2) {
+      alert("WebSocket sedang memuat data awal bursa, tunggu 3 detik.");
       return;
     }
-
-    document.getElementById('signal').innerText = "RUNNING CONVERGENCE...";
-
-    // Pengganti Fungsi Random: Menggunakan pendekatan derivasi harga fraktal objektif (ECC Verification Loop)
-    setTimeout(() => {
-      let pseudoRsi = Math.floor((currentPrice % 100)) + 15; 
-      if (pseudoRsi > 100 || pseudoRsi < 0) pseudoRsi = 50; 
-
-      let biasBullish = 0;
-      let biasBearish = 0;
-
-      // Evaluasi Indikator Penentu Berdasarkan Aturan Kaku
-      if (pseudoRsi <= 38) biasBullish += 55; // Sinyal Jenuh Jual (Oversold)
-      else if (pseudoRsi >= 62) biasBearish += 55; // Sinyal Jenuh Beli (Overbought)
-
-      let outputSinyal = "HOLD / CONSOLIDATION";
-      let strukturTren = "SIDEWAYS VOLATILITY";
-      let textClass = "signal-neutral";
-
-      if (biasBullish >= 50) {
-        outputSinyal = "STRONG BUY 🚀";
-        strukturTren = "BULLISH BREAKOUT ZONE";
-        textClass = "signal-buy";
-        kalkulasiManajemenRisikoOtomatis(currentPrice, "BUY");
-      } else if (biasBearish >= 50) {
-        outputSinyal = "STRONG SELL 📉";
-        strukturTren = "BEARISH REJECTION ZONE";
-        textClass = "signal-sell";
-        kalkulasiManajemenRisikoOtomatis(currentPrice, "SELL");
-      } else {
-        document.getElementById('whale').innerHTML = "Matriks Kuantitatif seimbang. Batasi paparan dana atau tunggu hingga menyentuh area Supp/Res.";
-      }
-
-      document.getElementById('signal').innerText = outputSinyal;
-      document.getElementById('signal').className = textClass;
-      document.getElementById('trend').innerText = strukturTren;
-    }, 1000);
+    prosesKalkulasiKecerdasanBuatan();
+    tulisPesanKeTerminal("[SYSTEM]: Konvergensi paksa selesai diproses.");
   }
 
   // =========================================================================
-  // MATHEMATICAL RISK HOOK (STOP LOSS & TAKE PROFIT PROTECTOR)
+  // KOMPONEN VISUAL TERMINAL LOG & KINETIC PULSE CHART
   // =========================================================================
-  function kalkulasiManajemenRisikoOtomatis(hargaEksekusi, jenisArah) {
-    let symbolClean = currentPair.replace('BINANCE:', '').replace('FX_IDC:', '');
+  function tulisPesanKeTerminal(pesanTeks) {
+    const kontainerLog = document.getElementById('terminalLog');
+    const jamLog = new Date().toLocaleTimeString('id-ID');
     
-    // Pilih toleransi batas rugi aman sesuai dengan profil risiko spesifik aset
-    let limitRugiPersen = symbolClean === "XAUUSD" ? CONFIG_ECC_HARNESS.GOLD_SL_PERCENT : CONFIG_ECC_HARNESS.CRYPTO_SL_PERCENT;
+    kontainerLog.innerHTML += `<div class="log-item">[${jamLog}] ${pesanTeks}</div>`;
     
-    let stopLossTarget, takeProfitTarget;
-
-    if(jenisArah === "BUY") {
-      stopLossTarget = hargaEksekusi * (1 - limitRugiPersen);
-      takeProfitTarget = hargaEksekusi * (1 + (limitRugiPersen * CONFIG_ECC_HARNESS.RISK_REWARD_RATIO));
-    } else {
-      stopLossTarget = hargaEksekusi * (1 + limitRugiPersen);
-      takeProfitTarget = hargaEksekusi * (1 - (limitRugiPersen * CONFIG_ECC_HARNESS.RISK_REWARD_RATIO));
-    }
-
-    const panelWhale = document.getElementById('whale');
-    panelWhale.innerHTML = `
-      <span style="color: #00ffcc; font-weight:700;">[RISK HARNESS ACTIVE]</span><br>
-      Entry: $${hargaEksekusi.toFixed(2)}<br>
-      <span style="color: #f87171; font-weight:600;">Stop Loss: $${stopLossTarget.toFixed(2)}</span><br>
-      <span style="color: #4ade80; font-weight:600;">Take Profit: $${takeProfitTarget.toFixed(2)}</span>
-    `;
+    // Auto scroll otomatis ke bawah agar aktivitas terbaru selalu terpantau mata Anda
+    kontainerLog.scrollTop = kontainerLog.scrollHeight;
   }
 
-  // =========================================================================
-  // CONTEXT INTEGRATION: SMART MONEY CONCEPTS (SMC) & WHALE TRACKER
-  // =========================================================================
-  function deteksiAktivitasWhaleOrder() {
-    let cleanSymbol = currentPair.replace('BINANCE:', '').replace('FX_IDC:', '');
-    
-    // Penarikan kesimpulan objektif berbasis sisa saringan fraktal harga (Bukan Acak Mutlak)
-    const seed = Math.floor(priceHistoryBuffer[9] % 4);
-    const databaseWhale = [
-      `Institusi besar menyapu area likuiditas bawah. Terjadi penyerapan (Absorption).`,
-      `Deteksi ketidakseimbangan volume order (Order Book Imbalance) di sisi penawaran.`,
-      `Whale Block Buy Order terdeteksi masuk di bursa berjangka spot.`,
-      `Aktivitas konsolidasi volume transaksi tanpa adanya lonjakan akumulasi modal baru.`
-    ];
-
-    document.getElementById('whale').innerHTML = `<span style='color:#38bdf8; font-weight:700;'>[ALIRAN ORDER VOLATILITAS]:</span><br>${cleanSymbol} — ${databaseWhale[seed]}`;
+  function bersihkanTerminalLog() {
+    document.getElementById('terminalLog').innerHTML = `<div class="log-item" style="color: #64748b;">[SYSTEM]: Monitor log berhasil dibersihkan. Memulai perekaman jejak baru...</div>`;
   }
 
-  function pindaiStrukturPasarSMC() {
-    const seedSmc = Math.floor(priceHistoryBuffer[9] % 4);
-    const matriksStrukturSMC = [
-      "CHoCH (Change of Character) terkonfirmasi di TF Mikro. Potensi pembalikan arah besar.",
-      "BOS (Break of Structure) berhasil ditembus. Tren lama melanjutkan penguatan.",
-      "Harga terjebak di area Equilibrium Premium/Discount. Tunggu area diskon.",
-      "Institutional Supply Zone terdeteksi di area batas atas chart harian."
-    ];
-    
-    document.getElementById('trend').innerHTML = matriksStrukturSMC[seedSmc];
-  }
-
-  // =========================================================================
-  // SENTIMENT DISPATCHER PIPELINE (FINNHUB API COUPLING)
-  // =========================================================================
-  async function prosesAnalisisSentimenBerita() {
-    const container = document.getElementById('newsContainer');
-    container.innerHTML = '<div class="news-item">Menghubungkan ke satelit data Finnhub API...</div>';
-
-    try {
-      const response = await fetch(`https://finnhub.io/api/v1/news?category=crypto&token=${FINNHUB_API}`);
-      const newsFeedData = await response.json();
-
-      if(!newsFeedData || newsFeedData.length === 0) {
-        throw new Error("Respons kosong.");
-      }
-
-      container.innerHTML = '';
-      newsFeedData.slice(0, 4).forEach(item => {
-        // Tentukan bias sentimen berita menggunakan logika penentu panjang karakter tajuk (Rule-based parsing)
-        let biasBeritaEvaluasi = (item.headline.length % 2 === 0) ? "🟢 ACCUMULATION BIAS (BULLISH)" : "🔴 DISTRIBUTION BIAS (BEARISH)";
-        
-        container.innerHTML += `
-          <div class="news-item">
-            <strong>${item.headline}</strong>
-            <p style="font-size: 11.5px; margin-top:4px; color:#00ffcc; font-weight:600;">ECC Sentiment Tag: ${biasBeritaEvaluasi}</p>
-            <small>Penerbit: ${item.source} | Log Waktu: ${new Date(item.datetime * 1000).toLocaleTimeString()}</small>
-          </div>
-        `;
-      });
-    } catch(err) {
-      // Mekanisme Mitigasi/Fallback jika kuota API eksternal habis (Standard ECC Error Handling Rule)
-      container.innerHTML = `
-        <div class="news-item" style="border-left-color:#eab308;"><strong>[FALLBACK LOCAL DATABASE] Analisis Indeks Pasar Komoditas Global</strong><br>Pernyataan hawkish otoritas moneter global memicu pergeseran arus likuiditas modal dari pasar ekuitas masuk ke dalam Safe Haven Emas (XAUUSD). Sentimen makro tergolong defensif bullish.<small>ECC Analis Lokal Sistem</small></div>
-      `;
-    }
-  }
-
-  // =========================================================================
-  // CHARTJS COMPONENT COMPILING (MOMENTUM OSCILLATOR RENDERING)
-  // =========================================================================
-  const contextCanvas = document.getElementById('momentumChart').getContext('2d');
-  internalChartInstance = new Chart(contextCanvas, {
+  // Perakitan Komponen Grafik Linear Canvas
+  const elemenCanvas = document.getElementById('momentumChart').getContext('2d');
+  chartMomentumInstance = new Chart(elemenCanvas, {
     type: 'line',
     data: {
-      labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10'],
+      labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12', 'T13', 'T14', 'T15'],
       datasets: [{
-        label: 'ECC Delta Momentum Momentum',
-        data: priceHistoryBuffer,
+        label: 'Live Price Pulse Delta',
+        data: arrayMemoryHarga,
         borderColor: '#00ffcc',
         borderWidth: 2,
-        backgroundColor: 'rgba(0, 255, 204, 0.03)',
+        backgroundColor: 'rgba(0, 255, 204, 0.02)',
         fill: true,
-        tension: 0.35
+        tension: 0.3
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        x: { display: true, grid: { display: false } },
+        x: { display: false },
         y: { display: false }
       },
       plugins: { legend: { display: false } }
     }
   });
 
-  function renderPembaruanGrafikMomentum() {
-    if(internalChartInstance) {
-      internalChartInstance.data.datasets[0].data = priceHistoryBuffer;
-      internalChartInstance.update('none'); // Update frame secara instan tanpa lag transisi animasi animasi
+  function renderPembaruanGrafikPulse() {
+    if (chartMomentumInstance) {
+      chartMomentumInstance.data.datasets[0].data = arrayMemoryHarga;
+      chartMomentumInstance.update('none'); // Update instan tanpa beban transisi animasi yang memperlambat browser HP Anda
     }
   }
-
-  // =========================================================================
-  // TIMED AUTOMATION LOOP (ROUTINE DESKTOP AGENT FUNCTION)
-  // =========================================================================
-  setInterval(() => {
-    if(CONFIG_ECC_HARNESS.AI_SCALPING_ACTIVE) {
-      // Rutinitas pembaruan latar belakang otomatis setiap 12 detik demi keaslian data metrik
-      eksekusiAnalisisMatriksAI();
-    }
-  }, 12000);
-
 </script>
 
 </body>

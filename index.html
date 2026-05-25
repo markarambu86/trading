@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ECC AI LIVE TRADING ENGINE PRO</title>
+<title>ECC INSTITUTIONAL AI LIVE TRADING ENGINE</title>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
 
 <style>
 
@@ -14,41 +14,45 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Segoe UI,Tahoma,sans-serif;
+    font-family:Segoe UI,sans-serif;
 }
 
 body{
-    background:#070b14;
-    color:#fff;
-    padding:20px;
+    background:#050816;
+    color:white;
+    overflow-x:hidden;
 }
 
 .container{
-    max-width:1600px;
+    max-width:1800px;
     margin:auto;
+    padding:20px;
 }
 
-header{
+.header{
     display:flex;
     justify-content:space-between;
     align-items:center;
     margin-bottom:20px;
-    border-bottom:1px solid #1f2937;
-    padding-bottom:15px;
 }
 
-header h1{
+.logo{
+    font-size:34px;
+    font-weight:900;
     color:#38bdf8;
-    font-size:28px;
+}
+
+.logo span{
+    color:#22c55e;
 }
 
 .status{
+    display:flex;
+    gap:10px;
+    align-items:center;
     background:#0f172a;
     padding:10px 16px;
     border-radius:10px;
-    display:flex;
-    align-items:center;
-    gap:10px;
 }
 
 .dot{
@@ -61,18 +65,18 @@ header h1{
 
 @keyframes pulse{
     0%{transform:scale(.9);}
-    50%{transform:scale(1.2);}
+    50%{transform:scale(1.3);}
     100%{transform:scale(.9);}
 }
 
-.grid{
+.main{
     display:grid;
-    grid-template-columns:1fr 400px;
+    grid-template-columns:1fr 420px;
     gap:20px;
 }
 
-@media(max-width:1200px){
-    .grid{
+@media(max-width:1300px){
+    .main{
         grid-template-columns:1fr;
     }
 }
@@ -81,262 +85,227 @@ header h1{
     background:#0f172a;
     border:1px solid #1e293b;
     border-radius:14px;
-    padding:20px;
+    padding:18px;
 }
 
 .card h2{
-    margin-bottom:15px;
+    margin-bottom:16px;
     color:#38bdf8;
-    font-size:18px;
 }
 
-.top-grid{
+#chart{
+    width:100%;
+    height:700px;
+}
+
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.price{
+    font-size:38px;
+    font-weight:900;
+}
+
+.green{
+    color:#22c55e;
+}
+
+.red{
+    color:#ef4444;
+}
+
+.yellow{
+    color:#facc15;
+}
+
+.select{
+    background:#111827;
+    border:1px solid #1e293b;
+    padding:10px;
+    color:white;
+    border-radius:8px;
+}
+
+.signal-box{
+    text-align:center;
+    padding:25px;
+    background:#111827;
+    border-radius:14px;
+}
+
+.signal{
+    font-size:46px;
+    font-weight:900;
+}
+
+.reason{
+    margin-top:15px;
+    color:#cbd5e1;
+    line-height:1.7;
+}
+
+.stats{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:20px;
-    margin-top:20px;
-}
-
-@media(max-width:900px){
-    .top-grid{
-        grid-template-columns:1fr;
-    }
+    gap:12px;
 }
 
 .stat{
     background:#111827;
-    border-radius:12px;
+    border-radius:10px;
     padding:15px;
-    margin-bottom:10px;
 }
 
 .label{
+    font-size:12px;
     color:#94a3b8;
-    font-size:13px;
     margin-bottom:8px;
 }
 
 .value{
     font-size:24px;
-    font-weight:700;
-}
-
-.buy{
-    color:#22c55e;
-}
-
-.sell{
-    color:#ef4444;
-}
-
-.wait{
-    color:#facc15;
-}
-
-.signalBox{
-    padding:25px;
-    border-radius:12px;
-    text-align:center;
-    background:#111827;
-    border:1px solid #1e293b;
-}
-
-.signalText{
-    font-size:40px;
-    font-weight:900;
-    margin-bottom:10px;
-}
-
-.reason{
-    color:#cbd5e1;
-    line-height:1.6;
-}
-
-canvas{
-    width:100%!important;
-    height:450px!important;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:15px;
-}
-
-th,td{
-    padding:12px;
-    border-bottom:1px solid #1e293b;
-    text-align:left;
-    font-size:13px;
-}
-
-th{
-    background:#111827;
-    color:#38bdf8;
-}
-
-.badge{
-    padding:5px 10px;
-    border-radius:6px;
-    font-size:12px;
-    font-weight:700;
-}
-
-.badge-buy{
-    background:rgba(34,197,94,.2);
-    color:#22c55e;
-}
-
-.badge-sell{
-    background:rgba(239,68,68,.2);
-    color:#ef4444;
-}
-
-.badge-wait{
-    background:rgba(250,204,21,.2);
-    color:#facc15;
-}
-
-.select{
-    width:100%;
-    padding:12px;
-    background:#111827;
-    border:1px solid #1f2937;
-    border-radius:8px;
-    color:white;
-    margin-bottom:15px;
+    font-weight:800;
 }
 
 .progress{
-    height:14px;
+    height:12px;
     background:#1f2937;
     border-radius:10px;
     overflow:hidden;
     margin-top:10px;
 }
 
-.progressInner{
+.bar{
     height:100%;
     width:0%;
     background:linear-gradient(90deg,#22c55e,#38bdf8);
 }
 
-.small{
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th,td{
+    padding:10px;
+    border-bottom:1px solid #1e293b;
     font-size:12px;
+}
+
+th{
+    color:#38bdf8;
+}
+
+.badge-buy{
+    background:rgba(34,197,94,.2);
+    color:#22c55e;
+    padding:5px 10px;
+    border-radius:6px;
+}
+
+.badge-sell{
+    background:rgba(239,68,68,.2);
+    color:#ef4444;
+    padding:5px 10px;
+    border-radius:6px;
+}
+
+.news{
+    background:#111827;
+    padding:12px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+.small{
     color:#94a3b8;
+    font-size:11px;
+    margin-top:6px;
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
-<header>
+<div class="header">
 
-<div>
-<h1>ECC AI LIVE TRADING ENGINE PRO</h1>
-<div class="small">
-Realtime Crypto & Forex Scalping System
-</div>
+<div class="logo">
+ECC <span>INSTITUTIONAL AI</span>
 </div>
 
 <div class="status">
 <div class="dot"></div>
-<div id="socket-status">Realtime Connected</div>
+<div id="socketStatus">
+Realtime Connected
+</div>
 </div>
 
-</header>
+</div>
 
-<div class="grid">
+<div class="main">
 
 <div>
 
 <div class="card">
 
-<h2>LIVE MARKET CHART</h2>
+<div class="topbar">
 
-<select id="symbol" class="select">
+<div>
+
+<div style="font-size:13px;color:#94a3b8;">
+SYMBOL
+</div>
+
+<div style="font-size:30px;font-weight:900;"
+id="pairName">
+BTCUSDT
+</div>
+
+</div>
+
+<div>
+
+<div class="price green"
+id="livePrice">
+0.00
+</div>
+
+</div>
+
+<div>
+
+<select class="select"
+id="symbolSelect">
+
 <option value="btcusdt">BTCUSDT</option>
 <option value="ethusdt">ETHUSDT</option>
 <option value="bnbusdt">BNBUSDT</option>
 <option value="solusdt">SOLUSDT</option>
+
+<option value="EUR_USD">EUR/USD</option>
+<option value="GBP_USD">GBP/USD</option>
+<option value="USD_JPY">USD/JPY</option>
+
 </select>
 
-<canvas id="chart"></canvas>
-
-</div>
-
-<div class="top-grid">
-
-<div class="card">
-
-<h2>AI SIGNAL ENGINE</h2>
-
-<div class="signalBox">
-
-<div id="signalText" class="signalText wait">
-WAIT
-</div>
-
-<div id="signalReason" class="reason">
-Menunggu data realtime...
-</div>
-
-<div style="margin-top:20px;">
-<div class="small">
-AI Confidence
-</div>
-
-<div class="progress">
-<div class="progressInner" id="confidenceBar"></div>
-</div>
-
-<div style="margin-top:10px;font-size:24px;font-weight:700;" id="confidenceText">
-0%
-</div>
 </div>
 
 </div>
 
-</div>
-
-<div class="card">
-
-<h2>MARKET ANALYTICS</h2>
-
-<div class="stat">
-<div class="label">Current Price</div>
-<div class="value" id="price">-</div>
-</div>
-
-<div class="stat">
-<div class="label">EMA Trend</div>
-<div class="value" id="trend">-</div>
-</div>
-
-<div class="stat">
-<div class="label">RSI Momentum</div>
-<div class="value" id="rsi">-</div>
-</div>
-
-<div class="stat">
-<div class="label">ADX Strength</div>
-<div class="value" id="adx">-</div>
-</div>
-
-<div class="stat">
-<div class="label">Volume Spike</div>
-<div class="value" id="volume">-</div>
-</div>
+<div id="chart"></div>
 
 </div>
 
-</div>
+<div class="card" style="margin-top:20px;">
 
-<div class="card">
-
-<h2>TRADE EXECUTION JOURNAL</h2>
+<h2>TRADE JOURNAL</h2>
 
 <table>
 
@@ -347,13 +316,11 @@ AI Confidence
 <th>Entry</th>
 <th>SL</th>
 <th>TP</th>
-<th>Conf.</th>
+<th>Conf</th>
 </tr>
 </thead>
 
-<tbody id="journal">
-
-</tbody>
+<tbody id="journal"></tbody>
 
 </table>
 
@@ -365,48 +332,116 @@ AI Confidence
 
 <div class="card">
 
-<h2>LIVE TRADE SETUP</h2>
+<h2>AI SIGNAL ENGINE</h2>
+
+<div class="signal-box">
+
+<div class="signal yellow"
+id="signal">
+WAIT
+</div>
+
+<div style="font-size:24px;font-weight:900;"
+id="confidenceText">
+0%
+</div>
+
+<div class="progress">
+<div class="bar"
+id="confidenceBar">
+</div>
+</div>
+
+<div class="reason"
+id="reason">
+Waiting realtime market...
+</div>
+
+</div>
+
+</div>
+
+<div class="card"
+style="margin-top:20px;">
+
+<h2>MARKET ANALYTICS</h2>
+
+<div class="stats">
 
 <div class="stat">
-<div class="label">Entry</div>
-<div class="value" id="entryPrice">-</div>
+<div class="label">RSI</div>
+<div class="value"
+id="rsiVal">
+0
+</div>
 </div>
 
 <div class="stat">
-<div class="label">Stop Loss</div>
-<div class="value sell" id="stopLoss">-</div>
+<div class="label">EMA TREND</div>
+<div class="value"
+id="trendVal">
+-
+</div>
 </div>
 
 <div class="stat">
-<div class="label">Take Profit</div>
-<div class="value buy" id="takeProfit">-</div>
+<div class="label">ATR</div>
+<div class="value"
+id="atrVal">
+0
+</div>
 </div>
 
 <div class="stat">
-<div class="label">Risk Reward</div>
-<div class="value" id="rr">1:2</div>
+<div class="label">VOLUME</div>
+<div class="value"
+id="volVal">
+0
 </div>
-
-</div>
-
-<div class="card" style="margin-top:20px;">
-
-<h2>AI MARKET FILTER</h2>
-
-<div class="stat">
-<div class="label">Market Regime</div>
-<div class="value" id="regime">TRENDING</div>
 </div>
 
 <div class="stat">
-<div class="label">Volatility</div>
-<div class="value" id="volatility">MEDIUM</div>
+<div class="label">ORDERFLOW</div>
+<div class="value"
+id="flowVal">
+-
+</div>
 </div>
 
 <div class="stat">
-<div class="label">Fake Breakout Risk</div>
-<div class="value" id="fakeout">LOW</div>
+<div class="label">SMART MONEY</div>
+<div class="value"
+id="smcVal">
+-
 </div>
+</div>
+
+<div class="stat">
+<div class="label">STOP LOSS</div>
+<div class="value red"
+id="slVal">
+0
+</div>
+</div>
+
+<div class="stat">
+<div class="label">TAKE PROFIT</div>
+<div class="value green"
+id="tpVal">
+0
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card"
+style="margin-top:20px;">
+
+<h2>FINNHUB NEWS</h2>
+
+<div id="newsBox"></div>
 
 </div>
 
@@ -418,65 +453,120 @@ AI Confidence
 
 <script>
 
-const ctx = document.getElementById('chart').getContext('2d');
-
-let candleData = [];
-let labels = [];
-
-const chart = new Chart(ctx,{
-    type:'line',
-    data:{
-        labels:labels,
-        datasets:[
-            {
-                label:'Price',
-                data:candleData,
-                borderWidth:2,
-                tension:0.2
-            }
-        ]
-    },
-    options:{
-        responsive:true,
-        plugins:{
-            legend:{
-                labels:{
-                    color:'white'
-                }
-            }
-        },
-        scales:{
-            x:{
-                ticks:{color:'white'}
-            },
-            y:{
-                ticks:{color:'white'}
-            }
-        }
-    }
-});
+const FINNHUB_API =
+'d8a56ahr01qplfv1oougd8a56ahr01qplfv1oov0';
 
 let socket;
+
+let currentSymbol = 'btcusdt';
 
 let closes = [];
 let highs = [];
 let lows = [];
 let volumes = [];
 
-function connectSocket(symbol){
+const chart =
+LightweightCharts.createChart(
+document.getElementById('chart'),
+{
+    layout:{
+        background:{color:'#0f172a'},
+        textColor:'#cbd5e1'
+    },
 
-    if(socket){
-        socket.close();
+    grid:{
+        vertLines:{color:'#1e293b'},
+        horzLines:{color:'#1e293b'}
+    },
+
+    timeScale:{
+        borderColor:'#1e293b',
+        timeVisible:true
+    },
+
+    rightPriceScale:{
+        borderColor:'#1e293b'
     }
+});
+
+const candleSeries =
+chart.addCandlestickSeries({
+    upColor:'#22c55e',
+    downColor:'#ef4444',
+    borderVisible:false,
+    wickUpColor:'#22c55e',
+    wickDownColor:'#ef4444'
+});
+
+async function loadCryptoHistory(){
+
+    const url =
+`https://api.binance.com/api/v3/klines?symbol=${currentSymbol.toUpperCase()}&interval=1m&limit=200`;
+
+    const res = await fetch(url);
+
+    const data = await res.json();
+
+    const candles = data.map(c=>({
+
+        time:Math.floor(c[0]/1000),
+        open:parseFloat(c[1]),
+        high:parseFloat(c[2]),
+        low:parseFloat(c[3]),
+        close:parseFloat(c[4])
+
+    }));
+
+    candleSeries.setData(candles);
+
+    closes = data.map(c=>parseFloat(c[4]));
+    highs = data.map(c=>parseFloat(c[2]));
+    lows = data.map(c=>parseFloat(c[3]));
+    volumes = data.map(c=>parseFloat(c[5]));
+
+}
+
+async function loadForexHistory(){
+
+    const now =
+    Math.floor(Date.now()/1000);
+
+    const from =
+    now - (60*200);
+
+    const url =
+`https://finnhub.io/api/v1/forex/candle?symbol=OANDA:${currentSymbol}&resolution=1&from=${from}&to=${now}&token=${FINNHUB_API}`;
+
+    const res = await fetch(url);
+
+    const data = await res.json();
+
+    const candles = data.c.map((c,i)=>({
+
+        time:data.t[i],
+        open:data.o[i],
+        high:data.h[i],
+        low:data.l[i],
+        close:data.c[i]
+
+    }));
+
+    candleSeries.setData(candles);
+
+    closes = data.c;
+    highs = data.h;
+    lows = data.l;
+    volumes = data.v;
+
+}
+
+function connectCryptoSocket(){
+
+    if(socket) socket.close();
 
     socket = new WebSocket(
-        `wss://stream.binance.com:9443/ws/${symbol}@kline_1m`
+`wss://stream.binance.com:9443/ws/${currentSymbol}@kline_1m`
     );
-
-    socket.onopen = ()=>{
-        document.getElementById('socket-status').innerText =
-        'Realtime Connected';
-    };
 
     socket.onmessage = (event)=>{
 
@@ -484,300 +574,472 @@ function connectSocket(symbol){
 
         const k = msg.k;
 
-        const close = parseFloat(k.c);
-        const high = parseFloat(k.h);
-        const low = parseFloat(k.l);
-        const volume = parseFloat(k.v);
+        const candle = {
 
-        document.getElementById('price').innerText =
-        close.toLocaleString();
+            time:Math.floor(k.t/1000),
+            open:parseFloat(k.o),
+            high:parseFloat(k.h),
+            low:parseFloat(k.l),
+            close:parseFloat(k.c)
 
-        if(k.x){
+        };
 
-            closes.push(close);
-            highs.push(high);
-            lows.push(low);
-            volumes.push(volume);
+        candleSeries.update(candle);
 
-            if(closes.length > 200){
-                closes.shift();
-                highs.shift();
-                lows.shift();
-                volumes.shift();
-            }
+        document.getElementById('livePrice')
+        .innerText =
+        candle.close.toLocaleString();
 
-            labels.push(new Date().toLocaleTimeString());
-
-            candleData.push(close);
-
-            if(candleData.length > 50){
-                candleData.shift();
-                labels.shift();
-            }
-
-            chart.update();
-
-            runAI(close);
-
-        }
+        updateRealtime(candle);
 
     };
 
     socket.onclose = ()=>{
-        document.getElementById('socket-status').innerText =
-        'Reconnecting...';
 
-        setTimeout(()=>{
-            connectSocket(symbol);
-        },3000);
+        setTimeout(connectCryptoSocket,2000);
+
     };
+
+}
+
+async function pollForex(){
+
+    const now =
+    Math.floor(Date.now()/1000);
+
+    const from =
+    now - 60;
+
+    const url =
+`https://finnhub.io/api/v1/forex/candle?symbol=OANDA:${currentSymbol}&resolution=1&from=${from}&to=${now}&token=${FINNHUB_API}`;
+
+    const res = await fetch(url);
+
+    const data = await res.json();
+
+    if(!data.c) return;
+
+    const candle = {
+
+        time:data.t[data.t.length-1],
+        open:data.o[data.o.length-1],
+        high:data.h[data.h.length-1],
+        low:data.l[data.l.length-1],
+        close:data.c[data.c.length-1]
+
+    };
+
+    candleSeries.update(candle);
+
+    document.getElementById('livePrice')
+    .innerText =
+    candle.close.toFixed(5);
+
+    updateRealtime(candle);
+
+}
+
+function updateRealtime(candle){
+
+    closes.push(candle.close);
+    highs.push(candle.high);
+    lows.push(candle.low);
+
+    if(closes.length > 300){
+
+        closes.shift();
+        highs.shift();
+        lows.shift();
+
+    }
+
+    runAI(candle.close);
 
 }
 
 function EMA(period,data){
 
-    const k = 2 / (period + 1);
+    const k = 2/(period+1);
 
     let ema = data[0];
 
     for(let i=1;i<data.length;i++){
-        ema = data[i] * k + ema * (1-k);
+
+        ema =
+        data[i]*k + ema*(1-k);
+
     }
 
     return ema;
+
 }
 
 function RSI(period,data){
 
-    if(data.length < period + 1) return 50;
+    if(data.length < period+1)
+        return 50;
 
-    let gains = 0;
-    let losses = 0;
+    let gain = 0;
+    let loss = 0;
 
     for(let i=data.length-period;i<data.length;i++){
 
-        const diff = data[i] - data[i-1];
+        const diff =
+        data[i]-data[i-1];
 
-        if(diff >= 0){
-            gains += diff;
-        }else{
-            losses += Math.abs(diff);
-        }
+        if(diff > 0)
+            gain += diff;
+        else
+            loss += Math.abs(diff);
+
     }
 
-    const rs = gains / (losses || 1);
+    const rs =
+    gain/(loss || 1);
 
-    return 100 - (100 / (1 + rs));
+    return 100-(100/(1+rs));
+
 }
 
 function ATR(period){
-
-    if(highs.length < period) return 0;
 
     let trs = [];
 
     for(let i=1;i<highs.length;i++){
 
-        const tr = Math.max(
-            highs[i]-lows[i],
-            Math.abs(highs[i]-closes[i-1]),
-            Math.abs(lows[i]-closes[i-1])
+        trs.push(
+            Math.max(
+                highs[i]-lows[i],
+                Math.abs(highs[i]-closes[i-1]),
+                Math.abs(lows[i]-closes[i-1])
+            )
         );
 
-        trs.push(tr);
     }
 
-    return trs.reduce((a,b)=>a+b,0) / trs.length;
-}
+    return trs.reduce((a,b)=>a+b,0)/trs.length;
 
-function volumeSpike(){
-
-    if(volumes.length < 20) return false;
-
-    const avg =
-    volumes.slice(-20).reduce((a,b)=>a+b,0)/20;
-
-    return volumes[volumes.length-1] > avg * 1.5;
 }
 
 function runAI(price){
 
-    if(closes.length < 50) return;
+    if(closes.length < 50)
+        return;
 
-    const ema9 = EMA(9,closes);
-    const ema21 = EMA(21,closes);
-    const ema200 = EMA(50,closes);
+    const ema9 =
+    EMA(9,closes);
 
-    const rsi = RSI(14,closes);
+    const ema21 =
+    EMA(21,closes);
 
-    const atr = ATR(14);
+    const ema200 =
+    EMA(100,closes);
 
-    const volSpike = volumeSpike();
+    const rsi =
+    RSI(14,closes);
+
+    const atr =
+    ATR(14);
 
     let bullish = 0;
     let bearish = 0;
 
-    if(ema9 > ema21) bullish += 25;
-    else bearish += 25;
+    if(ema9 > ema21)
+        bullish += 25;
+    else
+        bearish += 25;
 
-    if(ema21 > ema200) bullish += 25;
-    else bearish += 25;
+    if(ema21 > ema200)
+        bullish += 25;
+    else
+        bearish += 25;
 
-    if(rsi > 55) bullish += 20;
-    else if(rsi < 45) bearish += 20;
+    if(rsi > 55)
+        bullish += 20;
 
-    if(volSpike) bullish += 15;
+    if(rsi < 45)
+        bearish += 20;
 
-    if(price > ema9) bullish += 15;
-    else bearish += 15;
+    if(price > ema9)
+        bullish += 15;
+    else
+        bearish += 15;
+
+    const volumeSpike =
+    volumes[volumes.length-1] >
+    (
+        volumes.reduce((a,b)=>a+b,0)
+        /volumes.length
+    )*1.5;
+
+    if(volumeSpike)
+        bullish += 15;
 
     let signal = 'WAIT';
+
     let confidence = 50;
 
     if(bullish >= 70){
+
         signal = 'BUY';
         confidence = bullish;
+
     }
     else if(bearish >= 70){
+
         signal = 'SELL';
         confidence = bearish;
+
     }
 
     let sl = 0;
     let tp = 0;
 
     if(signal === 'BUY'){
-        sl = price - (atr * 1.5);
-        tp = price + (atr * 3);
+
+        sl = price - (atr*1.5);
+        tp = price + (atr*3);
+
     }
 
     if(signal === 'SELL'){
-        sl = price + (atr * 1.5);
-        tp = price - (atr * 3);
+
+        sl = price + (atr*1.5);
+        tp = price - (atr*3);
+
     }
 
     updateUI({
+
         signal,
         confidence,
-        price,
+        rsi,
+        atr,
         sl,
         tp,
+        bullish,
+        bearish,
         ema9,
-        ema21,
-        rsi,
-        volSpike
+        ema21
+
+    },price);
+
+}
+
+function updateUI(data,price){
+
+    const signal =
+    document.getElementById('signal');
+
+    signal.innerText =
+    data.signal;
+
+    signal.className =
+    'signal';
+
+    if(data.signal === 'BUY')
+        signal.classList.add('green');
+
+    else if(data.signal === 'SELL')
+        signal.classList.add('red');
+
+    else
+        signal.classList.add('yellow');
+
+    document.getElementById('confidenceText')
+    .innerText =
+    data.confidence + '%';
+
+    document.getElementById('confidenceBar')
+    .style.width =
+    data.confidence + '%';
+
+    document.getElementById('rsiVal')
+    .innerText =
+    data.rsi.toFixed(2);
+
+    document.getElementById('atrVal')
+    .innerText =
+    data.atr.toFixed(2);
+
+    document.getElementById('trendVal')
+    .innerText =
+    data.ema9 > data.ema21
+    ? 'BULL'
+    : 'BEAR';
+
+    document.getElementById('flowVal')
+    .innerText =
+    data.bullish > data.bearish
+    ? 'BUY FLOW'
+    : 'SELL FLOW';
+
+    document.getElementById('smcVal')
+    .innerText =
+    data.bullish > data.bearish
+    ? 'BOS'
+    : 'CHOCH';
+
+    document.getElementById('slVal')
+    .innerText =
+    data.sl.toFixed(2);
+
+    document.getElementById('tpVal')
+    .innerText =
+    data.tp.toFixed(2);
+
+    document.getElementById('volVal')
+    .innerText =
+    volumes[volumes.length-1]
+    .toFixed(0);
+
+    document.getElementById('reason')
+    .innerText =
+`
+EMA Trend aktif,
+RSI Momentum tervalidasi,
+ATR Volatility aktif,
+Orderflow terdeteksi,
+Smart Money terdeteksi,
+AI Confidence ${data.confidence}%.
+`;
+
+    if(data.signal !== 'WAIT')
+        addJournal(data,price);
+
+}
+
+function addJournal(data,price){
+
+    const tbody =
+    document.getElementById('journal');
+
+    const row =
+    document.createElement('tr');
+
+    row.innerHTML = `
+<td>${new Date().toLocaleTimeString()}</td>
+<td>
+<span class="${
+data.signal==='BUY'
+?'badge-buy'
+:'badge-sell'
+}">
+${data.signal}
+</span>
+</td>
+<td>${price.toFixed(2)}</td>
+<td>${data.sl.toFixed(2)}</td>
+<td>${data.tp.toFixed(2)}</td>
+<td>${data.confidence}%</td>
+`;
+
+    tbody.prepend(row);
+
+    while(tbody.rows.length > 20){
+
+        tbody.deleteRow(20);
+
+    }
+
+}
+
+async function loadNews(){
+
+    const res =
+    await fetch(
+`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API}`
+    );
+
+    const news =
+    await res.json();
+
+    const box =
+    document.getElementById('newsBox');
+
+    box.innerHTML = '';
+
+    news.slice(0,5).forEach(n=>{
+
+        box.innerHTML += `
+<div class="news">
+
+<div>
+${n.headline}
+</div>
+
+<div class="small">
+${new Date(
+n.datetime*1000
+).toLocaleString()}
+</div>
+
+</div>
+`;
+
     });
 
 }
 
-function updateUI(data){
+document.getElementById('symbolSelect')
+.addEventListener('change',
+async(e)=>{
 
-    const signalText =
-    document.getElementById('signalText');
+    currentSymbol =
+    e.target.value;
 
-    signalText.innerText = data.signal;
+    document.getElementById('pairName')
+    .innerText =
+    currentSymbol.toUpperCase();
 
-    signalText.className = 'signalText';
-
-    if(data.signal === 'BUY'){
-        signalText.classList.add('buy');
-    }
-    else if(data.signal === 'SELL'){
-        signalText.classList.add('sell');
-    }
-    else{
-        signalText.classList.add('wait');
-    }
-
-    document.getElementById('confidenceText').innerText =
-    data.confidence + '%';
-
-    document.getElementById('confidenceBar').style.width =
-    data.confidence + '%';
-
-    document.getElementById('entryPrice').innerText =
-    data.price.toFixed(2);
-
-    document.getElementById('stopLoss').innerText =
-    data.sl.toFixed(2);
-
-    document.getElementById('takeProfit').innerText =
-    data.tp.toFixed(2);
-
-    document.getElementById('trend').innerText =
-    data.ema9 > data.ema21 ? 'BULLISH' : 'BEARISH';
-
-    document.getElementById('rsi').innerText =
-    data.rsi.toFixed(2);
-
-    document.getElementById('adx').innerText =
-    data.confidence > 70 ? 'STRONG' : 'WEAK';
-
-    document.getElementById('volume').innerText =
-    data.volSpike ? 'HIGH' : 'NORMAL';
-
-    document.getElementById('signalReason').innerText =
-    `
-    EMA Trend Confirmation aktif,
-    RSI Momentum tervalidasi,
-    ATR Volatility terdeteksi,
-    Volume ${data.volSpike ? 'Spike' : 'Normal'},
-    AI Confidence ${data.confidence}%.
-    `;
-
-    addJournal(data);
-
-}
-
-function addJournal(data){
-
-    if(data.signal === 'WAIT') return;
-
-    const tbody = document.getElementById('journal');
-
-    const row = document.createElement('tr');
-
-    const badge =
-    data.signal === 'BUY'
-    ? 'badge-buy'
-    : 'badge-sell';
-
-    row.innerHTML = `
-        <td>${new Date().toLocaleTimeString()}</td>
-        <td><span class="badge ${badge}">
-        ${data.signal}
-        </span></td>
-        <td>${data.price.toFixed(2)}</td>
-        <td>${data.sl.toFixed(2)}</td>
-        <td>${data.tp.toFixed(2)}</td>
-        <td>${data.confidence}%</td>
-    `;
-
-    tbody.prepend(row);
-
-    while(tbody.rows.length > 10){
-        tbody.deleteRow(10);
-    }
-
-}
-
-document.getElementById('symbol')
-.addEventListener('change',(e)=>{
     closes = [];
     highs = [];
     lows = [];
     volumes = [];
-    candleData = [];
-    labels = [];
 
-    chart.data.labels = labels;
-    chart.data.datasets[0].data = candleData;
-    chart.update();
+    if(currentSymbol.includes('usdt')){
 
-    connectSocket(e.target.value);
+        await loadCryptoHistory();
+
+        connectCryptoSocket();
+
+    }
+    else{
+
+        await loadForexHistory();
+
+        if(socket)
+            socket.close();
+
+    }
+
 });
 
-connectSocket('btcusdt');
+async function init(){
+
+    await loadCryptoHistory();
+
+    connectCryptoSocket();
+
+    loadNews();
+
+    setInterval(loadNews,300000);
+
+    setInterval(()=>{
+
+        if(
+            !currentSymbol.includes('usdt')
+        ){
+
+            pollForex();
+
+        }
+
+    },5000);
+
+}
+
+init();
 
 </script>
 

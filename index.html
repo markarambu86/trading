@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECC Advanced Trading Assistant - Markarambu86</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0b0f19;
+            color: #f1f5f9;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #1e293b;
+            margin-bottom: 25px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            color: #38bdf8;
+            letter-spacing: 0.5px;
+        }
+
+        header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .market-status-bar {
+            background-color: #1e293b;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+
+        /* Layout Grid */
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 900px) {
+            .grid-layout { grid-template-columns: 1fr; }
+        }
+
+        .card {
+            background-color: #111827;
+            border: 1px solid #1e293b;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-size: 16px;
+            color: #ffffff;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Form elements */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 11px 14px;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            color: #0f172a;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            width: 100%;
+            transition: opacity 0.2s;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        /* Signals Display */
+        .signal-display {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            background-color: #1f2937;
+            border-radius: 10px;
+            text-align: center;
+            min-height: 200px;
+            border: 2px dashed #374151;
+            transition: all 0.3s ease;
+        }
+
+        .signal-status {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .signal-neutral { color: #94a3b8; }
+        .signal-buy { color: #4ade80; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
+        .signal-sell { color: #f87171; text-shadow: 0 0 15px rgba(248, 113, 113, 0.3); }
+
+        .signal-reason {
+            font-size: 14px;
+            color: #cbd5e1;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+
+        /* Matrix Parameters Details */
+        .matrix-output {
+            margin-top: 15px;
+            background-color: #0f172a;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .matrix-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .matrix-row:last-child { border-bottom: none; }
+        .matrix-label { color: #94a3b8; }
+        .matrix-value { font-weight: 600; color: #ffffff; }
+
+        /* Journal Table */
+        .journal-section {
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        th {
+            background-color: #1e293b;
+            color: #38bdf8;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: rgba(255, 255, 255, 0.01);
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-buy { background-color: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
+        .badge-sell { background-color: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); }
+
+        /* Tips Panel */
+        .tips-panel {
+            background-color: rgba(56, 189, 248, 0.05);
+            border-left: 4px solid #38bdf8;
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-top: 15px;
+            font-size: 13.5px;
+            line-height: 1.5;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div>
+                <h1>ECC Mathematical Trading Engine v2.0</h1>
+                <p>Asisten Pengambil Keputusan Sinyal Kuantitatif Berdasarkan Logika Multi-Indikator</p>
+            </div>
+            <div class="market-status-bar">
+                <div class="pulse-dot"></div>
+                <span>Engine Aktif Lokal</span>
+            </div>
+        </header>
+
+        <!-- Main Grid Area -->
+        <div class="grid-layout">
+            
+            <!-- LEFT PANEL: PARAMETER INPUT -->
+            <div class="card">
+                <h2>📊 Masukkan Data Indikator Pasar (Teknikal)</h2>
+                <div class="form-group">
+                    <label>Aset yang Diperiksa</label>
+                    <select id="asset-name">
+                        <option value="BTCUSDT">Bitcoin (BTC/USDT)</option>
+                        <option value="ETHUSDT">Ethereum (ETH/USDT)</option>
+                        <option value="FOREX">Pasar Mata Uang (Forex)</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Harga Saat Ini (Current Price)</label>
+                        <input type="number" id="price-current" value="65200" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label>Moving Average Menengah (MA 20)</label>
+                        <input type="number" id="price-ma20" value="64800" step="any">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nilai RSI (Relative Strength Index)</label>
+                        <input type="number" id="val-rsi" value="55" min="0" max="100">
+                    </div>
+                    <div class="form-group">
+                        <label>Garis MACD vs Signal Line</label>
+                        <select id="val-macd">
+                            <option value="bullish_cross">Golden Cross (MACD di atas Signal) 📈</option>
+                            <option value="bearish_cross">Death Cross (MACD di bawah Signal) 📉</option>
+                            <option value="flat">Datar / Konvergen Biasa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Batas Candlestick Support Atas</label>
+                        <input type="number" id="level-support" value="63500" step="any">
+                    </div>
+                    <div class="form-group">
+                        <label>Batas Candlestick Resistance Atas</label>
+                        <input type="number" id="level-resistance" value="66500" step="any">
+                    </div>
+                </div>
+
+                <button onclick="prosesSinyalPrediksi()">Jalankan Analisis & Prediksi Keputusan</button>
+
+                <div class="tips-panel">
+                    <strong>💡 Tips Kerja:</strong> Masukkan data di atas berdasarkan indikator chart Anda (misal dari TradingView atau MetaTrader) sebelum memutuskan masuk market. Gunakan ini untuk konfirmasi objektif agar psikologi Anda tidak bias emosi.
+                </div>
+            </div>
+
+            <!-- RIGHT PANEL: DECISION & MATHEMATICAL MATRIX -->
+            <div class="card">
+                <h2>🎯 Hasil Prediksi & Konfirmasi Eksekusi</h2>
+                
+                <div class="signal-display" id="signal-box">
+                    <div class="signal-status signal-neutral" id="txt-signal">WAIT & SEE</div>
+                    <div class="signal-reason" id="txt-reason">Masukkan parameter di panel kiri dan tekan tombol Analisis untuk memunculkan prediksi konseptual matematika.</div>
+                </div>
+
+                <!-- Matrix Perhitungan Bobot -->
+                <div class="matrix-output" id="matrix-box">
+                    <h3 style="font-size:14px; color:#38bdf8; margin-bottom:10px;">Skor Matriks Kuantitatif:</h3>
+                    <div class="matrix-row">
+                        <span class="matrix-label">Skor Sentimen Bullish (Maks 100)</span>
+                        <span class="matrix-value" id="m-bull">-</span>
+                    </div>
+                    <div class="matrix-row">
+                        <span class="matrix-label">Skor Sentimen Bearish (Maks 100)</span>
+                        <span class="matrix-value" id="m-bear">-</span>
+                    </div>
+                    <div class="matrix-row">
+                        <span class="matrix-label">Level Stop Loss Pengaman Optimal</span>
+                        <span class="matrix-value" id="m-sl" style="color:#f87171;">-</span>
+                    </div>
+                    <div class="matrix-row">
+                        <span class="matrix-label">Level Take Profit Target Rasional</span>
+                        <span class="matrix-value" id="m-tp" style="color:#4ade80;">-</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- LOWER SECTION: HISTORICAL DECISION LOGS -->
+        <div class="card journal-section">
+            <h2>📜 Log Rekaman Prediksi Eksekusi Lokal</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Waktu Eksekusi</th>
+                        <th>Aset</th>
+                        <th>Harga Saat Analisis</th>
+                        <th>Rekomendasi Prediksi</th>
+                        <th>Batas Stop Loss</th>
+                        <th>Batas Take Profit</th>
+                    </tr>
+                </thead>
+                <tbody id="log-table-body">
+                    <tr>
+                        <td>25/05/2026 10:15</td>
+                        <td>BTCUSDT</td>
+                        <td>$62,100</td>
+                        <td><span class="badge badge-buy">STRONG BUY</span></td>
+                        <td>$61,200</td>
+                        <td>$63,900</td>
+                    </tr>
+                    <tr>
+                        <td>24/05/2026 14:30</td>
+                        <td>ETHUSDT</td>
+                        <td>$3,450</td>
+                        <td><span class="badge badge-sell">STRONG SELL</span></td>
+                        <td>$3,510</td>
+                        <td>$3,330</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SCRIPT ENGINE CORE LOGIC -->
+    <script>
+        function prosesSinyalPrediksi() {
+            // Fetch Input Data
+            const asset = document.getElementById('asset-name').value;
+            const price = parseFloat(document.getElementById('price-current').value);
+            const ma20 = parseFloat(document.getElementById('price-ma20').value);
+            const rsi = parseFloat(document.getElementById('val-rsi').value);
+            const macd = document.getElementById('val-macd').value;
+            const support = parseFloat(document.getElementById('level-support').value);
+            const resistance = parseFloat(document.getElementById('level-resistance').value);
+
+            // Validasi Input
+            if (isNaN(price) || isNaN(ma20) || isNaN(rsi) || isNaN(support) || isNaN(resistance)) {
+                alert("Mohon isi semua parameter angka dengan valid!");
+                return;
+            }
+
+            // Core Math Engine Algorithm: Penghitungan Berbobot (Weight Scoring System)
+            let bullishScore = 0;
+            let bearishScore = 0;
+
+            // 1. Analisis Tren via Moving Average
+            if (price > ma20) {
+                bullishScore += 30; // Harga di atas rerata tren naik
+            } else {
+                bearishScore += 30; // Harga di bawah rerata tren turun
+            }
+
+            // 2. Analisis Momentum via RSI
+            if (rsi <= 30) {
+                bullishScore += 35; // Oversold (Sangat Murah, Potensi Rebound Tinggi)
+            } else if (rsi >= 70) {
+                bearishScore += 35; // Overbought (Sangat Mahal, Potensi Koreksi Turun)
+            } else if (rsi > 50 && price > ma20) {
+                bullishScore += 15; // Momentum Bullish Berlanjut
+            } else if (rsi < 50 && price < ma20) {
+                bearishScore += 15; // Momentum Bearish Berlanjut
+            }
+
+            // 3. Analisis MACD Cross
+            if (macd === 'bullish_cross') {
+                bullishScore += 35;
+            } else if (macd === 'bearish_cross') {
+                bearishScore += 35;
+            }
+
+            // Perhitungan Target SL & TP Matematik Kuantitatif (Risk Reward Ratio 1:2 Berbasis Struktur Market)
+            let optimalSL, optimalTP;
+            
+            // Default Kalkulasi Struktur Terdekat
+            if (bullishScore > bearishScore) {
+                optimalSL = support - (price * 0.002); // Letakkan sedikit di bawah support agar aman dari stop loss hunting
+                const gapRisk = price - optimalSL;
+                optimalTP = price + (gapRisk * 2); // Target profit rasional RR 1:2
+            } else {
+                optimalSL = resistance + (price * 0.002); // Letakkan sedikit di atas resistance
+                const gapRisk = optimalSL - price;
+                optimalTP = price - (gapRisk * 2); // Target profit short sell
+            }
+
+            // Penentuan Sinyal Akhir Berdasarkan Dominasi Skor Matriks
+            const signalBox = document.getElementById('signal-box');
+            const txtSignal = document.getElementById('txt-signal');
+            const txtReason = document.getElementById('txt-reason');
+
+            // Reset classes
+            signalBox.style.backgroundColor = '#1f2937';
+            txtSignal.className = 'signal-status';
+
+            let finalRecommendation = "";
+            let badgeClass = "";
+
+            if (bullishScore >= 65 && rsi < 70) {
+                txtSignal.innerText = "🚀 BUY SIGNAL (STRONG)";
+                txtSignal.classList.add('signal-buy');
+                txtReason.innerText = `Data multi-indikator mengonfirmasi konvergensi positif kuat pada ${asset}. Harga berada di zona tren akumulasi dengan momentum beli dominan.`;
+                signalBox.style.backgroundColor = 'rgba(34, 197, 94, 0.08)';
+                finalRecommendation = "STRONG BUY";
+                badgeClass = "badge-buy";
+            } else if (bearishScore >= 65 && rsi > 30) {
+                txtSignal.innerText = "⚠️ SELL SIGNAL (STRONG)";
+                txtSignal.classList.add('signal-sell');
+                txtReason.innerText = `Deteksi distribusi pasar masif pada ${asset}. Indikator momentum menunjukkan area jenuh beli atau kerusakan struktur tren, disarankan amankan profit atau lakukan short entry.`;
+                signalBox.style.backgroundColor = 'rgba(239, 68, 68, 0.08)';
+                finalRecommendation = "STRONG SELL";
+                badgeClass = "badge-sell";
+            } else {
+                txtSignal.innerText = "⏳ HOLD / WAIT & SEE";
+                txtSignal.classList.add('signal-neutral');
+                txtReason.innerText = "Kekuatan pasar seimbang (sideways). Tidak ada sinyal konvergensi indikator yang dominan. Hindari masuk market di tengah area konsolidasi untuk menghindari noise.";
+                finalRecommendation = "WAIT & SEE";
+                badgeClass = "badge-neutral";
+                
+                // Set default TP SL ke level struktur standar jika tidak ada tren kuat
+                optimalSL = support;
+                optimalTP = resistance;
+            }
+
+            // Update Panel Output Matriks
+            document.getElementById('matrix-box').style.display = 'block';
+            document.getElementById('m-bull').innerText = bullishScore + " pts";
+            document.getElementById('m-bear').innerText = bearishScore + " pts";
+            document.getElementById('m-sl').innerText = "$" + optimalSL.toFixed(2);
+            document.getElementById('m-tp').innerText = "$" + optimalTP.toFixed(2);
+
+            // Tambahkan Otomatis Rekaman Ke Tabel Histori (Log Jurnal)
+            const now = new Date();
+            const timeStr = now.getDate().toString().padStart(2, '0') + '/' + 
+                            (now.getMonth()+1).toString().padStart(2, '0') + '/' + 
+                            now.getFullYear() + ' ' + 
+                            now.getHours().toString().padStart(2, '0') + ':' + 
+                            now.getMinutes().toString().padStart(2, '0');
+
+            const tbody = document.getElementById('log-table-body');
+            const newRow = tbody.insertRow(0); // Insert paling atas
+            newRow.innerHTML = `
+                <td>${timeStr}</td>
+                <td>${asset}</td>
+                <td>$${price.toLocaleString()}</td>
+                <td><span class="badge ${badgeClass}">${finalRecommendation}</span></td>
+                <td>$${optimalSL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td>$${optimalTP.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+            `;
+        }
+    </script>
+</body>
+</html>

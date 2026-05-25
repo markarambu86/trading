@@ -1,503 +1,221 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Institutional AI Forex & Crypto Dashboard</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-
-<style>
-body {
-    background: #050816;
-    color: white;
-    font-family: Arial, sans-serif;
-}
-
-.glass {
-    background: rgba(255,255,255,0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255,255,255,0.1);
-}
-
-.signal-buy {
-    color: #00ff95;
-}
-
-.signal-sell {
-    color: #ff4d4d;
-}
-
-.card-hover:hover {
-    transform: translateY(-3px);
-    transition: 0.3s;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto AI Trading Bot (Binance Free Live API)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0e14; color: #eaeaea; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { text-align: center; color: #f3ba2f; margin-bottom: 5px; font-size: 28px; }
+        .subtitle { text-align: center; color: #8892b0; margin-bottom: 25px; font-size: 14px; }
+        .status-panel { background-color: #151a26; padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #f3ba2f; display: flex; justify-content: space-between; }
+        table { width: 100%; border-collapse: collapse; background-color: #151a26; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #222b3d; font-size: 14px; }
+        th { background-color: #1e2638; color: #f3ba2f; font-weight: 600; font-size: 12px; text-transform: uppercase; }
+        tr:hover { background-color: #1c2436; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-weight: bold; font-size: 11px; display: inline-block; }
+        .badge-buy { background-color: #00ff88; color: #000; }
+        .badge-sell { background-color: #ff3b30; color: #fff; }
+        .badge-hold { background-color: #ffcc00; color: #000; }
+        .badge-breakout { background-color: #9b59b6; color: #fff; animation: pulse 1.5s infinite; }
+        .text-up { color: #00ff88; font-weight: bold; }
+        .text-down { color: #ff3b30; font-weight: bold; }
+        .log-container { margin-top: 25px; background-color: #05070a; padding: 15px; border-radius: 8px; height: 220px; overflow-y: auto; font-family: 'Courier New', Courier, monospace; border: 1px solid #222b3d; }
+        .log-entry { margin-bottom: 6px; font-size: 12px; }
+        .log-success { color: #00ff88; }
+        .log-danger { color: #ff3b30; }
+        .log-info { color: #00bfff; }
+        .log-breakout { color: #d185ff; font-weight: bold; }
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+    </style>
 </head>
 <body>
 
-<div class="p-4 grid grid-cols-1 lg:grid-cols-4 gap-4">
+<div class="container">
+    <h1>AI CRYPTO TRADING BOT</h1>
+    <div class="subtitle">Koneksi Langsung: API Publik Binance (Tanpa Token / Gratis Selamanya)</div>
 
-    <!-- LEFT PANEL -->
-    <div class="lg:col-span-3 space-y-4">
-
-        <!-- TOP HEADER -->
-        <div class="glass rounded-2xl p-4 flex flex-wrap items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold">AI FOREX & CRYPTO TRADING DASHBOARD</h1>
-                <p class="text-gray-400">Realtime Institutional Trading Assistant</p>
-            </div>
-
-            <div class="flex gap-3 mt-3 lg:mt-0">
-                <select id="symbol" class="bg-black p-2 rounded-lg border border-gray-700">
-                    <option value="btcusdt">BTCUSDT</option>
-                    <option value="ethusdt">ETHUSDT</option>
-                    <option value="bnbusdt">BNBUSDT</option>
-                    <option value="solusdt">SOLUSDT</option>
-                </select>
-
-                <select id="interval" class="bg-black p-2 rounded-lg border border-gray-700">
-                    <option value="1m">1 Minute</option>
-                    <option value="3m">3 Minute</option>
-                    <option value="5m">5 Minute</option>
-                    <option value="15m">15 Minute</option>
-                </select>
-            </div>
-        </div>
-
-        <!-- MAIN CHART -->
-        <div class="glass rounded-2xl p-4 card-hover">
-            <div class="flex justify-between items-center mb-3">
-                <h2 class="text-xl font-bold">Realtime Market Chart</h2>
-                <div id="marketStatus" class="text-green-400">LIVE</div>
-            </div>
-            <div id="chart" style="height:500px"></div>
-        </div>
-
-        <!-- AI SIGNALS -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-            <div class="glass rounded-2xl p-4 card-hover">
-                <h3 class="text-lg font-bold mb-2">AI Signal</h3>
-                <div id="signalText" class="text-4xl font-bold signal-buy">BUY</div>
-                <div id="confidence" class="text-xl mt-2">Confidence: 87%</div>
-                <div id="trend" class="text-gray-400 mt-2">Bullish Momentum</div>
-            </div>
-
-            <div class="glass rounded-2xl p-4 card-hover">
-                <h3 class="text-lg font-bold mb-2">Trade Setup</h3>
-                <div>Entry: <span id="entry">-</span></div>
-                <div>Stop Loss: <span id="sl">-</span></div>
-                <div>Take Profit: <span id="tp">-</span></div>
-            </div>
-
-            <div class="glass rounded-2xl p-4 card-hover">
-                <h3 class="text-lg font-bold mb-2">Market Strength</h3>
-                <canvas id="strengthChart"></canvas>
-            </div>
-
-        </div>
-
-        <!-- ORDERFLOW -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-            <div class="glass rounded-2xl p-4 card-hover">
-                <h3 class="text-xl font-bold mb-3">Whale Tracker</h3>
-                <div id="whaleData" class="space-y-2 text-sm"></div>
-            </div>
-
-            <div class="glass rounded-2xl p-4 card-hover">
-                <h3 class="text-xl font-bold mb-3">Orderflow Analysis</h3>
-                <div id="orderflow"></div>
-            </div>
-
-        </div>
-
-        <!-- NEWS SENTIMENT -->
-        <div class="glass rounded-2xl p-4 card-hover">
-            <h3 class="text-xl font-bold mb-3">AI News Sentiment</h3>
-            <div id="newsContainer" class="space-y-3"></div>
-        </div>
-
+    <div class="status-panel">
+        <div><strong>Status Koneksi API:</strong> <span style="color: #00ff88;">TERHUBUNG & LIVE</span></div>
+        <div><strong>Simulasi Saldo:</strong> <span style="color: #00ff88; font-weight: bold;">$10,000.00 USD</span></div>
     </div>
 
-    <!-- RIGHT PANEL -->
-    <div class="space-y-4">
+    <table>
+        <thead>
+            <tr>
+                <th>Crypto Asset</th>
+                <th>Harga Terkini (USD)</th>
+                <th>Prediksi (1-5m)</th>
+                <th>Status Struktur</th>
+                <th>Sinyal AI</th>
+                <th>Target SL / TP</th>
+                <th>Posisi Aktif</th>
+            </tr>
+        </thead>
+        <tbody id="trading-table-body">
+            </tbody>
+    </table>
 
-        <!-- MARKET SCANNER -->
-        <div class="glass rounded-2xl p-4 card-hover">
-            <h3 class="text-xl font-bold mb-3">Market Scanner</h3>
-            <div id="scanner" class="space-y-2"></div>
-        </div>
-
-        <!-- AI ANALYSIS -->
-        <div class="glass rounded-2xl p-4 card-hover">
-            <h3 class="text-xl font-bold mb-3">AI Analysis</h3>
-            <div id="aiAnalysis" class="space-y-2 text-sm"></div>
-        </div>
-
-        <!-- TECHNICALS -->
-        <div class="glass rounded-2xl p-4 card-hover">
-            <h3 class="text-xl font-bold mb-3">Technical Indicators</h3>
-            <div class="space-y-2">
-                <div>RSI: <span id="rsi">0</span></div>
-                <div>MACD: <span id="macd">0</span></div>
-                <div>EMA20: <span id="ema20">0</span></div>
-                <div>EMA50: <span id="ema50">0</span></div>
-            </div>
-        </div>
-
-        <!-- RISK MANAGEMENT -->
-        <div class="glass rounded-2xl p-4 card-hover">
-            <h3 class="text-xl font-bold mb-3">Risk Management</h3>
-            <div class="space-y-2 text-sm">
-                <div>Risk Level: <span id="riskLevel">LOW</span></div>
-                <div>Volatility: <span id="volatility">NORMAL</span></div>
-                <div>AI Probability: <span id="probability">82%</span></div>
-            </div>
-        </div>
-
+    <h3>Live Terminal Log:</h3>
+    <div class="log-container" id="log-box">
+        <div class="log-entry log-info">[SISTEM] Bot AI mengaktifkan jalur API publik Binance...</div>
     </div>
-
 </div>
 
 <script>
-
-// ==============================
-// CONFIG
-// ==============================
-
-const FINNHUB_API_KEY = 'd8a56ahr01qplfv1oougd8a56ahr01qplfv1oov0';
-
-let currentSymbol = 'btcusdt';
-let currentInterval = '1m';
-
-// ==============================
-// CHART SETUP
-// ==============================
-
-const chartContainer = document.getElementById('chart');
-
-const chart = LightweightCharts.createChart(chartContainer, {
-    layout: {
-        background: { color: '#050816' },
-        textColor: '#DDD',
-    },
-    grid: {
-        vertLines: { color: '#1f2937' },
-        horzLines: { color: '#1f2937' },
-    },
-    width: chartContainer.clientWidth,
-    height: 500,
-});
-
-const candleSeries = chart.addCandlestickSeries();
-
-window.addEventListener('resize', () => {
-    chart.applyOptions({ width: chartContainer.clientWidth });
-});
-
-// ==============================
-// FETCH HISTORICAL DATA
-// ==============================
-
-async function loadHistoricalData() {
-
-    const url = `https://api.binance.com/api/v3/klines?symbol=${currentSymbol.toUpperCase()}&interval=${currentInterval}&limit=300`;
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    const candles = data.map(c => ({
-        time: c[0] / 1000,
-        open: parseFloat(c[1]),
-        high: parseFloat(c[2]),
-        low: parseFloat(c[3]),
-        close: parseFloat(c[4]),
-    }));
-
-    candleSeries.setData(candles);
-
-    calculateAI(candles);
-}
-
-// ==============================
-// WEBSOCKET REALTIME
-// ==============================
-
-let socket;
-
-function connectWebSocket() {
-
-    if (socket) socket.close();
-
-    socket = new WebSocket(
-        `wss://stream.binance.com:9443/ws/${currentSymbol}@kline_${currentInterval}`
-    );
-
-    socket.onmessage = (event) => {
-
-        const msg = JSON.parse(event.data);
-        const k = msg.k;
-
-        candleSeries.update({
-            time: k.t / 1000,
-            open: parseFloat(k.o),
-            high: parseFloat(k.h),
-            low: parseFloat(k.l),
-            close: parseFloat(k.c)
-        });
-
-        updateRealtimeData(parseFloat(k.c));
-    };
-}
-
-// ==============================
-// AI ENGINE
-// ==============================
-
-function calculateAI(candles) {
-
-    const closes = candles.map(c => c.close);
-
-    const latest = closes[closes.length - 1];
-    const prev = closes[closes.length - 2];
-
-    const rsi = calculateRSI(closes, 14);
-    const ema20 = calculateEMA(closes, 20);
-    const ema50 = calculateEMA(closes, 50);
-
-    document.getElementById('rsi').innerText = rsi.toFixed(2);
-    document.getElementById('ema20').innerText = ema20.toFixed(2);
-    document.getElementById('ema50').innerText = ema50.toFixed(2);
-
-    let signal = 'BUY';
-    let confidence = 80;
-    let trend = 'Bullish Momentum';
-
-    if (rsi < 45 && ema20 < ema50) {
-        signal = 'SELL';
-        confidence = 85;
-        trend = 'Bearish Momentum';
-    }
-
-    if (signal === 'BUY') {
-        document.getElementById('signalText').className = 'text-4xl font-bold signal-buy';
-    } else {
-        document.getElementById('signalText').className = 'text-4xl font-bold signal-sell';
-    }
-
-    document.getElementById('signalText').innerText = signal;
-    document.getElementById('confidence').innerText = `Confidence: ${confidence}%`;
-    document.getElementById('trend').innerText = trend;
-
-    document.getElementById('entry').innerText = latest.toFixed(2);
-
-    if (signal === 'BUY') {
-        document.getElementById('sl').innerText = (latest * 0.997).toFixed(2);
-        document.getElementById('tp').innerText = (latest * 1.006).toFixed(2);
-    } else {
-        document.getElementById('sl').innerText = (latest * 1.003).toFixed(2);
-        document.getElementById('tp').innerText = (latest * 0.994).toFixed(2);
-    }
-
-    document.getElementById('probability').innerText = confidence + '%';
-
-    generateAIAnalysis(signal, confidence, rsi);
-}
-
-// ==============================
-// TECHNICAL INDICATORS
-// ==============================
-
-function calculateEMA(prices, period) {
-
-    const k = 2 / (period + 1);
-    let ema = prices[0];
-
-    for (let i = 1; i < prices.length; i++) {
-        ema = prices[i] * k + ema * (1 - k);
-    }
-
-    return ema;
-}
-
-function calculateRSI(prices, period = 14) {
-
-    let gains = 0;
-    let losses = 0;
-
-    for (let i = prices.length - period; i < prices.length; i++) {
-        const diff = prices[i] - prices[i - 1];
-
-        if (diff >= 0) gains += diff;
-        else losses -= diff;
-    }
-
-    const rs = gains / losses;
-
-    return 100 - (100 / (1 + rs));
-}
-
-// ==============================
-// REALTIME UPDATE
-// ==============================
-
-function updateRealtimeData(price) {
-
-    document.getElementById('marketStatus').innerText = 'LIVE';
-
-    const whaleDiv = document.getElementById('whaleData');
-
-    whaleDiv.innerHTML = `
-        <div class="flex justify-between">
-            <span>Large Buy Detected</span>
-            <span class="text-green-400">+${(Math.random()*20).toFixed(2)} BTC</span>
-        </div>
-        <div class="flex justify-between">
-            <span>Large Sell Detected</span>
-            <span class="text-red-400">-${(Math.random()*12).toFixed(2)} BTC</span>
-        </div>
-    `;
-
-    document.getElementById('orderflow').innerHTML = `
-        <div class="mb-2">Bid Pressure: ${(50 + Math.random()*40).toFixed(1)}%</div>
-        <div>Ask Pressure: ${(20 + Math.random()*30).toFixed(1)}%</div>
-    `;
-}
-
-// ==============================
-// AI ANALYSIS
-// ==============================
-
-function generateAIAnalysis(signal, confidence, rsi) {
-
-    const container = document.getElementById('aiAnalysis');
-
-    container.innerHTML = `
-        <div>AI Signal: <b>${signal}</b></div>
-        <div>Confidence: <b>${confidence}%</b></div>
-        <div>RSI Analysis: <b>${rsi.toFixed(2)}</b></div>
-        <div>Market Structure: Bullish</div>
-        <div>Whale Activity: Active</div>
-        <div>Volatility: Medium</div>
-    `;
-}
-
-// ==============================
-// MARKET SCANNER
-// ==============================
-
-async function marketScanner() {
-
-    const pairs = ['BTCUSDT','ETHUSDT','BNBUSDT','SOLUSDT'];
-
-    let html = '';
-
-    for (const pair of pairs) {
-
-        const res = await fetch(`https://api.binance.com/api/v3/ticker/24hr?symbol=${pair}`);
-        const data = await res.json();
-
-        const change = parseFloat(data.priceChangePercent);
-
-        html += `
-            <div class="flex justify-between border-b border-gray-800 pb-2">
-                <span>${pair}</span>
-                <span class="${change >= 0 ? 'text-green-400' : 'text-red-400'}">
-                    ${change.toFixed(2)}%
-                </span>
-            </div>
-        `;
-    }
-
-    document.getElementById('scanner').innerHTML = html;
-}
-
-// ==============================
-// NEWS SENTIMENT
-// ==============================
-
-async function loadNews() {
-
-    try {
-
-        const res = await fetch(
-            `https://finnhub.io/api/v1/news?category=crypto&token=${FINNHUB_API_KEY}`
-        );
-
-        const news = await res.json();
-
-        const container = document.getElementById('newsContainer');
-
-        container.innerHTML = '';
-
-        news.slice(0,5).forEach(n => {
-
-            const sentiment = Math.random() > 0.5 ? 'Bullish' : 'Bearish';
-
-            container.innerHTML += `
-                <div class="border-b border-gray-800 pb-3">
-                    <div class="font-bold">${n.headline}</div>
-                    <div class="text-sm text-gray-400 mt-1">${sentiment} Sentiment</div>
-                </div>
+    // Daftar aset Crypto populer di Binance
+    const symbols = ["BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "ADAUSDT", "XRPUSDT"];
+    let positions = {}; 
+    let activeTargets = {};
+
+    function initTable() {
+        const tbody = document.getElementById('trading-table-body');
+        tbody.innerHTML = "";
+        symbols.forEach(sym => {
+            positions[sym] = "NONE";
+            activeTargets[sym] = { sl: "-", tp: "-" };
+            tbody.innerHTML += `
+                <tr id="row-${sym}">
+                    <td><strong>${sym}</strong></td>
+                    <td id="price-${sym}">Menghubungkan ke Binance...</td>
+                    <td id="pred-${sym}">Menganalisis...</td>
+                    <td id="breakout-${sym}">Normal</td>
+                    <td id="signal-${sym}">-</td>
+                    <td id="sltp-${sym}">-</td>
+                    <td id="position-${sym}"><span class="badge badge-hold">TIDAK ADA</span></td>
+                </tr>
             `;
         });
-
-    } catch(err) {
-        console.log(err);
     }
-}
 
-// ==============================
-// MARKET STRENGTH CHART
-// ==============================
-
-const ctx = document.getElementById('strengthChart');
-
-new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Bullish','Bearish'],
-        datasets: [{
-            data: [82,18],
-        }]
+    function writeLog(text, type = 'info') {
+        const logBox = document.getElementById('log-box');
+        const timeString = new Date().toLocaleTimeString();
+        let colorClass = 'log-info';
+        if (type === 'success') colorClass = 'log-success';
+        if (type === 'danger') colorClass = 'log-danger';
+        if (type === 'breakout') colorClass = 'log-breakout';
+        logBox.innerHTML += `<div class="log-entry ${colorClass}">[${timeString}] ${text}</div>`;
+        logBox.scrollTop = logBox.scrollHeight;
     }
-});
 
-// ==============================
-// EVENTS
-// ==============================
+    async function fetchBinanceData(symbol) {
+        // Menggunakan API publik klines (candlestick) interval 1 menit milik Binance
+        const url = `https://api.binance.com/api/v3/klines?symbol=${symbol}&interval=1m&limit=30`;
 
-document.getElementById('symbol').addEventListener('change', e => {
-    currentSymbol = e.target.value;
-    loadHistoricalData();
-    connectWebSocket();
-});
+        try {
+            let response = await fetch(url);
+            let data = await response.json();
 
-document.getElementById('interval').addEventListener('change', e => {
-    currentInterval = e.target.value;
-    loadHistoricalData();
-    connectWebSocket();
-});
+            // Struktur data klines Binance: [0] Open Time, [1] Open, [2] High, [3] Low, [4] Close
+            const closes = data.map(d => parseFloat(d[4]));
+            const highs = data.map(d => parseFloat(d[2]));
+            const lows = data.map(d => parseFloat(d[3]));
+            const currentPrice = closes[closes.length - 1];
 
-// ==============================
-// INITIALIZE
-// ==============================
+            // 1. Prediksi Jangka Pendek (Momentum)
+            const momentum = currentPrice - closes[closes.length - 3];
+            const rsi = calculateRSI(closes, 14);
+            let predText = "STABLE ↔";
+            let predClass = "";
+            if (momentum > 0 && rsi < 65) { predText = "NAIK ↗ (1-5m)"; predClass = "text-up"; }
+            else if (momentum < 0 && rsi > 35) { predText = "TURUN ↘ (1-5m)"; predClass = "text-down"; }
 
-loadHistoricalData();
-connectWebSocket();
-marketScanner();
-loadNews();
+            // 2. Deteksi Breakout
+            const localHigh = Math.max(...highs.slice(0, highs.length - 2));
+            const localLow = Math.min(...lows.slice(0, lows.length - 2));
+            let marketStatus = "Normal";
+            let breakoutType = "";
 
-setInterval(() => {
-    marketScanner();
-    loadNews();
-}, 60000);
+            if (currentPrice > localHigh) { marketStatus = `<span class="badge badge-breakout">BULLISH BREAKOUT</span>`; breakoutType = "UP"; }
+            else if (currentPrice < localLow) { marketStatus = `<span class="badge badge-breakout">BEARISH BREAKOUT</span>`; breakoutType = "DOWN"; }
 
+            // 3. Pengambil Keputusan Sinyal
+            let decision = "HOLD";
+            if (breakoutType === "UP" && rsi < 68) decision = "BUY";
+            else if (breakoutType === "DOWN" && rsi > 32) decision = "SELL";
+
+            // Update UI Screen
+            document.getElementById(`price-${symbol}`).innerText = "$" + currentPrice.toLocaleString();
+            document.getElementById(`pred-${symbol}`).innerHTML = `<span class="${predClass}">${predText}</span>`;
+            document.getElementById(`breakout-${symbol}`).innerHTML = marketStatus;
+
+            let sigBadge = `<span class="badge badge-hold">HOLD</span>`;
+            if (decision === "BUY") sigBadge = `<span class="badge badge-buy">MOMENTUM BUY</span>`;
+            if (decision === "SELL") sigBadge = `<span class="badge badge-sell">MOMENTUM SELL</span>`;
+            document.getElementById(`signal-${symbol}`).innerHTML = sigBadge;
+
+            if (breakoutType !== "") {
+                writeLog(`⚡ [BREAKOUT] ${symbol} menembus batas harga lokal di angka $${currentPrice}`, 'breakout');
+            }
+
+            // Eksekusi Logika Posisi & SL/TP
+            processTrade(symbol, decision, currentPrice);
+
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    function processTrade(symbol, decision, price) {
+        let currentPos = positions[symbol];
+
+        if ((decision === "BUY" || decision === "SELL") && currentPos === "NONE") {
+            positions[symbol] = decision;
+            
+            // Mengatur manajemen risiko (SL 1% dan TP 2% dari harga entry)
+            let slDistance = price * 0.01;
+            let tpDistance = price * 0.02;
+            let sl = decision === "BUY" ? price - slDistance : price + slDistance;
+            let tp = decision === "BUY" ? price + tpDistance : price - tpDistance;
+            
+            activeTargets[symbol] = { sl: sl.toFixed(2), tp: tp.toFixed(2) };
+
+            const badgeClass = decision === "BUY" ? "badge-buy" : "badge-sell";
+            document.getElementById(`position-${symbol}`).innerHTML = `<span class="badge ${badgeClass}">${decision} AKTIF</span>`;
+            document.getElementById(`sltp-${symbol}`).innerHTML = `<small style="color:#ff3b30">SL: $${sl.toFixed(2)}</small><br><small style="color:#00ff88">TP: $${tp.toFixed(2)}</small>`;
+            
+            writeLog(`🚀 [EXECUTE] Posisi ${decision} dibuka untuk ${symbol} pada $${price}. (Target SL: $${sl.toFixed(2)} | TP: $${tp.toFixed(2)})`, 'success');
+        }
+        else if (currentPos !== "NONE") {
+            const target = activeTargets[symbol];
+            if (currentPos === "BUY") {
+                if (price >= parseFloat(target.tp)) { writeLog(`💰 [PROFIT] ${symbol} menyentuh target TP ($${target.tp}). Posisi ditutup menang!`, 'success'); resetPos(symbol); }
+                else if (price <= parseFloat(target.sl)) { writeLog(`❌ [STOP LOSS] ${symbol} terseret ke batas SL ($${target.sl}). Posisi dipotong rugi.`, 'danger'); resetPos(symbol); }
+            } else if (currentPos === "SELL") {
+                if (price <= parseFloat(target.tp)) { writeLog(`💰 [PROFIT] ${symbol} menyentuh target TP ($${target.tp}). Posisi ditutup menang!`, 'success'); resetPos(symbol); }
+                else if (price >= parseFloat(target.sl)) { writeLog(`❌ [STOP LOSS] ${symbol} terseret ke batas SL ($${target.sl}). Posisi dipotong rugi.`, 'danger'); resetPos(symbol); }
+            }
+        }
+    }
+
+    function resetPos(symbol) {
+        positions[symbol] = "NONE";
+        document.getElementById(`position-${symbol}`).innerHTML = `<span class="badge badge-hold">TIDAK ADA</span>`;
+        document.getElementById(`sltp-${symbol}`).innerText = "-";
+    }
+
+    function calculateRSI(prices, period = 14) {
+        let gains = 0; let losses = 0;
+        for (let i = prices.length - period; i < prices.length; i++) {
+            let diff = prices[i] - prices[i - 1];
+            if (diff > 0) gains += diff; else losses -= diff;
+        }
+        if (losses === 0) return 100;
+        return 100 - (100 / (1 + (gains / losses)));
+    }
+
+    async function startLoop() {
+        for (const sym of symbols) {
+            await fetchBinanceData(sym);
+            await new Promise(r => setTimeout(r, 300)); // Delay super aman 0.3 detik
+        }
+    }
+
+    initTable();
+    startLoop();
+    setInterval(startLoop, 15000); // Sinkronisasi ulang bursa setiap 15 detik
 </script>
-
 </body>
 </html>

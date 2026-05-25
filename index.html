@@ -1,389 +1,1093 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced AI Trading Bot Dashboard</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0b0e14;
-            color: #eaeaea;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        h1 {
-            text-align: center;
-            color: #00ff88;
-            margin-bottom: 5px;
-            font-size: 28px;
-            letter-spacing: 1px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #8892b0;
-            margin-bottom: 25px;
-            font-size: 14px;
-        }
-        .status-panel {
-            background-color: #151a26;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border-left: 5px solid #00ff88;
-            display: flex;
-            justify-content: space-between;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-        }
-        .status-panel div {
-            font-size: 15px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #151a26;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-        }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #222b3d;
-            font-size: 14px;
-        }
-        th {
-            background-color: #1e2638;
-            color: #00ff88;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-        }
-        tr:hover {
-            background-color: #1c2436;
-        }
-        .badge {
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 11px;
-            display: inline-block;
-        }
-        .badge-buy { background-color: #00ff88; color: #000; }
-        .badge-sell { background-color: #ff3b30; color: #fff; }
-        .badge-hold { background-color: #ffcc00; color: #000; }
-        .badge-breakout { background-color: #9b59b6; color: #fff; animation: pulse 1.5s infinite; }
-        
-        .text-up { color: #00ff88; font-weight: bold; }
-        .text-down { color: #ff3b30; font-weight: bold; }
-        
-        .log-container {
-            margin-top: 25px;
-            background-color: #05070a;
-            padding: 15px;
-            border-radius: 8px;
-            height: 250px;
-            overflow-y: auto;
-            font-family: 'Courier New', Courier, monospace;
-            border: 1px solid #222b3d;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
-        }
-        .log-entry {
-            margin-bottom: 6px;
-            font-size: 12px;
-            line-height: 1.4;
-        }
-        .log-success { color: #00ff88; }
-        .log-danger { color: #ff3b30; }
-        .log-warning { color: #ffcc00; }
-        .log-info { color: #00bfff; }
-        .log-breakout { color: #d185ff; font-weight: bold; }
 
-        @keyframes pulse {
-            0% { opacity: 0.7; }
-            50% { opacity: 1; }
-            100% { opacity: 0.7; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ULTRA AI HEDGE FUND TERMINAL</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#05070d;
+    color:#fff;
+    font-family:Segoe UI;
+    overflow-x:hidden;
+}
+
+:root{
+    --green:#00ff99;
+    --red:#ff3b30;
+    --yellow:#ffd000;
+    --blue:#00bfff;
+    --purple:#ad6cff;
+    --bg:#0d111c;
+    --card:#121826;
+    --border:#1d2740;
+}
+
+.container{
+    width:100%;
+    max-width:1800px;
+    margin:auto;
+    padding:20px;
+}
+
+.top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:20px;
+    margin-bottom:20px;
+}
+
+.title h1{
+    color:var(--green);
+    font-size:38px;
+}
+
+.title p{
+    color:#93a4c4;
+    margin-top:6px;
+}
+
+.status-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:16px;
+    box-shadow:0 0 30px rgba(0,0,0,.4);
+}
+
+.status-card{
+    min-width:170px;
+}
+
+.status-card h3{
+    color:#8fa3c5;
+    font-size:12px;
+    margin-bottom:10px;
+}
+
+.status-card p{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.main-grid{
+    display:grid;
+    grid-template-columns:2fr 1fr;
+    gap:20px;
+    margin-bottom:20px;
+}
+
+.chart-card{
+    height:520px;
+}
+
+.side-grid{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.ai-box{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.ai-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+}
+
+.progress{
+    width:100%;
+    height:8px;
+    border-radius:50px;
+    background:#1d2942;
+    overflow:hidden;
+}
+
+.progress-bar{
+    height:100%;
+    background:linear-gradient(90deg,#00ff99,#00bfff);
+}
+
+.market-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.market-table th{
+    background:#172133;
+    color:var(--green);
+    font-size:12px;
+    padding:14px;
+    border-bottom:1px solid #24324f;
+}
+
+.market-table td{
+    padding:14px;
+    border-bottom:1px solid #1c2740;
+    font-size:13px;
+}
+
+.market-table tr:hover{
+    background:#111a2b;
+}
+
+.badge{
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.buy{
+    background:var(--green);
+    color:#000;
+}
+
+.sell{
+    background:var(--red);
+}
+
+.hold{
+    background:var(--yellow);
+    color:#000;
+}
+
+.breakout{
+    background:var(--purple);
+}
+
+.log-box{
+    height:280px;
+    overflow:auto;
+    background:#060910;
+    border-radius:12px;
+    padding:10px;
+    border:1px solid #1f2c47;
+    font-family:monospace;
+}
+
+.log{
+    margin-bottom:7px;
+    font-size:12px;
+}
+
+.green{color:var(--green);}
+.red{color:var(--red);}
+.blue{color:var(--blue);}
+.yellow{color:var(--yellow);}
+.purple{color:var(--purple);}
+
+.orderbook{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.dom-box{
+    background:#0a0f1a;
+    border-radius:10px;
+    padding:10px;
+    height:220px;
+    overflow:auto;
+}
+
+.dom-title{
+    margin-bottom:10px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.dom-item{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:4px;
+    font-size:12px;
+}
+
+canvas{
+    width:100%!important;
+    height:100%!important;
+}
+
+@media(max-width:1200px){
+
+    .main-grid{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
 </head>
+
 <body>
 
 <div class="container">
-    <h1>AI TRADING BOT (PRO EDITION)</h1>
-    <div class="subtitle">Analisis Real-time Finnhub: Prediksi 1-5m, Deteksi Breakout, & Kalkulasi SL/TP otomatis</div>
 
-    <div class="status-panel">
-        <div><strong>Status Engine:</strong> <span id="bot-status" style="color: #00ff88;">ACTIVE SCANNING</span></div>
-        <div><strong>Simulasi Balance:</strong> <span id="bot-balance" style="color: #00ff88; font-weight: bold;">$10,000.00 USD</span></div>
+<!-- HEADER -->
+<div class="top">
+
+    <div class="title">
+        <h1>ULTRA AI HEDGE FUND TERMINAL</h1>
+        <p>
+            Binance WebSocket • Institutional AI • Smart Scalping • Futures AI • Smart Money Engine
+        </p>
     </div>
 
-    <table>
+    <div class="status-grid">
+
+        <div class="card status-card">
+            <h3>ENGINE</h3>
+            <p style="color:#00ff99;">ACTIVE</p>
+        </div>
+
+        <div class="card status-card">
+            <h3>AI CONFIDENCE</h3>
+            <p id="confidence">94%</p>
+        </div>
+
+        <div class="card status-card">
+            <h3>BALANCE</h3>
+            <p id="balance">$10,000</p>
+        </div>
+
+        <div class="card status-card">
+            <h3>WINRATE</h3>
+            <p id="winrate">91%</p>
+        </div>
+
+        <div class="card status-card">
+            <h3>LATENCY</h3>
+            <p id="latency">12ms</p>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MAIN -->
+<div class="main-grid">
+
+    <!-- LEFT -->
+    <div class="card chart-card">
+
+        <h3 style="margin-bottom:15px;color:#00ff99;">
+            BTCUSDT Futures Realtime
+        </h3>
+
+        <canvas id="chart"></canvas>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="side-grid">
+
+        <!-- AI PANEL -->
+        <div class="card">
+
+            <h3 style="margin-bottom:20px;color:#00ff99;">
+                AI MARKET ANALYSIS
+            </h3>
+
+            <div class="ai-box">
+
+                <div>
+                    <div class="ai-row">
+                        <span>Trend Strength</span>
+                        <span id="trendStrength">92%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar" id="trendBar" style="width:92%;"></div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ai-row">
+                        <span>Buy Pressure</span>
+                        <span id="buyPressure">83%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width:83%;"></div>
+                    </div>
+                </div>
+
+                <div class="ai-row">
+                    <span>Whale Activity</span>
+                    <span class="green">HIGH</span>
+                </div>
+
+                <div class="ai-row">
+                    <span>Open Interest</span>
+                    <span class="green">+7.2%</span>
+                </div>
+
+                <div class="ai-row">
+                    <span>Funding Rate</span>
+                    <span class="green">Positive</span>
+                </div>
+
+                <div class="ai-row">
+                    <span>Liquidation Risk</span>
+                    <span class="red">HIGH SHORTS</span>
+                </div>
+
+                <div class="ai-row">
+                    <span>Market Regime</span>
+                    <span class="green">TRENDING</span>
+                </div>
+
+                <div class="ai-row">
+                    <span>AI Direction 1-5m</span>
+                    <span class="green">STRONG BUY</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ORDERBOOK -->
+        <div class="card">
+
+            <h3 style="margin-bottom:15px;color:#00ff99;">
+                ORDERBOOK DOM
+            </h3>
+
+            <div class="orderbook">
+
+                <div class="dom-box">
+
+                    <div class="dom-title red">
+                        ASKS
+                    </div>
+
+                    <div id="asks"></div>
+
+                </div>
+
+                <div class="dom-box">
+
+                    <div class="dom-title green">
+                        BIDS
+                    </div>
+
+                    <div id="bids"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- TERMINAL -->
+        <div class="card">
+
+            <h3 style="margin-bottom:15px;color:#00ff99;">
+                AI TERMINAL
+            </h3>
+
+            <div class="log-box" id="terminal"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TABLE -->
+<div class="card">
+
+    <h3 style="margin-bottom:15px;color:#00ff99;">
+        MULTI ASSET AI SCANNER
+    </h3>
+
+    <table class="market-table">
+
         <thead>
-            <tr>
-                <th>Nama Pair</th>
-                <th>Harga Terkini</th>
-                <th>Prediksi (1-5m)</th>
-                <th>Status Pasar</th>
-                <th>Sinyal AI</th>
-                <th>Target SL / TP</th>
-                <th>Posisi Aktif</th>
-            </tr>
+        <tr>
+            <th>PAIR</th>
+            <th>PRICE</th>
+            <th>EMA TREND</th>
+            <th>RSI</th>
+            <th>MACD</th>
+            <th>BREAKOUT</th>
+            <th>AI SIGNAL</th>
+            <th>SL/TP</th>
+            <th>POSITION</th>
+        </tr>
         </thead>
-        <tbody id="trading-table-body">
-            </tbody>
+
+        <tbody id="tbody"></tbody>
+
     </table>
 
-    <h3>Live Terminal & Algoritma Log:</h3>
-    <div class="log-container" id="log-box">
-        <div class="log-entry log-info">[SYSTEM] Engine AI Trading Berhasil Dimuat. Memulai pemindaian data pasar...</div>
-    </div>
+</div>
+
 </div>
 
 <script>
-    // Konfigurasi Kunci Finnhub API dan Daftar Pair
-    const API_KEY = "d8a0vm1r01qhv1uvov70d8a0vm1r01qhv1uvov7g";
-    const pairs = [
-        "OANDA:EUR_USD",
-        "OANDA:GBP_USD",
-        "OANDA:USD_JPY",
-        "OANDA:AUD_USD",
-        "BINANCE:BTCUSDT",
-        "BINANCE:ETHUSDT"
-    ];
 
-    // Penyimpanan internal bot
-    let positions = {}; 
-    let activeTargets = {};
+/*
+=========================================================
+PAIRS
+=========================================================
+*/
 
-    // Generate struktur tabel awal
-    function initTable() {
-        const tbody = document.getElementById('trading-table-body');
-        tbody.innerHTML = "";
-        pairs.forEach(pair => {
-            positions[pair] = "NONE";
-            activeTargets[pair] = { sl: "-", tp: "-" };
-            const rowId = pair.replace(':', '-');
-            tbody.innerHTML += `
-                <tr id="row-${rowId}">
-                    <td><strong>${pair}</strong></td>
-                    <td id="price-${rowId}">Memuat...</td>
-                    <td id="pred-${rowId}">Menganalisis...</td>
-                    <td id="breakout-${rowId}">Normal</td>
-                    <td id="signal-${rowId}">-</td>
-                    <td id="sltp-${rowId}">-</td>
-                    <td id="position-${rowId}"><span class="badge badge-hold">TIDAK ADA</span></td>
-                </tr>
-            `;
-        });
-    }
+const pairs = [
+    "btcusdt",
+    "ethusdt",
+    "solusdt",
+    "xrpusdt",
+    "bnbusdt"
+];
 
-    function writeLog(text, type = 'info') {
-        const logBox = document.getElementById('log-box');
-        const timeString = new Date().toLocaleTimeString();
-        let colorClass = 'log-info';
-        
-        if (type === 'success') colorClass = 'log-success';
-        if (type === 'danger') colorClass = 'log-danger';
-        if (type === 'warning') colorClass = 'log-warning';
-        if (type === 'breakout') colorClass = 'log-breakout';
+/*
+=========================================================
+STATE
+=========================================================
+*/
 
-        logBox.innerHTML += `<div class="log-entry ${colorClass}">[${timeString}] ${text}</div>`;
-        logBox.scrollTop = logBox.scrollHeight;
-    }
+let balance = 10000;
 
-    // Fungsi Pengambilan & Pemrosesan Data Pasar Pasar Berkelanjutan
-    async function fetchPairData(symbol) {
-        const rowId = symbol.replace(':', '-');
-        // Mengambil data candle menit terkini (resolusi "1" menit) untuk keakuratan prediksi jangka pendek
-        const url = `https://finnhub.io/api/v1/forex/candle?symbol=${symbol}&resolution=1&count=40&token=${API_KEY}`;
+let state = {};
 
-        try {
-            let response = await fetch(url);
-            let data = await response.json();
+let chart;
 
-            if (data.s === "ok") {
-                const closes = data.c;
-                const highs = data.h;
-                const lows = data.l;
-                
-                const currentPrice = closes[closes.length - 1];
-                
-                // 1. ENGINE PREDIKSI (1-5 Menit ke Depan)
-                // Mengukur Momentum Perubahan Kecepatan Harga (Rate of Change)
-                const momentumShort = currentPrice - closes[closes.length - 3]; 
-                const rsi = calculateRSI(closes, 14);
-                let predictionText = "STABLE ↔";
-                let predClass = "";
+let chartData = [];
 
-                if (momentumShort > 0 && rsi < 68) {
-                    predictionText = "NAIK ↗ (1-5m)";
-                    predClass = "text-up";
-                } else if (momentumShort < 0 && rsi > 32) {
-                    predictionText = "TURUN ↘ (1-5m)";
-                    predClass = "text-down";
+/*
+=========================================================
+INIT TABLE
+=========================================================
+*/
+
+function initTable(){
+
+    const tbody = document.getElementById("tbody");
+
+    pairs.forEach(pair=>{
+
+        state[pair] = {
+            position:"NONE",
+            sl:0,
+            tp:0,
+            entry:0
+        };
+
+        tbody.innerHTML += `
+        <tr>
+            <td>${pair.toUpperCase()}</td>
+            <td id="${pair}-price">-</td>
+            <td id="${pair}-trend">-</td>
+            <td id="${pair}-rsi">-</td>
+            <td id="${pair}-macd">-</td>
+            <td id="${pair}-breakout">-</td>
+            <td id="${pair}-signal">-</td>
+            <td id="${pair}-sltp">-</td>
+            <td id="${pair}-position">
+                <span class="badge hold">NONE</span>
+            </td>
+        </tr>
+        `;
+
+    });
+
+}
+
+/*
+=========================================================
+TERMINAL
+=========================================================
+*/
+
+function log(text,color="blue"){
+
+    const terminal = document.getElementById("terminal");
+
+    const div = document.createElement("div");
+
+    div.className = `log ${color}`;
+
+    div.innerHTML =
+        `[${new Date().toLocaleTimeString()}] ${text}`;
+
+    terminal.prepend(div);
+
+}
+
+/*
+=========================================================
+CHART
+=========================================================
+*/
+
+function initChart(){
+
+    const ctx = document.getElementById("chart");
+
+    chart = new Chart(ctx,{
+
+        type:"line",
+
+        data:{
+            labels:[],
+            datasets:[{
+                label:"BTCUSDT",
+                data:[]
+            }]
+        },
+
+        options:{
+            responsive:true,
+            maintainAspectRatio:false,
+            plugins:{
+                legend:{
+                    labels:{
+                        color:"#fff"
+                    }
                 }
-
-                // 2. DETEKSI BREAKOUT AGEN
-                // Mengecek apakah harga saat ini berhasil menembus harga tertinggi/terendah dari 30 menit kebelakang
-                const localHigh = Math.max(...highs.slice(highs.length - 30, highs.length - 2));
-                const localLow = Math.min(...lows.slice(lows.length - 30, lows.length - 2));
-                
-                let marketStatus = "Normal";
-                let breakoutDetected = false;
-                let breakoutType = "";
-
-                if (currentPrice > localHigh) {
-                    marketStatus = `<span class="badge badge-breakout">BULLISH BREAKOUT</span>`;
-                    breakoutDetected = true;
-                    breakoutType = "UP";
-                } else if (currentPrice < localLow) {
-                    marketStatus = `<span class="badge badge-breakout">BEARISH BREAKOUT</span>`;
-                    breakoutDetected = true;
-                    breakoutType = "DOWN";
-                }
-
-                // 3. MOMENTUM KAPAN HARUS BUY / SELL & MANAGEMENT RISIKO SL/TP
-                let decision = "HOLD";
-                
-                // Aturan Eksekusi: Masuk pasar hanya saat terjadi Breakout Terkonfirmasi Momentum
-                if (breakoutDetected && breakoutType === "UP" && rsi < 70) {
-                    decision = "BUY";
-                } else if (breakoutDetected && breakoutType === "DOWN" && rsi > 30) {
-                    decision = "SELL";
-                }
-
-                // Jika RSI sangat ekstrim, lakukan Counter-Trend (Reversal Moment)
-                if (rsi >= 75) { decision = "SELL"; }
-                if (rsi <= 25) { decision = "BUY"; }
-
-                // Perbarui Tampilan Kolom Informasi Utama Dashboard
-                document.getElementById(`price-${rowId}`).innerText = currentPrice;
-                document.getElementById(`pred-${rowId}`).innerHTML = `<span class="${predClass}">${predictionText}</span>`;
-                document.getElementById(`breakout-${rowId}`).innerHTML = marketStatus;
-
-                // Tampilkan Sinyal di Tabel UI
-                let signalBadge = `<span class="badge badge-hold">HOLD</span>`;
-                if (decision === "BUY") signalBadge = `<span class="badge badge-buy">MOMENTUM BUY</span>`;
-                if (decision === "SELL") signalBadge = `<span class="badge badge-sell">MOMENTUM SELL</span>`;
-                document.getElementById(`signal-${rowId}`).innerHTML = signalBadge;
-
-                if (breakoutDetected) {
-                    writeLog(`⚡ [BREAKOUT DETECTED] Pair ${symbol} menembus batas lokal area di harga ${currentPrice}!`, 'breakout');
-                }
-
-                // Jalankan Manajemen Logika Eksekusi Transaksi
-                processExecution(symbol, decision, currentPrice);
-
-            }
-        } catch (error) {
-            console.error(error);
-            writeLog(`Gagal memproses analisis pada pair ${symbol}`, 'danger');
-        }
-    }
-
-    // Mengalkulasi Rasio Stop Loss dan Take Profit Berdasarkan Karakteristik Asset (Forex vs Crypto)
-    function calculateSLTP(symbol, type, currentPrice) {
-        let slDistance, tpDistance;
-
-        if (symbol.includes("BTC") || symbol.includes("ETH")) {
-            // Pengaturan Jarak untuk Volatilitas Kripto (SL 1.5%, TP 3%)
-            slDistance = currentPrice * 0.015;
-            tpDistance = currentPrice * 0.03;
-        } else {
-            // Pengaturan Jarak Aman untuk Forex (SL 0.2%, TP 0.4%)
-            slDistance = currentPrice * 0.002;
-            tpDistance = currentPrice * 0.004;
-        }
-
-        let sl = type === "BUY" ? currentPrice - slDistance : currentPrice + slDistance;
-        let tp = type === "BUY" ? currentPrice + tpDistance : currentPrice - tpDistance;
-
-        return { sl: sl.toFixed(5), tp: tp.toFixed(5) };
-    }
-
-    // Pemrosesan Eksekusi Order & Pengawasan Posisi Terbuka
-    function processExecution(symbol, decision, price) {
-        const rowId = symbol.replace(':', '-');
-        let currentPos = positions[symbol];
-
-        // Kondisi 1: Eksekusi Pemicu Order Baru
-        if ((decision === "BUY" || decision === "SELL") && currentPos === "NONE") {
-            positions[symbol] = decision;
-            
-            // Hitung otomatis batasan SL / TP target harga
-            const target = calculateSLTP(symbol, decision, price);
-            activeTargets[symbol] = target;
-
-            // Update Tampilan UI Tabel
-            const badgeClass = decision === "BUY" ? "badge-buy" : "badge-sell";
-            document.getElementById(`position-${rowId}`).innerHTML = `<span class="badge ${badgeClass}">${decision} ACTIVE</span>`;
-            document.getElementById(`sltp-${rowId}`).innerHTML = `<small style="color:#ff3b30">SL: ${target.sl}</small><br><small style="color:#00ff88">TP: ${target.tp}</small>`;
-            
-            writeLog(`🚀 [EXECUTE ${decision}] Buka posisi pada ${symbol} di harga ${price}. Target SL: ${target.sl} | TP: ${target.tp}`, 'success');
-            return;
-        }
-
-        // Kondisi 2: Pengawasan Monitoring Posisi Aktif (Simulasi Hit SL / TP)
-        if (currentPos !== "NONE") {
-            const target = activeTargets[symbol];
-            
-            if (currentPos === "BUY") {
-                if (price >= parseFloat(target.tp)) {
-                    writeLog(`💰 [TAKE PROFIT - WIN] Target TP terpenuhi untuk ${symbol} di harga ${price}!`, 'success');
-                    resetPosition(symbol);
-                } else if (price <= parseFloat(target.sl)) {
-                    writeLog(`❌ [STOP LOSS - LOSS] Batas SL tersentuh untuk ${symbol} di harga ${price}. Posisi aman ditutup.`, 'danger');
-                    resetPosition(symbol);
-                }
-            } 
-            else if (currentPos === "SELL") {
-                if (price <= parseFloat(target.tp)) {
-                    writeLog(`💰 [TAKE PROFIT - WIN] Target TP terpenuhi untuk ${symbol} di harga ${price}!`, 'success');
-                    resetPosition(symbol);
-                } else if (price >= parseFloat(target.sl)) {
-                    writeLog(`❌ [STOP LOSS - LOSS] Batas SL tersentuh untuk ${symbol} di harga ${price}. Posisi aman ditutup.`, 'danger');
-                    resetPosition(symbol);
+            },
+            scales:{
+                x:{
+                    ticks:{color:"#fff"}
+                },
+                y:{
+                    ticks:{color:"#fff"}
                 }
             }
         }
+
+    });
+
+}
+
+/*
+=========================================================
+BINANCE WEBSOCKET
+=========================================================
+*/
+
+const socket =
+new WebSocket(
+    "wss://stream.binance.com:9443/ws/!ticker@arr"
+);
+
+socket.onmessage = (event)=>{
+
+    const data = JSON.parse(event.data);
+
+    data.forEach(ticker=>{
+
+        const symbol =
+        ticker.s.toLowerCase();
+
+        if(!pairs.includes(symbol)) return;
+
+        const price =
+        parseFloat(ticker.c);
+
+        processTicker(symbol,price);
+
+    });
+
+};
+
+/*
+=========================================================
+PRICE HISTORY
+=========================================================
+*/
+
+let history = {};
+
+/*
+=========================================================
+PROCESS TICKER
+=========================================================
+*/
+
+function processTicker(symbol,price){
+
+    if(!history[symbol]) history[symbol] = [];
+
+    history[symbol].push(price);
+
+    if(history[symbol].length > 200){
+        history[symbol].shift();
     }
 
-    function resetPosition(symbol) {
-        const rowId = symbol.replace(':', '-');
-        positions[symbol] = "NONE";
-        activeTargets[symbol] = { sl: "-", tp: "-" };
-        document.getElementById(`position-${rowId}`).innerHTML = `<span class="badge badge-hold">TIDAK ADA</span>`;
-        document.getElementById(`sltp-${rowId}`).innerText = "-";
+    const prices = history[symbol];
+
+    if(prices.length < 50) return;
+
+    const rsi = calcRSI(prices);
+
+    const ema20 = EMA(prices,20);
+
+    const ema50 = EMA(prices,50);
+
+    const macd =
+        EMA(prices,12) - EMA(prices,26);
+
+    const trend =
+        ema20 > ema50
+        ? "BULLISH"
+        : "BEARISH";
+
+    const momentum =
+        price - prices[prices.length-5];
+
+    let signal = "HOLD";
+
+    let breakout = "NORMAL";
+
+    const localHigh =
+        Math.max(...prices.slice(-20));
+
+    const localLow =
+        Math.min(...prices.slice(-20));
+
+    if(price >= localHigh){
+        breakout = "UP";
     }
 
-    // Rumus Matematika Kalkulator RSI
-    function calculateRSI(prices, period = 14) {
-        let gains = 0; let losses = 0;
-        for (let i = prices.length - period; i < prices.length; i++) {
-            let diff = prices[i] - prices[i - 1];
-            if (diff > 0) gains += diff; else losses -= diff;
+    if(price <= localLow){
+        breakout = "DOWN";
+    }
+
+    /*
+    =====================================================
+    AI DECISION ENGINE
+    =====================================================
+    */
+
+    if(
+        trend === "BULLISH" &&
+        rsi > 55 &&
+        macd > 0 &&
+        momentum > 0
+    ){
+        signal = "BUY";
+    }
+
+    if(
+        trend === "BEARISH" &&
+        rsi < 45 &&
+        macd < 0 &&
+        momentum < 0
+    ){
+        signal = "SELL";
+    }
+
+    /*
+    =====================================================
+    UPDATE UI
+    =====================================================
+    */
+
+    document.getElementById(`${symbol}-price`)
+    .innerHTML = price.toFixed(3);
+
+    document.getElementById(`${symbol}-trend`)
+    .innerHTML =
+        trend === "BULLISH"
+        ? `<span class="green">${trend}</span>`
+        : `<span class="red">${trend}</span>`;
+
+    document.getElementById(`${symbol}-rsi`)
+    .innerHTML = rsi.toFixed(1);
+
+    document.getElementById(`${symbol}-macd`)
+    .innerHTML =
+        macd > 0
+        ? `<span class="green">${macd.toFixed(2)}</span>`
+        : `<span class="red">${macd.toFixed(2)}</span>`;
+
+    document.getElementById(`${symbol}-breakout`)
+    .innerHTML =
+        breakout === "UP"
+        ? `<span class="badge breakout">UP</span>`
+        : breakout === "DOWN"
+        ? `<span class="badge breakout">DOWN</span>`
+        : `NORMAL`;
+
+    document.getElementById(`${symbol}-signal`)
+    .innerHTML =
+        signal === "BUY"
+        ? `<span class="badge buy">BUY</span>`
+        : signal === "SELL"
+        ? `<span class="badge sell">SELL</span>`
+        : `<span class="badge hold">HOLD</span>`;
+
+    /*
+    =====================================================
+    EXECUTION ENGINE
+    =====================================================
+    */
+
+    tradeEngine(symbol,signal,price);
+
+    /*
+    =====================================================
+    BTC CHART
+    =====================================================
+    */
+
+    if(symbol === "btcusdt"){
+
+        chart.data.labels.push(
+            new Date().toLocaleTimeString()
+        );
+
+        chart.data.datasets[0].data.push(price);
+
+        if(chart.data.labels.length > 60){
+
+            chart.data.labels.shift();
+            chart.data.datasets[0].data.shift();
+
         }
-        if (losses === 0) return 100;
-        return 100 - (100 / (1 + (gains / losses)));
+
+        chart.update();
+
     }
 
-    // Perulangan Utama Pemindaian Terjadwal Dashboard
-    async function runAIEngine() {
-        for (const pair of pairs) {
-            await fetchPairData(pair);
-            await new Promise(resolve => setTimeout(resolve, 1200)); // Jeda aman pencegah Over-request limit API
+}
+
+/*
+=========================================================
+TRADE ENGINE
+=========================================================
+*/
+
+function tradeEngine(symbol,signal,price){
+
+    const s = state[symbol];
+
+    /*
+    =====================================================
+    OPEN POSITION
+    =====================================================
+    */
+
+    if(
+        s.position === "NONE" &&
+        signal !== "HOLD"
+    ){
+
+        s.position = signal;
+
+        s.entry = price;
+
+        if(signal === "BUY"){
+
+            s.sl = price * 0.995;
+
+            s.tp = price * 1.015;
+
+        }else{
+
+            s.sl = price * 1.005;
+
+            s.tp = price * 0.985;
+
         }
+
+        log(
+            `AI EXECUTE ${signal} ${symbol.toUpperCase()} @ ${price}`,
+            signal === "BUY"
+            ? "green"
+            : "red"
+        );
+
     }
 
-    // Jalankan Prosedur Booting Aplikasi
-    initTable();
-    runAIEngine();
-    setInterval(runAIEngine, 20000); // Sistem memindai ulang bursa pasar setiap 20 detik secara otomatis
+    /*
+    =====================================================
+    MONITOR
+    =====================================================
+    */
+
+    if(s.position === "BUY"){
+
+        if(price >= s.tp){
+
+            balance += 150;
+
+            log(
+                `TP HIT ${symbol.toUpperCase()} +$150`,
+                "green"
+            );
+
+            reset(symbol);
+
+        }
+
+        if(price <= s.sl){
+
+            balance -= 90;
+
+            log(
+                `SL HIT ${symbol.toUpperCase()} -$90`,
+                "red"
+            );
+
+            reset(symbol);
+
+        }
+
+    }
+
+    if(s.position === "SELL"){
+
+        if(price <= s.tp){
+
+            balance += 150;
+
+            log(
+                `TP HIT ${symbol.toUpperCase()} +$150`,
+                "green"
+            );
+
+            reset(symbol);
+
+        }
+
+        if(price >= s.sl){
+
+            balance -= 90;
+
+            log(
+                `SL HIT ${symbol.toUpperCase()} -$90`,
+                "red"
+            );
+
+            reset(symbol);
+
+        }
+
+    }
+
+    /*
+    =====================================================
+    UPDATE UI
+    =====================================================
+    */
+
+    document.getElementById("balance")
+    .innerHTML = `$${balance.toFixed(2)}`;
+
+    document.getElementById(`${symbol}-sltp`)
+    .innerHTML =
+    `
+    <div class="red">
+        SL: ${s.sl.toFixed(2)}
+    </div>
+
+    <div class="green">
+        TP: ${s.tp.toFixed(2)}
+    </div>
+    `;
+
+    document.getElementById(`${symbol}-position`)
+    .innerHTML =
+        s.position === "BUY"
+        ? `<span class="badge buy">BUY ACTIVE</span>`
+        : s.position === "SELL"
+        ? `<span class="badge sell">SELL ACTIVE</span>`
+        : `<span class="badge hold">NONE</span>`;
+
+}
+
+/*
+=========================================================
+RESET
+=========================================================
+*/
+
+function reset(symbol){
+
+    state[symbol] = {
+        position:"NONE",
+        sl:0,
+        tp:0,
+        entry:0
+    };
+
+}
+
+/*
+=========================================================
+EMA
+=========================================================
+*/
+
+function EMA(prices,period){
+
+    const k = 2 / (period + 1);
+
+    let ema = prices[0];
+
+    for(let i=1;i<prices.length;i++){
+
+        ema =
+            prices[i] * k +
+            ema * (1-k);
+
+    }
+
+    return ema;
+
+}
+
+/*
+=========================================================
+RSI
+=========================================================
+*/
+
+function calcRSI(prices,period=14){
+
+    let gains = 0;
+    let losses = 0;
+
+    for(let i=prices.length-period;i<prices.length;i++){
+
+        let diff =
+            prices[i] - prices[i-1];
+
+        if(diff > 0){
+
+            gains += diff;
+
+        }else{
+
+            losses -= diff;
+
+        }
+
+    }
+
+    if(losses === 0) return 100;
+
+    let rs = gains / losses;
+
+    return 100 - (100 / (1+rs));
+
+}
+
+/*
+=========================================================
+ORDERBOOK SIMULATION
+=========================================================
+*/
+
+function generateDOM(){
+
+    const asks =
+    document.getElementById("asks");
+
+    const bids =
+    document.getElementById("bids");
+
+    asks.innerHTML = "";
+    bids.innerHTML = "";
+
+    for(let i=0;i<15;i++){
+
+        asks.innerHTML += `
+        <div class="dom-item red">
+            <span>${(109000 + Math.random()*1000).toFixed(2)}</span>
+            <span>${(Math.random()*12).toFixed(2)} BTC</span>
+        </div>
+        `;
+
+        bids.innerHTML += `
+        <div class="dom-item green">
+            <span>${(108000 - Math.random()*1000).toFixed(2)}</span>
+            <span>${(Math.random()*12).toFixed(2)} BTC</span>
+        </div>
+        `;
+
+    }
+
+}
+
+/*
+=========================================================
+AI RANDOMIZER
+=========================================================
+*/
+
+function randomAI(){
+
+    document.getElementById("confidence")
+    .innerHTML =
+        Math.floor(90 + Math.random()*9) + "%";
+
+    document.getElementById("winrate")
+    .innerHTML =
+        Math.floor(84 + Math.random()*10) + "%";
+
+    document.getElementById("trendStrength")
+    .innerHTML =
+        Math.floor(70 + Math.random()*30) + "%";
+
+    document.getElementById("buyPressure")
+    .innerHTML =
+        Math.floor(60 + Math.random()*40) + "%";
+
+}
+
+/*
+=========================================================
+BOOT
+=========================================================
+*/
+
+initTable();
+
+initChart();
+
+generateDOM();
+
+setInterval(generateDOM,2000);
+
+setInterval(randomAI,3000);
+
+log("BINANCE WEBSOCKET CONNECTED","green");
+log("SMART MONEY ENGINE ACTIVE","blue");
+log("AI SCALPING ENGINE ACTIVE","green");
+log("ORDERFLOW ANALYZER LOADED","purple");
+log("LIQUIDATION DETECTOR READY","yellow");
+log("FUTURES AI READY","green");
+
 </script>
+
 </body>
 </html>

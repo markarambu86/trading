@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ECC Advanced Trading Assistant - Markarambu86</title>
+    <title>ECC Advanced Trading Engine - XAUUSD Edition</title>
     <style>
         * {
             box-sizing: border-box;
@@ -24,7 +24,6 @@
             margin: 0 auto;
         }
 
-        /* Header */
         header {
             display: flex;
             justify-content: space-between;
@@ -36,7 +35,7 @@
 
         header h1 {
             font-size: 24px;
-            color: #38bdf8;
+            color: #eab308; /* Gold Accent Color */
             letter-spacing: 0.5px;
         }
 
@@ -59,19 +58,18 @@
         .pulse-dot {
             width: 8px;
             height: 8px;
-            background-color: #22c55e;
+            background-color: #eab308;
             border-radius: 50%;
-            box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+            box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7);
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
-            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
-            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(234, 179, 8, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
         }
 
-        /* Layout Grid */
         .grid-layout {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -104,7 +102,6 @@
             letter-spacing: 0.5px;
         }
 
-        /* Form elements */
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -132,35 +129,32 @@
             border-radius: 8px;
             color: #ffffff;
             font-size: 14px;
-            transition: all 0.2s;
         }
 
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+        .form-group select {
+            border-left: 4px solid #eab308;
+            font-weight: 600;
         }
 
         button {
-            background: linear-gradient(135deg, #38bdf8 0%, #0284c7 100%);
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
             color: #0f172a;
             border: none;
-            padding: 12px 20px;
+            padding: 14px 20px;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 700;
             width: 100%;
-            transition: opacity 0.2s;
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(234, 179, 8, 0.15);
         }
 
         button:hover {
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
-        /* Signals Display */
         .signal-display {
             display: flex;
             flex-direction: column;
@@ -172,19 +166,18 @@
             text-align: center;
             min-height: 200px;
             border: 2px dashed #374151;
-            transition: all 0.3s ease;
         }
 
         .signal-status {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
             margin-bottom: 10px;
             letter-spacing: 1px;
         }
 
         .signal-neutral { color: #94a3b8; }
-        .signal-buy { color: #4ade80; text-shadow: 0 0 15px rgba(74, 222, 128, 0.3); }
-        .signal-sell { color: #f87171; text-shadow: 0 0 15px rgba(248, 113, 113, 0.3); }
+        .signal-buy { color: #4ade80; text-shadow: 0 0 15px rgba(74, 222, 128, 0.2); }
+        .signal-sell { color: #f87171; text-shadow: 0 0 15px rgba(248, 113, 113, 0.2); }
 
         .signal-reason {
             font-size: 14px;
@@ -193,7 +186,6 @@
             line-height: 1.5;
         }
 
-        /* Matrix Parameters Details */
         .matrix-output {
             margin-top: 15px;
             background-color: #0f172a;
@@ -214,11 +206,6 @@
         .matrix-label { color: #94a3b8; }
         .matrix-value { font-weight: 600; color: #ffffff; }
 
-        /* Journal Table */
-        .journal-section {
-            margin-top: 10px;
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
@@ -234,12 +221,8 @@
 
         th {
             background-color: #1e293b;
-            color: #38bdf8;
+            color: #eab308;
             font-weight: 600;
-        }
-
-        tr:hover {
-            background-color: rgba(255, 255, 255, 0.01);
         }
 
         .badge {
@@ -247,20 +230,19 @@
             border-radius: 4px;
             font-size: 11px;
             font-weight: 700;
-            text-transform: uppercase;
         }
 
         .badge-buy { background-color: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3); }
         .badge-sell { background-color: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(248, 113, 113, 0.3); }
+        .badge-neutral { background-color: rgba(148, 163, 184, 0.15); color: #94a3b8; }
 
-        /* Tips Panel */
         .tips-panel {
-            background-color: rgba(56, 189, 248, 0.05);
-            border-left: 4px solid #38bdf8;
+            background-color: rgba(234, 179, 8, 0.03);
+            border-left: 4px solid #eab308;
             padding: 15px;
             border-radius: 0 8px 8px 0;
             margin-top: 15px;
-            font-size: 13.5px;
+            font-size: 13px;
             line-height: 1.5;
             color: #cbd5e1;
         }
@@ -269,150 +251,148 @@
 <body>
 
     <div class="container">
-        <!-- Header -->
         <header>
             <div>
-                <h1>ECC Mathematical Trading Engine v2.0</h1>
-                <p>Asisten Pengambil Keputusan Sinyal Kuantitatif Berdasarkan Logika Multi-Indikator</p>
+                <h1>ECC Mathematical Trading Engine v2.5 (Gold Edition)</h1>
+                <p>Asisten Sinyal Kuantitatif Instan untuk Pemantauan Cepat di Tengah Kesibukan Lapangan</p>
             </div>
             <div class="market-status-bar">
                 <div class="pulse-dot"></div>
-                <span>Engine Aktif Lokal</span>
+                <span id="active-asset-badge">XAUUSD Aktif</span>
             </div>
         </header>
 
-        <!-- Main Grid Area -->
         <div class="grid-layout">
-            
-            <!-- LEFT PANEL: PARAMETER INPUT -->
             <div class="card">
-                <h2>📊 Masukkan Data Indikator Pasar (Teknikal)</h2>
+                <h2>✨ Pilih Aset & Indikator Pasar</h2>
                 <div class="form-group">
-                    <label>Aset yang Diperiksa</label>
-                    <select id="asset-name">
-                        <option value="BTCUSDT">Bitcoin (BTC/USDT)</option>
-                        <option value="ETHUSDT">Ethereum (ETH/USDT)</option>
-                        <option value="FOREX">Pasar Mata Uang (Forex)</option>
+                    <label>Pilih Pasangan Aset (Pair)</label>
+                    <select id="asset-name" onchange="autoLoadAssetParams()">
+                        <option value="XAUUSD">⚜️ XAU/USD (Emas / Gold)</option>
+                        <option value="BTCUSDT">₿ BTC/USDT (Bitcoin)</option>
+                        <option value="EURUSD">💱 EUR/USD (Forex)</option>
                     </select>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>Harga Saat Ini (Current Price)</label>
-                        <input type="number" id="price-current" value="65200" step="any">
+                        <input type="number" id="price-current" value="2350.50" step="any">
                     </div>
                     <div class="form-group">
-                        <label>Moving Average Menengah (MA 20)</label>
-                        <input type="number" id="price-ma20" value="64800" step="any">
+                        <label>Tren Indikator (MA 20)</label>
+                        <input type="number" id="price-ma20" value="2342.00" step="any">
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Nilai RSI (Relative Strength Index)</label>
-                        <input type="number" id="val-rsi" value="55" min="0" max="100">
+                        <label>Nilai RSI Momentum (1 - 100)</label>
+                        <input type="number" id="val-rsi" value="32" min="0" max="100">
                     </div>
                     <div class="form-group">
-                        <label>Garis MACD vs Signal Line</label>
+                        <label>Status MACD Oscillator</label>
                         <select id="val-macd">
-                            <option value="bullish_cross">Golden Cross (MACD di atas Signal) 📈</option>
-                            <option value="bearish_cross">Death Cross (MACD di bawah Signal) 📉</option>
-                            <option value="flat">Datar / Konvergen Biasa</option>
+                            <option value="bullish_cross">Golden Cross (Sinyal Naik) 📈</option>
+                            <option value="bearish_cross">Death Cross (Sinyal Turun) 📉</option>
+                            <option value="flat">Datar / Sideways</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Batas Candlestick Support Atas</label>
-                        <input type="number" id="level-support" value="63500" step="any">
+                        <label>Area Batas Bawah (Support)</label>
+                        <input type="number" id="level-support" value="2338.00" step="any">
                     </div>
                     <div class="form-group">
-                        <label>Batas Candlestick Resistance Atas</label>
-                        <input type="number" id="level-resistance" value="66500" step="any">
+                        <label>Area Batas Atas (Resistance)</label>
+                        <input type="number" id="level-resistance" value="2365.00" step="any">
                     </div>
                 </div>
 
-                <button onclick="prosesSinyalPrediksi()">Jalankan Analisis & Prediksi Keputusan</button>
+                <button onclick="prosesSinyalPrediksi()">🎯 Dapatkan Sinyal & Batas Target Instan</button>
 
                 <div class="tips-panel">
-                    <strong>💡 Tips Kerja:</strong> Masukkan data di atas berdasarkan indikator chart Anda (misal dari TradingView atau MetaTrader) sebelum memutuskan masuk market. Gunakan ini untuk konfirmasi objektif agar psikologi Anda tidak bias emosi.
+                    <strong>💡 Fitur Mudahnya Penggunaan:</strong> Anda tinggal mengubah jenis aset di atas, maka angka-angka contoh yang mendekati realitas pasar akan termuat secara otomatis. Anda cukup mencocokkan sedikit dengan chart asli Anda tanpa ketik ulang semua data.
                 </div>
             </div>
 
-            <!-- RIGHT PANEL: DECISION & MATHEMATICAL MATRIX -->
             <div class="card">
-                <h2>🎯 Hasil Prediksi & Konfirmasi Eksekusi</h2>
+                <h2>🎯 Keputusan Eksekusi Objektif</h2>
                 
                 <div class="signal-display" id="signal-box">
-                    <div class="signal-status signal-neutral" id="txt-signal">WAIT & SEE</div>
-                    <div class="signal-reason" id="txt-reason">Masukkan parameter di panel kiri dan tekan tombol Analisis untuk memunculkan prediksi konseptual matematika.</div>
+                    <div class="signal-status signal-neutral" id="txt-signal">SIAP DIOPERASIKAN</div>
+                    <div class="signal-reason" id="txt-reason">Pilih pair, sesuaikan angka indikator, lalu klik tombol emas di bawah untuk memproses kalkulasi risiko.</div>
                 </div>
 
-                <!-- Matrix Perhitungan Bobot -->
                 <div class="matrix-output" id="matrix-box">
-                    <h3 style="font-size:14px; color:#38bdf8; margin-bottom:10px;">Skor Matriks Kuantitatif:</h3>
+                    <h3 style="font-size:14px; color:#eab308; margin-bottom:10px;">📋 Parameter Rencana Trading (Trading Plan):</h3>
                     <div class="matrix-row">
-                        <span class="matrix-label">Skor Sentimen Bullish (Maks 100)</span>
+                        <span class="matrix-label">Skor Konvergensi Beli (Bullish)</span>
                         <span class="matrix-value" id="m-bull">-</span>
                     </div>
                     <div class="matrix-row">
-                        <span class="matrix-label">Skor Sentimen Bearish (Maks 100)</span>
+                        <span class="matrix-label">Skor Distribusi Jual (Bearish)</span>
                         <span class="matrix-value" id="m-bear">-</span>
                     </div>
                     <div class="matrix-row">
-                        <span class="matrix-label">Level Stop Loss Pengaman Optimal</span>
-                        <span class="matrix-value" id="m-sl" style="color:#f87171;">-</span>
+                        <span class="matrix-label">🛡️ Stop Loss (Batas Potong Rugi Aman)</span>
+                        <span class="matrix-value" id="m-sl" style="color:#f87171; font-size: 15px;">-</span>
                     </div>
                     <div class="matrix-row">
-                        <span class="matrix-label">Level Take Profit Target Rasional</span>
-                        <span class="matrix-value" id="m-tp" style="color:#4ade80;">-</span>
+                        <span class="matrix-label">💰 Take Profit (Target Amankan Cuan)</span>
+                        <span class="matrix-value" id="m-tp" style="color:#4ade80; font-size: 15px;">-</span>
                     </div>
                 </div>
             </div>
-
         </div>
 
-        <!-- LOWER SECTION: HISTORICAL DECISION LOGS -->
-        <div class="card journal-section">
-            <h2>📜 Log Rekaman Prediksi Eksekusi Lokal</h2>
+        <div class="card">
+            <h2>📜 Jurnal Log Keputusan Instan</h2>
             <table>
                 <thead>
                     <tr>
-                        <th>Waktu Eksekusi</th>
-                        <th>Aset</th>
-                        <th>Harga Saat Analisis</th>
-                        <th>Rekomendasi Prediksi</th>
-                        <th>Batas Stop Loss</th>
-                        <th>Batas Take Profit</th>
+                        <th>Waktu Analisis</th>
+                        <th>Aset / Pair</th>
+                        <th>Harga Eksekusi</th>
+                        <th>Sinyal Rekomendasi</th>
+                        <th>Titik Stop Loss</th>
+                        <th>Titik Take Profit</th>
                     </tr>
                 </thead>
                 <tbody id="log-table-body">
-                    <tr>
-                        <td>25/05/2026 10:15</td>
-                        <td>BTCUSDT</td>
-                        <td>$62,100</td>
-                        <td><span class="badge badge-buy">STRONG BUY</span></td>
-                        <td>$61,200</td>
-                        <td>$63,900</td>
-                    </tr>
-                    <tr>
-                        <td>24/05/2026 14:30</td>
-                        <td>ETHUSDT</td>
-                        <td>$3,450</td>
-                        <td><span class="badge badge-sell">STRONG SELL</span></td>
-                        <td>$3,510</td>
-                        <td>$3,330</td>
-                    </tr>
-                </tbody>
+                    </tbody>
             </table>
         </div>
     </div>
 
-    <!-- SCRIPT ENGINE CORE LOGIC -->
     <script>
+        // Memudahkan Penggunaan: Otomatis memuat parameter default saat ganti aset agar tidak lelah mengetik
+        const assetTemplates = {
+            XAUUSD: { current: 2350.50, ma20: 2342.00, rsi: 32, macd: "bullish_cross", support: 2338.00, resistance: 2365.00 },
+            BTCUSDT: { current: 65200, ma20: 64800, rsi: 55, macd: "flat", support: 63500, resistance: 66500 },
+            EURUSD: { current: 1.0850, ma20: 1.0890, rsi: 72, macd: "bearish_cross", support: 1.0810, resistance: 1.0920 }
+        };
+
+        function autoLoadAssetParams() {
+            const asset = document.getElementById('asset-name').value;
+            const template = assetTemplates[asset];
+            
+            document.getElementById('price-current').value = template.current;
+            document.getElementById('price-ma20').value = template.ma20;
+            document.getElementById('val-rsi').value = template.rsi;
+            document.getElementById('val-macd').value = template.macd;
+            document.getElementById('level-support').value = template.support;
+            document.getElementById('level-resistance').value = template.resistance;
+
+            document.getElementById('active-asset-badge').innerText = asset + " Aktif";
+        }
+
+        // Jalankan auto load pertama kali saat halaman dibuka
+        window.onload = autoLoadAssetParams;
+
         function prosesSinyalPrediksi() {
-            // Fetch Input Data
             const asset = document.getElementById('asset-name').value;
             const price = parseFloat(document.getElementById('price-current').value);
             const ma20 = parseFloat(document.getElementById('price-ma20').value);
@@ -421,117 +401,91 @@
             const support = parseFloat(document.getElementById('level-support').value);
             const resistance = parseFloat(document.getElementById('level-resistance').value);
 
-            // Validasi Input
             if (isNaN(price) || isNaN(ma20) || isNaN(rsi) || isNaN(support) || isNaN(resistance)) {
-                alert("Mohon isi semua parameter angka dengan valid!");
+                alert("Mohon isi semua data parameter dengan angka valid!");
                 return;
             }
 
-            // Core Math Engine Algorithm: Penghitungan Berbobot (Weight Scoring System)
             let bullishScore = 0;
             let bearishScore = 0;
 
-            // 1. Analisis Tren via Moving Average
-            if (price > ma20) {
-                bullishScore += 30; // Harga di atas rerata tren naik
-            } else {
-                bearishScore += 30; // Harga di bawah rerata tren turun
-            }
+            // Logika Tren MA
+            if (price > ma20) bullishScore += 30;
+            else bearishScore += 30;
 
-            // 2. Analisis Momentum via RSI
-            if (rsi <= 30) {
-                bullishScore += 35; // Oversold (Sangat Murah, Potensi Rebound Tinggi)
-            } else if (rsi >= 70) {
-                bearishScore += 35; // Overbought (Sangat Mahal, Potensi Koreksi Turun)
-            } else if (rsi > 50 && price > ma20) {
-                bullishScore += 15; // Momentum Bullish Berlanjut
-            } else if (rsi < 50 && price < ma20) {
-                bearishScore += 15; // Momentum Bearish Berlanjut
-            }
+            // Logika RSI
+            if (rsi <= 35) bullishScore += 35; // Kondisi Murah (Oversold)
+            else if (rsi >= 65) bearishScore += 35; // Kondisi Mahal (Overbought)
 
-            // 3. Analisis MACD Cross
-            if (macd === 'bullish_cross') {
-                bullishScore += 35;
-            } else if (macd === 'bearish_cross') {
-                bearishScore += 35;
-            }
+            // Logika MACD
+            if (macd === 'bullish_cross') bullishScore += 35;
+            else if (macd === 'bearish_cross') bearishScore += 35;
 
-            // Perhitungan Target SL & TP Matematik Kuantitatif (Risk Reward Ratio 1:2 Berbasis Struktur Market)
             let optimalSL, optimalTP;
-            
-            // Default Kalkulasi Struktur Terdekat
+            let multiplier = asset === "EURUSD" ? 0.0005 : (asset === "XAUUSD" ? 1.5 : 150); // Buff toleransi gap stop loss hunting sesuai karakteristik volatilitas aset
+
             if (bullishScore > bearishScore) {
-                optimalSL = support - (price * 0.002); // Letakkan sedikit di bawah support agar aman dari stop loss hunting
-                const gapRisk = price - optimalSL;
-                optimalTP = price + (gapRisk * 2); // Target profit rasional RR 1:2
+                optimalSL = support - multiplier;
+                const riskGap = price - optimalSL;
+                optimalTP = price + (riskGap * 2); // Rasio Untung:Rugi = 2:1
             } else {
-                optimalSL = resistance + (price * 0.002); // Letakkan sedikit di atas resistance
-                const gapRisk = optimalSL - price;
-                optimalTP = price - (gapRisk * 2); // Target profit short sell
+                optimalSL = resistance + multiplier;
+                const riskGap = optimalSL - price;
+                optimalTP = price - (riskGap * 2);
             }
 
-            // Penentuan Sinyal Akhir Berdasarkan Dominasi Skor Matriks
             const signalBox = document.getElementById('signal-box');
             const txtSignal = document.getElementById('txt-signal');
             const txtReason = document.getElementById('txt-reason');
 
-            // Reset classes
             signalBox.style.backgroundColor = '#1f2937';
             txtSignal.className = 'signal-status';
 
-            let finalRecommendation = "";
-            let badgeClass = "";
+            let recText = "";
+            let bClass = "";
 
-            if (bullishScore >= 65 && rsi < 70) {
-                txtSignal.innerText = "🚀 BUY SIGNAL (STRONG)";
+            if (bullishScore >= 65) {
+                txtSignal.innerText = "📈 EMAS / ASET SIAP BUY";
                 txtSignal.classList.add('signal-buy');
-                txtReason.innerText = `Data multi-indikator mengonfirmasi konvergensi positif kuat pada ${asset}. Harga berada di zona tren akumulasi dengan momentum beli dominan.`;
+                txtReason.innerText = `Matriks ECC menyimpulkan sinyal BELI kuat untuk ${asset}. Kombinasi indikator mendeteksi momentum pembalikan arah naik di dekat area Support.`;
                 signalBox.style.backgroundColor = 'rgba(34, 197, 94, 0.08)';
-                finalRecommendation = "STRONG BUY";
-                badgeClass = "badge-buy";
-            } else if (bearishScore >= 65 && rsi > 30) {
-                txtSignal.innerText = "⚠️ SELL SIGNAL (STRONG)";
+                recText = "STRONG BUY";
+                bClass = "badge-buy";
+            } else if (bearishScore >= 65) {
+                txtSignal.innerText = "📉 EMAS / ASET SIAP SELL";
                 txtSignal.classList.add('signal-sell');
-                txtReason.innerText = `Deteksi distribusi pasar masif pada ${asset}. Indikator momentum menunjukkan area jenuh beli atau kerusakan struktur tren, disarankan amankan profit atau lakukan short entry.`;
+                txtReason.innerText = `Matriks ECC mendeteksi konfirmasi JUAL untuk ${asset}. Sinyal jenuh beli berpadu dengan penembusan tren bawah, amankan profit Anda segera.`;
                 signalBox.style.backgroundColor = 'rgba(239, 68, 68, 0.08)';
-                finalRecommendation = "STRONG SELL";
-                badgeClass = "badge-sell";
+                recText = "STRONG SELL";
+                bClass = "badge-sell";
             } else {
                 txtSignal.innerText = "⏳ HOLD / WAIT & SEE";
                 txtSignal.classList.add('signal-neutral');
-                txtReason.innerText = "Kekuatan pasar seimbang (sideways). Tidak ada sinyal konvergensi indikator yang dominan. Hindari masuk market di tengah area konsolidasi untuk menghindari noise.";
-                finalRecommendation = "WAIT & SEE";
-                badgeClass = "badge-neutral";
-                
-                // Set default TP SL ke level struktur standar jika tidak ada tren kuat
+                txtReason.innerText = "Sinyal pasar konsolidasi atau transisi. Volume perdagangan seimbang, tunggu pergerakan konklusif keluar dari area jenuh sebelum mengambil keputusan eksekusi.";
+                recText = "WAIT & SEE";
+                bClass = "badge-neutral";
                 optimalSL = support;
                 optimalTP = resistance;
             }
 
-            // Update Panel Output Matriks
+            // Tampilkan Hasil Matriks
             document.getElementById('matrix-box').style.display = 'block';
-            document.getElementById('m-bull').innerText = bullishScore + " pts";
-            document.getElementById('m-bear').innerText = bearishScore + " pts";
-            document.getElementById('m-sl').innerText = "$" + optimalSL.toFixed(2);
-            document.getElementById('m-tp').innerText = "$" + optimalTP.toFixed(2);
+            document.getElementById('m-bull').innerText = bullishScore + " / 100 Poin";
+            document.getElementById('m-bear').innerText = bearishScore + " / 100 Poin";
+            document.getElementById('m-sl').innerText = optimalSL.toFixed(asset === "EURUSD" ? 4 : 2);
+            document.getElementById('m-tp').innerText = optimalTP.toFixed(asset === "EURUSD" ? 4 : 2);
 
-            // Tambahkan Otomatis Rekaman Ke Tabel Histori (Log Jurnal)
-            const now = new Date();
-            const timeStr = now.getDate().toString().padStart(2, '0') + '/' + 
-                            (now.getMonth()+1).toString().padStart(2, '0') + '/' + 
-                            now.getFullYear() + ' ' + 
-                            now.getHours().toString().padStart(2, '0') + ':' + 
-                            now.getMinutes().toString().padStart(2, '0');
-
+            // Tambahkan Rekaman ke Tabel Jurnal
+            const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + " WIB";
             const tbody = document.getElementById('log-table-body');
-            const newRow = tbody.insertRow(0); // Insert paling atas
+            const newRow = tbody.insertRow(0);
             newRow.innerHTML = `
-                <td>${timeStr}</td>
-                <td>${asset}</td>
-                <td>$${price.toLocaleString()}</td>
-                <td><span class="badge ${badgeClass}">${finalRecommendation}</span></td>
-                <td>$${optimalSL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-                <td>$${optimalTP.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                <td>\${timeStr}</td>
+                <td><strong>\${asset}</strong></td>
+                <td>\${price.toFixed(asset === "EURUSD" ? 4 : 2)}</td>
+                <td><span class="badge \${bClass}">\${recText}</span></td>
+                <td style="color:#f87171">\${optimalSL.toFixed(asset === "EURUSD" ? 4 : 2)}</td>
+                <td style="color:#4ade80">\${optimalTP.toFixed(asset === "EURUSD" ? 4 : 2)}</td>
             `;
         }
     </script>

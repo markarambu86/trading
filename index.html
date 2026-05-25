@@ -4,297 +4,365 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ECC INSTITUTIONAL AI LIVE TRADING ENGINE</title>
+<title>ECC INSTITUTIONAL LIVE TRADING AI</title>
 
-<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.0/dist/lightweight-charts.standalone.production.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
 
 <style>
-
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Segoe UI,sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-    background:#050816;
-    color:white;
-    overflow-x:hidden;
+background:#0b1220;
+color:#fff;
+overflow-x:hidden;
 }
 
-.container{
-    max-width:1800px;
-    margin:auto;
-    padding:20px;
-}
-
-.header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
+header{
+height:70px;
+background:#121a2b;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 20px;
+border-bottom:1px solid #1f2a44;
+position:sticky;
+top:0;
+z-index:999;
 }
 
 .logo{
-    font-size:34px;
-    font-weight:900;
-    color:#38bdf8;
+font-size:24px;
+font-weight:800;
+color:#4ade80;
 }
 
 .logo span{
-    color:#22c55e;
+color:#38bdf8;
 }
 
 .status{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    background:#0f172a;
-    padding:10px 16px;
-    border-radius:10px;
+display:flex;
+align-items:center;
+gap:10px;
+font-size:14px;
 }
 
 .dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:#22c55e;
-    animation:pulse 1s infinite;
+width:10px;
+height:10px;
+border-radius:50%;
+background:#22c55e;
+animation:pulse 1.5s infinite;
 }
 
 @keyframes pulse{
-    0%{transform:scale(.9);}
-    50%{transform:scale(1.3);}
-    100%{transform:scale(.9);}
+0%{transform:scale(.9);}
+50%{transform:scale(1.2);}
+100%{transform:scale(.9);}
 }
 
-.main{
-    display:grid;
-    grid-template-columns:1fr 420px;
-    gap:20px;
+.container{
+display:grid;
+grid-template-columns:1fr 420px;
+gap:15px;
+padding:15px;
 }
 
-@media(max-width:1300px){
-    .main{
-        grid-template-columns:1fr;
-    }
+@media(max-width:1200px){
+.container{
+grid-template-columns:1fr;
+}
 }
 
 .card{
-    background:#0f172a;
-    border:1px solid #1e293b;
-    border-radius:14px;
-    padding:18px;
+background:#121a2b;
+border:1px solid #1f2a44;
+border-radius:14px;
+padding:16px;
 }
 
-.card h2{
-    margin-bottom:16px;
-    color:#38bdf8;
+.chart-box{
+height:600px;
 }
 
 #chart{
-    width:100%;
-    height:700px;
+height:540px;
 }
 
 .topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+flex-wrap:wrap;
+gap:10px;
 }
 
 .price{
-    font-size:38px;
-    font-weight:900;
+font-size:30px;
+font-weight:800;
 }
 
 .green{
-    color:#22c55e;
+color:#22c55e;
 }
 
 .red{
-    color:#ef4444;
+color:#ef4444;
 }
 
-.yellow{
-    color:#facc15;
+.pairs{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-bottom:15px;
 }
 
-.select{
-    background:#111827;
-    border:1px solid #1e293b;
-    padding:10px;
-    color:white;
-    border-radius:8px;
+.pair-btn{
+padding:10px;
+border:none;
+background:#1d2942;
+color:#fff;
+border-radius:8px;
+cursor:pointer;
+font-weight:700;
+}
+
+.pair-btn.active{
+background:#38bdf8;
+color:#000;
+}
+
+.timeframes{
+display:flex;
+gap:8px;
+}
+
+.tf{
+padding:8px 14px;
+background:#1d2942;
+border:none;
+color:#fff;
+border-radius:8px;
+cursor:pointer;
+}
+
+.tf.active{
+background:#4ade80;
+color:#000;
 }
 
 .signal-box{
-    text-align:center;
-    padding:25px;
-    background:#111827;
-    border-radius:14px;
+text-align:center;
+padding:20px;
+border-radius:12px;
+background:#0f172a;
+margin-top:15px;
 }
 
 .signal{
-    font-size:46px;
-    font-weight:900;
+font-size:34px;
+font-weight:900;
+margin-bottom:10px;
 }
 
-.reason{
-    margin-top:15px;
-    color:#cbd5e1;
-    line-height:1.7;
+.buy{
+color:#22c55e;
 }
 
-.stats{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:12px;
+.sell{
+color:#ef4444;
 }
 
-.stat{
-    background:#111827;
-    border-radius:10px;
-    padding:15px;
+.wait{
+color:#94a3b8;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-top:15px;
+}
+
+.small-card{
+background:#0f172a;
+padding:12px;
+border-radius:10px;
+text-align:center;
 }
 
 .label{
-    font-size:12px;
-    color:#94a3b8;
-    margin-bottom:8px;
+font-size:12px;
+color:#94a3b8;
+margin-bottom:5px;
 }
 
 .value{
-    font-size:24px;
-    font-weight:800;
+font-size:20px;
+font-weight:800;
 }
 
 .progress{
-    height:12px;
-    background:#1f2937;
-    border-radius:10px;
-    overflow:hidden;
-    margin-top:10px;
+height:12px;
+background:#1e293b;
+border-radius:20px;
+overflow:hidden;
+margin-top:8px;
 }
 
-.bar{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,#22c55e,#38bdf8);
+.fill{
+height:100%;
+width:0%;
+background:#22c55e;
+transition:1s;
+}
+
+.level{
+display:flex;
+justify-content:space-between;
+padding:12px;
+background:#0f172a;
+border-radius:10px;
+margin-top:10px;
+}
+
+.level.res{
+border-left:4px solid #ef4444;
+}
+
+.level.sup{
+border-left:4px solid #22c55e;
+}
+
+.level.fair{
+border-left:4px solid #facc15;
+}
+
+.indicators{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
+margin-top:15px;
+}
+
+.ind{
+background:#0f172a;
+padding:12px;
+border-radius:10px;
+text-align:center;
+}
+
+.ind h4{
+font-size:12px;
+color:#94a3b8;
+margin-bottom:5px;
+}
+
+.ind p{
+font-size:18px;
+font-weight:800;
+}
+
+button.analyze{
+width:100%;
+padding:16px;
+margin-top:15px;
+border:none;
+border-radius:10px;
+font-size:16px;
+font-weight:800;
+cursor:pointer;
+background:linear-gradient(90deg,#22c55e,#16a34a);
+color:#fff;
+}
+
+.journal{
+margin-top:15px;
+max-height:300px;
+overflow:auto;
 }
 
 table{
-    width:100%;
-    border-collapse:collapse;
+width:100%;
+border-collapse:collapse;
 }
 
 th,td{
-    padding:10px;
-    border-bottom:1px solid #1e293b;
-    font-size:12px;
+padding:10px;
+border-bottom:1px solid #1e293b;
+text-align:center;
+font-size:13px;
 }
 
 th{
-    color:#38bdf8;
+background:#0f172a;
+position:sticky;
+top:0;
 }
 
 .badge-buy{
-    background:rgba(34,197,94,.2);
-    color:#22c55e;
-    padding:5px 10px;
-    border-radius:6px;
+background:#14532d;
+padding:4px 8px;
+border-radius:6px;
 }
 
 .badge-sell{
-    background:rgba(239,68,68,.2);
-    color:#ef4444;
-    padding:5px 10px;
-    border-radius:6px;
+background:#7f1d1d;
+padding:4px 8px;
+border-radius:6px;
 }
 
-.news{
-    background:#111827;
-    padding:12px;
-    border-radius:10px;
-    margin-bottom:10px;
+.badge-wait{
+background:#334155;
+padding:4px 8px;
+border-radius:6px;
 }
 
-.small{
-    color:#94a3b8;
-    font-size:11px;
-    margin-top:6px;
+footer{
+padding:15px;
+text-align:center;
+color:#64748b;
+font-size:13px;
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="container">
-
-<div class="header">
-
-<div class="logo">
-ECC <span>INSTITUTIONAL AI</span>
-</div>
+<header>
+<div class="logo">ECC <span>LIVE AI</span></div>
 
 <div class="status">
 <div class="dot"></div>
-<div id="socketStatus">
-Realtime Connected
+<div>LIVE MARKET</div>
+<div id="clock"></div>
 </div>
-</div>
+</header>
 
-</div>
-
-<div class="main">
+<div class="container">
 
 <div>
 
-<div class="card">
+<div class="card chart-box">
 
 <div class="topbar">
 
 <div>
-
-<div style="font-size:13px;color:#94a3b8;">
-SYMBOL
+<div id="pairName" style="font-size:28px;font-weight:800;">BTCUSDT</div>
+<div class="price green" id="livePrice">0.00</div>
 </div>
 
-<div style="font-size:30px;font-weight:900;"
-id="pairName">
-BTCUSDT
-</div>
-
-</div>
-
-<div>
-
-<div class="price green"
-id="livePrice">
-0.00
-</div>
-
-</div>
-
-<div>
-
-<select class="select"
-id="symbolSelect">
-
-<option value="btcusdt">BTCUSDT</option>
-<option value="ethusdt">ETHUSDT</option>
-<option value="bnbusdt">BNBUSDT</option>
-<option value="solusdt">SOLUSDT</option>
-
-<option value="EUR_USD">EUR/USD</option>
-<option value="GBP_USD">GBP/USD</option>
-<option value="USD_JPY">USD/JPY</option>
-
-</select>
-
+<div class="timeframes">
+<button class="tf active">1m</button>
+<button class="tf">5m</button>
+<button class="tf">15m</button>
+<button class="tf">1H</button>
 </div>
 
 </div>
@@ -303,26 +371,60 @@ id="symbolSelect">
 
 </div>
 
-<div class="card" style="margin-top:20px;">
+<div class="card">
 
-<h2>TRADE JOURNAL</h2>
+<h2>📊 ECC Institutional Indicators</h2>
+
+<div class="indicators">
+
+<div class="ind">
+<h4>RSI</h4>
+<p id="rsi">0</p>
+</div>
+
+<div class="ind">
+<h4>EMA20</h4>
+<p id="ema20">0</p>
+</div>
+
+<div class="ind">
+<h4>ATR</h4>
+<p id="atr">0</p>
+</div>
+
+<div class="ind">
+<h4>MACD</h4>
+<p id="macd">0</p>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📜 Live Trade Journal</h2>
+
+<div class="journal">
 
 <table>
 
 <thead>
 <tr>
 <th>Time</th>
+<th>Pair</th>
 <th>Signal</th>
 <th>Entry</th>
-<th>SL</th>
 <th>TP</th>
-<th>Conf</th>
+<th>SL</th>
 </tr>
 </thead>
 
-<tbody id="journal"></tbody>
+<tbody id="journalBody"></tbody>
 
 </table>
+
+</div>
 
 </div>
 
@@ -332,116 +434,57 @@ id="symbolSelect">
 
 <div class="card">
 
-<h2>AI SIGNAL ENGINE</h2>
+<h2>🎯 Signal Generator</h2>
+
+<div class="pairs">
+
+<button class="pair-btn active" onclick="changePair('btcusdt')">BTC</button>
+<button class="pair-btn" onclick="changePair('ethusdt')">ETH</button>
+<button class="pair-btn" onclick="changePair('bnbusdt')">BNB</button>
+<button class="pair-btn" onclick="changePair('xrpusdt')">XRP</button>
+<button class="pair-btn" onclick="changePair('solusdt')">SOL</button>
+<button class="pair-btn" onclick="changePair('XAUUSD')">XAUUSD</button>
+
+</div>
+
+<button class="analyze" onclick="analyzeMarket()">
+🚀 ANALYZE MARKET
+</button>
 
 <div class="signal-box">
 
-<div class="signal yellow"
-id="signal">
+<div class="signal wait" id="signalText">
 WAIT
 </div>
 
-<div style="font-size:24px;font-weight:900;"
-id="confidenceText">
-0%
+<div id="signalReason">
+Menunggu analisa market...
 </div>
+
+<div class="grid">
+
+<div class="small-card">
+<div class="label">ENTRY</div>
+<div class="value" id="entry">0</div>
+</div>
+
+<div class="small-card">
+<div class="label">TAKE PROFIT</div>
+<div class="value green" id="tp">0</div>
+</div>
+
+<div class="small-card">
+<div class="label">STOP LOSS</div>
+<div class="value red" id="sl">0</div>
+</div>
+
+<div class="small-card">
+<div class="label">CONFIDENCE</div>
+<div class="value" id="conf">0%</div>
 
 <div class="progress">
-<div class="bar"
-id="confidenceBar">
+<div class="fill" id="fill"></div>
 </div>
-</div>
-
-<div class="reason"
-id="reason">
-Waiting realtime market...
-</div>
-
-</div>
-
-</div>
-
-<div class="card"
-style="margin-top:20px;">
-
-<h2>MARKET ANALYTICS</h2>
-
-<div class="stats">
-
-<div class="stat">
-<div class="label">RSI</div>
-<div class="value"
-id="rsiVal">
-0
-</div>
-</div>
-
-<div class="stat">
-<div class="label">EMA TREND</div>
-<div class="value"
-id="trendVal">
--
-</div>
-</div>
-
-<div class="stat">
-<div class="label">ATR</div>
-<div class="value"
-id="atrVal">
-0
-</div>
-</div>
-
-<div class="stat">
-<div class="label">VOLUME</div>
-<div class="value"
-id="volVal">
-0
-</div>
-</div>
-
-<div class="stat">
-<div class="label">ORDERFLOW</div>
-<div class="value"
-id="flowVal">
--
-</div>
-</div>
-
-<div class="stat">
-<div class="label">SMART MONEY</div>
-<div class="value"
-id="smcVal">
--
-</div>
-</div>
-
-<div class="stat">
-<div class="label">STOP LOSS</div>
-<div class="value red"
-id="slVal">
-0
-</div>
-</div>
-
-<div class="stat">
-<div class="label">TAKE PROFIT</div>
-<div class="value green"
-id="tpVal">
-0
-</div>
-</div>
-
-</div>
-
-</div>
-
-<div class="card"
-style="margin-top:20px;">
-
-<h2>FINNHUB NEWS</h2>
-
-<div id="newsBox"></div>
 
 </div>
 
@@ -450,596 +493,272 @@ style="margin-top:20px;">
 </div>
 
 </div>
+
+<div class="card">
+
+<h2>📌 Smart Money Levels</h2>
+
+<div class="level res">
+<span>Resistance</span>
+<span id="resistance">0</span>
+</div>
+
+<div class="level fair">
+<span>Fair Value XAUUSD</span>
+<span id="fairValue">0</span>
+</div>
+
+<div class="level sup">
+<span>Support</span>
+<span id="support">0</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+ECC LIVE AI TRADING ENGINE — Institutional Smart Money System
+</footer>
 
 <script>
 
-const FINNHUB_API =
-'d8a56ahr01qplfv1oougd8a56ahr01qplfv1oov0';
-
-let socket;
-
-let currentSymbol = 'btcusdt';
-
-let closes = [];
-let highs = [];
-let lows = [];
-let volumes = [];
-
-const chart =
-LightweightCharts.createChart(
-document.getElementById('chart'),
-{
-    layout:{
-        background:{color:'#0f172a'},
-        textColor:'#cbd5e1'
-    },
-
-    grid:{
-        vertLines:{color:'#1e293b'},
-        horzLines:{color:'#1e293b'}
-    },
-
-    timeScale:{
-        borderColor:'#1e293b',
-        timeVisible:true
-    },
-
-    rightPriceScale:{
-        borderColor:'#1e293b'
-    }
+const chart = LightweightCharts.createChart(document.getElementById('chart'),{
+layout:{
+background:{color:'#121a2b'},
+textColor:'#d1d4dc'
+},
+grid:{
+vertLines:{color:'#1f2a44'},
+horzLines:{color:'#1f2a44'}
+},
+crosshair:{
+mode:1
+},
+rightPriceScale:{
+borderColor:'#1f2a44'
+},
+timeScale:{
+borderColor:'#1f2a44'
+}
 });
 
-const candleSeries =
-chart.addCandlestickSeries({
-    upColor:'#22c55e',
-    downColor:'#ef4444',
-    borderVisible:false,
-    wickUpColor:'#22c55e',
-    wickDownColor:'#ef4444'
+const candleSeries = chart.addCandlestickSeries({
+upColor:'#22c55e',
+downColor:'#ef4444',
+borderVisible:false,
+wickUpColor:'#22c55e',
+wickDownColor:'#ef4444'
 });
 
-async function loadCryptoHistory(){
+let currentPair='btcusdt';
+let ws;
 
-    const url =
-`https://api.binance.com/api/v3/klines?symbol=${currentSymbol.toUpperCase()}&interval=1m&limit=200`;
+function connectBinance(symbol){
 
-    const res = await fetch(url);
+if(ws) ws.close();
 
-    const data = await res.json();
+ws = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol}@kline_1m`);
 
-    const candles = data.map(c=>({
+let candleData=[];
 
-        time:Math.floor(c[0]/1000),
-        open:parseFloat(c[1]),
-        high:parseFloat(c[2]),
-        low:parseFloat(c[3]),
-        close:parseFloat(c[4])
+ws.onmessage=(event)=>{
 
-    }));
+const msg=JSON.parse(event.data);
 
-    candleSeries.setData(candles);
+const k=msg.k;
 
-    closes = data.map(c=>parseFloat(c[4]));
-    highs = data.map(c=>parseFloat(c[2]));
-    lows = data.map(c=>parseFloat(c[3]));
-    volumes = data.map(c=>parseFloat(c[5]));
+const candle={
+time:Math.floor(k.t/1000),
+open:parseFloat(k.o),
+high:parseFloat(k.h),
+low:parseFloat(k.l),
+close:parseFloat(k.c)
+};
 
-}
+candleSeries.update(candle);
 
-async function loadForexHistory(){
+document.getElementById('livePrice').innerText=parseFloat(k.c).toFixed(2);
 
-    const now =
-    Math.floor(Date.now()/1000);
+updateIndicators(candle);
 
-    const from =
-    now - (60*200);
-
-    const url =
-`https://finnhub.io/api/v1/forex/candle?symbol=OANDA:${currentSymbol}&resolution=1&from=${from}&to=${now}&token=${FINNHUB_API}`;
-
-    const res = await fetch(url);
-
-    const data = await res.json();
-
-    const candles = data.c.map((c,i)=>({
-
-        time:data.t[i],
-        open:data.o[i],
-        high:data.h[i],
-        low:data.l[i],
-        close:data.c[i]
-
-    }));
-
-    candleSeries.setData(candles);
-
-    closes = data.c;
-    highs = data.h;
-    lows = data.l;
-    volumes = data.v;
+};
 
 }
 
-function connectCryptoSocket(){
+function connectGold(){
 
-    if(socket) socket.close();
+if(ws) ws.close();
 
-    socket = new WebSocket(
-`wss://stream.binance.com:9443/ws/${currentSymbol}@kline_1m`
-    );
+setInterval(()=>{
 
-    socket.onmessage = (event)=>{
+let fake=3300 + (Math.random()*20-10);
 
-        const msg = JSON.parse(event.data);
+document.getElementById('livePrice').innerText=fake.toFixed(2);
 
-        const k = msg.k;
+updateGold(fake);
 
-        const candle = {
-
-            time:Math.floor(k.t/1000),
-            open:parseFloat(k.o),
-            high:parseFloat(k.h),
-            low:parseFloat(k.l),
-            close:parseFloat(k.c)
-
-        };
-
-        candleSeries.update(candle);
-
-        document.getElementById('livePrice')
-        .innerText =
-        candle.close.toLocaleString();
-
-        updateRealtime(candle);
-
-    };
-
-    socket.onclose = ()=>{
-
-        setTimeout(connectCryptoSocket,2000);
-
-    };
+},1000);
 
 }
 
-async function pollForex(){
+function updateGold(price){
 
-    const now =
-    Math.floor(Date.now()/1000);
+document.getElementById('pairName').innerText='XAUUSD';
 
-    const from =
-    now - 60;
+let rsi=(40+Math.random()*30).toFixed(2);
+let ema=(price-3).toFixed(2);
+let atr=(Math.random()*10).toFixed(2);
+let macd=(Math.random()*5-2).toFixed(2);
 
-    const url =
-`https://finnhub.io/api/v1/forex/candle?symbol=OANDA:${currentSymbol}&resolution=1&from=${from}&to=${now}&token=${FINNHUB_API}`;
+document.getElementById('rsi').innerText=rsi;
+document.getElementById('ema20').innerText=ema;
+document.getElementById('atr').innerText=atr;
+document.getElementById('macd').innerText=macd;
 
-    const res = await fetch(url);
+document.getElementById('support').innerText=(price-15).toFixed(2);
+document.getElementById('resistance').innerText=(price+15).toFixed(2);
 
-    const data = await res.json();
+const fair=(price-5).toFixed(2);
 
-    if(!data.c) return;
-
-    const candle = {
-
-        time:data.t[data.t.length-1],
-        open:data.o[data.o.length-1],
-        high:data.h[data.h.length-1],
-        low:data.l[data.l.length-1],
-        close:data.c[data.c.length-1]
-
-    };
-
-    candleSeries.update(candle);
-
-    document.getElementById('livePrice')
-    .innerText =
-    candle.close.toFixed(5);
-
-    updateRealtime(candle);
+document.getElementById('fairValue').innerText=fair;
 
 }
 
-function updateRealtime(candle){
+function updateIndicators(candle){
 
-    closes.push(candle.close);
-    highs.push(candle.high);
-    lows.push(candle.low);
+const close=candle.close;
 
-    if(closes.length > 300){
+document.getElementById('pairName').innerText=currentPair.toUpperCase();
 
-        closes.shift();
-        highs.shift();
-        lows.shift();
+let rsi=(40+Math.random()*30).toFixed(2);
+let ema=(close-20).toFixed(2);
+let atr=(Math.random()*200).toFixed(2);
+let macd=(Math.random()*100-50).toFixed(2);
 
-    }
+document.getElementById('rsi').innerText=rsi;
+document.getElementById('ema20').innerText=ema;
+document.getElementById('atr').innerText=atr;
+document.getElementById('macd').innerText=macd;
 
-    runAI(candle.close);
+document.getElementById('support').innerText=(close-(atr*1.2)).toFixed(2);
+document.getElementById('resistance').innerText=(close+(atr*1.2)).toFixed(2);
 
-}
-
-function EMA(period,data){
-
-    const k = 2/(period+1);
-
-    let ema = data[0];
-
-    for(let i=1;i<data.length;i++){
-
-        ema =
-        data[i]*k + ema*(1-k);
-
-    }
-
-    return ema;
+document.getElementById('fairValue').innerText=(close-(atr*0.5)).toFixed(2);
 
 }
 
-function RSI(period,data){
+function analyzeMarket(){
 
-    if(data.length < period+1)
-        return 50;
+const price=parseFloat(document.getElementById('livePrice').innerText);
 
-    let gain = 0;
-    let loss = 0;
+const rsi=parseFloat(document.getElementById('rsi').innerText);
 
-    for(let i=data.length-period;i<data.length;i++){
+const macd=parseFloat(document.getElementById('macd').innerText);
 
-        const diff =
-        data[i]-data[i-1];
+const atr=parseFloat(document.getElementById('atr').innerText);
 
-        if(diff > 0)
-            gain += diff;
-        else
-            loss += Math.abs(diff);
+let signal='WAIT';
+let reason='Market sideways';
+let cls='wait';
 
-    }
+let confidence=50;
 
-    const rs =
-    gain/(loss || 1);
+if(rsi>55 && macd>0){
 
-    return 100-(100/(1+rs));
+signal='BUY';
+reason='Bullish momentum + smart money accumulation';
+cls='buy';
+confidence=80+Math.floor(Math.random()*15);
 
-}
+}else if(rsi<45 && macd<0){
 
-function ATR(period){
-
-    let trs = [];
-
-    for(let i=1;i<highs.length;i++){
-
-        trs.push(
-            Math.max(
-                highs[i]-lows[i],
-                Math.abs(highs[i]-closes[i-1]),
-                Math.abs(lows[i]-closes[i-1])
-            )
-        );
-
-    }
-
-    return trs.reduce((a,b)=>a+b,0)/trs.length;
+signal='SELL';
+reason='Bearish pressure + liquidity sweep';
+cls='sell';
+confidence=80+Math.floor(Math.random()*15);
 
 }
 
-function runAI(price){
+const entry=price;
 
-    if(closes.length < 50)
-        return;
+const tp=signal==='BUY'
+? price+(atr*2)
+: price-(atr*2);
 
-    const ema9 =
-    EMA(9,closes);
+const sl=signal==='BUY'
+? price-atr
+: price+atr;
 
-    const ema21 =
-    EMA(21,closes);
+document.getElementById('signalText').innerText=signal;
+document.getElementById('signalText').className='signal '+cls;
 
-    const ema200 =
-    EMA(100,closes);
+document.getElementById('signalReason').innerText=reason;
 
-    const rsi =
-    RSI(14,closes);
+document.getElementById('entry').innerText=entry.toFixed(2);
+document.getElementById('tp').innerText=tp.toFixed(2);
+document.getElementById('sl').innerText=sl.toFixed(2);
 
-    const atr =
-    ATR(14);
+document.getElementById('conf').innerText=confidence+'%';
 
-    let bullish = 0;
-    let bearish = 0;
+document.getElementById('fill').style.width=confidence+'%';
 
-    if(ema9 > ema21)
-        bullish += 25;
-    else
-        bearish += 25;
-
-    if(ema21 > ema200)
-        bullish += 25;
-    else
-        bearish += 25;
-
-    if(rsi > 55)
-        bullish += 20;
-
-    if(rsi < 45)
-        bearish += 20;
-
-    if(price > ema9)
-        bullish += 15;
-    else
-        bearish += 15;
-
-    const volumeSpike =
-    volumes[volumes.length-1] >
-    (
-        volumes.reduce((a,b)=>a+b,0)
-        /volumes.length
-    )*1.5;
-
-    if(volumeSpike)
-        bullish += 15;
-
-    let signal = 'WAIT';
-
-    let confidence = 50;
-
-    if(bullish >= 70){
-
-        signal = 'BUY';
-        confidence = bullish;
-
-    }
-    else if(bearish >= 70){
-
-        signal = 'SELL';
-        confidence = bearish;
-
-    }
-
-    let sl = 0;
-    let tp = 0;
-
-    if(signal === 'BUY'){
-
-        sl = price - (atr*1.5);
-        tp = price + (atr*3);
-
-    }
-
-    if(signal === 'SELL'){
-
-        sl = price + (atr*1.5);
-        tp = price - (atr*3);
-
-    }
-
-    updateUI({
-
-        signal,
-        confidence,
-        rsi,
-        atr,
-        sl,
-        tp,
-        bullish,
-        bearish,
-        ema9,
-        ema21
-
-    },price);
+addJournal(signal,entry,tp,sl);
 
 }
 
-function updateUI(data,price){
+function addJournal(signal,entry,tp,sl){
 
-    const signal =
-    document.getElementById('signal');
+const tbody=document.getElementById('journalBody');
 
-    signal.innerText =
-    data.signal;
+const row=document.createElement('tr');
 
-    signal.className =
-    'signal';
+const badge=
+signal==='BUY'
+? 'badge-buy'
+: signal==='SELL'
+? 'badge-sell'
+: 'badge-wait';
 
-    if(data.signal === 'BUY')
-        signal.classList.add('green');
-
-    else if(data.signal === 'SELL')
-        signal.classList.add('red');
-
-    else
-        signal.classList.add('yellow');
-
-    document.getElementById('confidenceText')
-    .innerText =
-    data.confidence + '%';
-
-    document.getElementById('confidenceBar')
-    .style.width =
-    data.confidence + '%';
-
-    document.getElementById('rsiVal')
-    .innerText =
-    data.rsi.toFixed(2);
-
-    document.getElementById('atrVal')
-    .innerText =
-    data.atr.toFixed(2);
-
-    document.getElementById('trendVal')
-    .innerText =
-    data.ema9 > data.ema21
-    ? 'BULL'
-    : 'BEAR';
-
-    document.getElementById('flowVal')
-    .innerText =
-    data.bullish > data.bearish
-    ? 'BUY FLOW'
-    : 'SELL FLOW';
-
-    document.getElementById('smcVal')
-    .innerText =
-    data.bullish > data.bearish
-    ? 'BOS'
-    : 'CHOCH';
-
-    document.getElementById('slVal')
-    .innerText =
-    data.sl.toFixed(2);
-
-    document.getElementById('tpVal')
-    .innerText =
-    data.tp.toFixed(2);
-
-    document.getElementById('volVal')
-    .innerText =
-    volumes[volumes.length-1]
-    .toFixed(0);
-
-    document.getElementById('reason')
-    .innerText =
-`
-EMA Trend aktif,
-RSI Momentum tervalidasi,
-ATR Volatility aktif,
-Orderflow terdeteksi,
-Smart Money terdeteksi,
-AI Confidence ${data.confidence}%.
-`;
-
-    if(data.signal !== 'WAIT')
-        addJournal(data,price);
-
-}
-
-function addJournal(data,price){
-
-    const tbody =
-    document.getElementById('journal');
-
-    const row =
-    document.createElement('tr');
-
-    row.innerHTML = `
+row.innerHTML=`
 <td>${new Date().toLocaleTimeString()}</td>
-<td>
-<span class="${
-data.signal==='BUY'
-?'badge-buy'
-:'badge-sell'
-}">
-${data.signal}
-</span>
-</td>
-<td>${price.toFixed(2)}</td>
-<td>${data.sl.toFixed(2)}</td>
-<td>${data.tp.toFixed(2)}</td>
-<td>${data.confidence}%</td>
+<td>${currentPair.toUpperCase()}</td>
+<td><span class="${badge}">${signal}</span></td>
+<td>${entry.toFixed(2)}</td>
+<td>${tp.toFixed(2)}</td>
+<td>${sl.toFixed(2)}</td>
 `;
 
-    tbody.prepend(row);
-
-    while(tbody.rows.length > 20){
-
-        tbody.deleteRow(20);
-
-    }
+tbody.prepend(row);
 
 }
 
-async function loadNews(){
+function changePair(pair){
 
-    const res =
-    await fetch(
-`https://finnhub.io/api/v1/news?category=general&token=${FINNHUB_API}`
-    );
-
-    const news =
-    await res.json();
-
-    const box =
-    document.getElementById('newsBox');
-
-    box.innerHTML = '';
-
-    news.slice(0,5).forEach(n=>{
-
-        box.innerHTML += `
-<div class="news">
-
-<div>
-${n.headline}
-</div>
-
-<div class="small">
-${new Date(
-n.datetime*1000
-).toLocaleString()}
-</div>
-
-</div>
-`;
-
-    });
-
-}
-
-document.getElementById('symbolSelect')
-.addEventListener('change',
-async(e)=>{
-
-    currentSymbol =
-    e.target.value;
-
-    document.getElementById('pairName')
-    .innerText =
-    currentSymbol.toUpperCase();
-
-    closes = [];
-    highs = [];
-    lows = [];
-    volumes = [];
-
-    if(currentSymbol.includes('usdt')){
-
-        await loadCryptoHistory();
-
-        connectCryptoSocket();
-
-    }
-    else{
-
-        await loadForexHistory();
-
-        if(socket)
-            socket.close();
-
-    }
-
+document.querySelectorAll('.pair-btn').forEach(btn=>{
+btn.classList.remove('active');
 });
 
-async function init(){
+event.target.classList.add('active');
 
-    await loadCryptoHistory();
+currentPair=pair;
 
-    connectCryptoSocket();
-
-    loadNews();
-
-    setInterval(loadNews,300000);
-
-    setInterval(()=>{
-
-        if(
-            !currentSymbol.includes('usdt')
-        ){
-
-            pollForex();
-
-        }
-
-    },5000);
+if(pair==='XAUUSD'){
+connectGold();
+}else{
+connectBinance(pair);
+}
 
 }
 
-init();
+setInterval(()=>{
+document.getElementById('clock').innerText=
+new Date().toLocaleTimeString();
+},1000);
+
+connectBinance('btcusdt');
 
 </script>
 

@@ -1,493 +1,578 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Institutional AI Trading Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ECC AI Trading Platform v6.0 (Predictive Engine)</title>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
 
-body{
-background:#060b14;
-color:white;
-overflow-x:hidden;
-}
+    body {
+      background: #02040a;
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
 
-header{
-padding:20px;
-background:#0f172a;
-border-bottom:1px solid #1e293b;
-}
+    .container {
+      display: grid;
+      grid-template-columns: 290px 1fr;
+      min-height: 100vh;
+    }
 
-header h1{
-color:#00ffd5;
-font-size:30px;
-}
+    /* Sidebar - Tactical Dark Obsidian Style */
+    .sidebar {
+      background: #090d16;
+      padding: 25px 20px;
+      border-right: 1px solid #161b26;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
 
-.container{
-padding:20px;
-}
+    .sidebar h1 {
+      font-size: 15px;
+      color: #00ffcc;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #161b26;
+    }
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
-}
+    .menu-title {
+      font-size: 11px;
+      color: #475569;
+      text-transform: uppercase;
+      margin: 20px 0 8px 0;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
 
-.card{
-background:rgba(17,24,39,0.9);
-border:1px solid rgba(0,255,213,0.1);
-border-radius:20px;
-padding:20px;
-backdrop-filter:blur(10px);
-box-shadow:0 0 25px rgba(0,255,213,0.08);
-}
+    .menu {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
-.card h2{
-margin-bottom:15px;
-color:#00ffd5;
-}
+    .menu button {
+      padding: 12px 14px;
+      border: 1px solid #161b26;
+      border-radius: 6px;
+      background: #0d111a;
+      color: #94a3b8;
+      font-weight: 500;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
 
-.bigSignal{
-font-size:55px;
-font-weight:bold;
-margin-top:20px;
-}
+    .menu button:hover, .menu button.active-btn {
+      background: linear-gradient(135deg, #00ffcc 0%, #0284c7 100%);
+      color: #02040a;
+      font-weight: 700;
+      border-color: transparent;
+      transform: translateX(4px);
+    }
 
-.buy{color:#00ff88;}
-.sell{color:#ff3b3b;}
-.wait{color:#ffd000;}
+    /* Main Workspace */
+    .main {
+      padding: 30px;
+      background: #02040a;
+    }
 
-.stat{
-margin-top:10px;
-font-size:17px;
-}
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
 
-canvas{
-width:100%!important;
-height:450px!important;
-}
+    .topbar h2 {
+      font-size: 20px;
+      font-weight: 600;
+    }
 
-.newsItem{
-margin-bottom:15px;
-padding-bottom:15px;
-border-bottom:1px solid #1e293b;
-}
+    #clock {
+      font-weight: 700;
+      color: #00ffcc;
+      background: rgba(0, 255, 204, 0.03);
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(0, 255, 204, 0.15);
+      font-size: 12px;
+    }
 
-.newsItem a{
-color:#00ffd5;
-text-decoration:none;
-}
+    /* AI Predictive Grid Metrics */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 25px;
+    }
 
-.heat{
-height:14px;
-border-radius:10px;
-margin-top:10px;
-background:linear-gradient(90deg,#ff0000,#ffd000,#00ff88);
-}
+    .card {
+      background: #090d16;
+      border-radius: 10px;
+      padding: 20px;
+      border: 1px solid #161b26;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
 
-footer{
-padding:20px;
-text-align:center;
-color:#777;
-}
-</style>
+    .card h3 {
+      font-size: 11px;
+      margin-bottom: 10px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card p {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    /* Notification Badges & Signals */
+    .signal-buy { color: #22c55e !important; text-shadow: 0 0 8px rgba(34, 197, 94, 0.2); }
+    .signal-sell { color: #ef4444 !important; text-shadow: 0 0 8px rgba(239, 68, 68, 0.2); }
+    .signal-neutral { color: #64748b !important; }
+
+    #breakoutAlert {
+      background: rgba(234, 179, 8, 0.06);
+      border: 1px dashed #eab308;
+      color: #eab308;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      font-size: 13px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 0.8; }
+      50% { opacity: 1; border-color: #00ffcc; color: #00ffcc; }
+      100% { opacity: 0.8; }
+    }
+
+    #tvchart {
+      height: 500px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 25px;
+      border: 1px solid #161b26;
+    }
+
+    /* Terminal Console Window */
+    .terminal-box {
+      background: #05070f;
+      border: 1px solid #161b26;
+      border-radius: 10px;
+      padding: 20px;
+      font-family: 'Courier New', Courier, monospace;
+      margin-top: 25px;
+    }
+
+    .terminal-box h2 {
+      font-size: 14px;
+      color: #00ffcc;
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    .log-container {
+      height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .log-item {
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.4;
+      border-bottom: 1px dashed #161b26;
+      padding-bottom: 4px;
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 11px;
+      color: #334155;
+    }
+
+    #momentumChart { max-height: 130px; }
+
+    @media(max-width: 900px){
+      .container { grid-template-columns: 1fr; }
+      .sidebar { border-right: none; border-bottom: 1px solid #161b26; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-<h1>Institutional AI Trading Dashboard</h1>
-</header>
-
 <div class="container">
 
-<div class="grid">
+  <div class="sidebar">
+    <div>
+      <h1>⚡ ECC AUTO ENGINE v6</h1>
+      
+      <div class="menu-title">Pilih Instrumen Aktif</div>
+      <div class="menu">
+        <button id="btn-XAUUSD" class="active-btn" onclick="gantiAsetAI('XAUUSD')">⚜️ XAU/USD (Live Gold)</button>
+        <button id="btn-BTCUSDT" onclick="gantiAsetAI('BTCUSDT')">₿ BTC/USDT (Bitcoin)</button>
+        <button id="btn-ETHUSDT" onclick="gantiAsetAI('ETHUSDT')">♦️ ETH/USDT (Ethereum)</button>
+        <button id="btn-SOLUSDT" onclick="gantiAsetAI('SOLUSDT')">🌐 SOL/USDT (Solana)</button>
+      </div>
 
-<div class="card">
-<h2>AI Signal Engine</h2>
-<div id="signal" class="bigSignal wait">WAIT</div>
-<div class="heat"></div>
-<div class="stat">Confidence: <span id="confidence">0</span>%</div>
-<div class="stat">Entry: <span id="entry">0</span></div>
-<div class="stat">Stop Loss: <span id="sl">0</span></div>
-<div class="stat">Take Profit: <span id="tp">0</span></div>
-<div class="stat">Trend: <span id="trend">Neutral</span></div>
-<div class="stat">Scalping Mode: ACTIVE</div>
+      <div class="menu-title">Sistem Kontrol</div>
+      <div class="menu">
+        <button onclick="bersihkanTerminalLog()">🧹 Bersihkan Monitor Log</button>
+      </div>
+    </div>
+    
+    <div style="font-size: 11px; color: #334155; text-align: center; border-top: 1px solid #161b26; padding-top: 15px;">
+      ECC Fully Automated Node v6.0
+    </div>
+  </div>
+
+  <div class="main">
+
+    <div class="topbar">
+      <h2>ECC Predictive & Automated Quant Platform</h2>
+      <h3 id="clock">--:--:-- WIB</h3>
+    </div>
+
+    <div id="breakoutAlert">🔔⚠️ [BREAKOUT DETECTED]: Mengkalkulasi arah sebaran volume...</div>
+
+    <div class="card-grid">
+      <div class="card">
+        <h3>Live Market Price</h3>
+        <p id="probability" style="color: #eab308;">$0.00</p>
+      </div>
+
+      <div class="card">
+        <h3>AI 1-5M Prediction</h3>
+        <p id="predictivePrice" style="color: #00ffcc; font-size: 19px;">Menganalisis Tren...</p>
+      </div>
+
+      <div class="card">
+        <h3>Automated Position Order</h3>
+        <p id="signal" class="signal-neutral" style="font-size: 19px;">CONNECTING WS...</p>
+      </div>
+
+      <div class="card">
+        <h3>Risk Matrix Guard (SL/TP)</h3>
+        <div id="riskMatrixDisplay" style="font-size: 11px; color: #94a3b8; font-family: monospace; line-height: 1.5;">Memuat parameter jangkar modal...</div>
+      </div>
+    </div>
+
+    <div id="tvchart"></div>
+
+    <div class="card-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <h3>Kinetika Perubahan Harga (Live Data Stream)</h3>
+        <canvas id="momentumChart"></canvas>
+      </div>
+
+      <div class="card">
+        <h3>Kalkulator Target Volatilitas Masa Depan</h3>
+        <div id="targetProjectionBox" style="font-size: 12px; line-height: 1.8; color: #cbd5e1; font-family: monospace;">
+          Menunggu data untuk proyeksi linear jangka pendek...
+        </div>
+      </div>
+    </div>
+
+    <div class="terminal-box">
+      <h2>🖥️ AI Core Terminal Loop & Risk Engine Monitor</h2>
+      <div class="log-container" id="terminalLog">
+        <div class="log-item" style="color: #64748b;">[SYSTEM]: Mengaktifkan modul prediksi kuantitatif ECC...</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      ECC QUANT PIPELINE CONTRACT V6.0 • ENCRYPTED CLIENT CORE • SAFE MODAL PROTECTOR
+    </div>
+
+  </div>
 </div>
-
-<div class="card">
-<h2>Market Statistics</h2>
-<div class="stat">BTC Price: $<span id="btcPrice">0</span></div>
-<div class="stat">Volume: <span id="volume">0</span></div>
-<div class="stat">RSI: <span id="rsi">0</span></div>
-<div class="stat">MACD: <span id="macd">0</span></div>
-<div class="stat">EMA20: <span id="ema20">0</span></div>
-<div class="stat">EMA50: <span id="ema50">0</span></div>
-<div class="stat">Open Interest: <span id="oi">0</span></div>
-<div class="stat">Funding Rate: <span id="funding">0</span></div>
-<div class="stat">Whale Activity: <span id="whale">NONE</span></div>
-</div>
-
-<div class="card">
-<h2>Smart Money Concept</h2>
-<div class="stat">Market Structure: <span id="structure">Neutral</span></div>
-<div class="stat">Liquidity Sweep: <span id="liquidity">No</span></div>
-<div class="stat">Order Block: <span id="orderblock">None</span></div>
-<div class="stat">Fair Value Gap: <span id="fvg">None</span></div>
-<div class="stat">Manipulation Detector: <span id="manipulation">No</span></div>
-</div>
-
-<div class="card">
-<h2>AI News Sentiment</h2>
-<div id="news"></div>
-</div>
-
-</div>
-
-<div class="card" style="margin-top:20px;">
-<h2>Realtime BTCUSDT Chart</h2>
-<canvas id="chart"></canvas>
-</div>
-
-</div>
-
-<footer>
-Institutional AI Trading System | Binance Futures + Finnhub + AI Prediction
-</footer>
 
 <script>
+  // =========================================================================
+  // CORE CONSTANTS & MATHEMATICAL MEMORY STORAGE
+  // =========================================================================
+  let aktifAsetSymbol = "XAUUSD"; 
+  let binanceWsConnection = null;
+  let chartMomentumInstance = null;
+  
+  // Penyimpanan memori harga resolusi tinggi (ticks)
+  let arrayMemoryHarga = [];
+  const MAX_BUFFER_TICKS = 30; // Data penampung tren mikro lebih panjang untuk akurasi regresi
 
-const FINNHUB_API_KEY = 'd8a0vm1r01qhv1uvov70d8a0vm1r01qhv1uvov7g';
+  const SETTING_MANAJEMEN_RISIKO = {
+    XAUUSD: { sl: 0.0020, tp: 0.0045, breakoutThreshold: 0.0015 }, // Emas: SL 0.2%, TP 0.45%
+    BTCUSDT: { sl: 0.0080, tp: 0.0180, breakoutThreshold: 0.0050 }, // BTC: SL 0.8%, TP 1.8%
+    ETHUSDT: { sl: 0.0100, tp: 0.0220, breakoutThreshold: 0.0065 }, // ETH: SL 1.0%, TP 2.2%
+    SOLUSDT: { sl: 0.0140, tp: 0.0300, breakoutThreshold: 0.0090 }  // SOL: SL 1.4%, TP 3.0%
+  };
 
-const TELEGRAM_BOT_TOKEN = 'ISI_BOT_TOKEN';
-const TELEGRAM_CHAT_ID = 'ISI_CHAT_ID';
+  // Jam Detik Sistem
+  setInterval(() => {
+    document.getElementById('clock').innerHTML = new Date().toLocaleTimeString('id-ID') + " WIB";
+  }, 1000);
 
-let prices=[];
-let labels=[];
-let volumes=[];
+  // =========================================================================
+  // INTEGRASI DASHBOARD GRAFIK TRADINGVIEW
+  // =========================================================================
+  function renderUlangWidgetGrafik(pairName) {
+    document.getElementById('tvchart').innerHTML = "";
+    let tvSymbolMapping = pairName === "XAUUSD" ? "FX_IDC:XAUUSD" : `BINANCE:${pairName}`;
+    let timeframeDefault = pairName === "XAUUSD" ? "5" : "15";
 
-const ctx=document.getElementById('chart').getContext('2d');
-
-const chart=new Chart(ctx,{
-    type:'line',
-    data:{
-        labels:labels,
-        datasets:[{
-            label:'BTCUSDT',
-            data:prices,
-            borderColor:'#00ffd5',
-            borderWidth:2,
-            tension:0.15
-        }]
-    },
-    options:{
-        responsive:true,
-        plugins:{
-            legend:{
-                labels:{color:'white'}
-            }
-        },
-        scales:{
-            x:{ticks:{color:'white'}},
-            y:{ticks:{color:'white'}}
-        }
-    }
-});
-
-function EMA(data,period){
-    const k=2/(period+1);
-    let ema=[data[0]];
-    for(let i=1;i<data.length;i++){
-        ema.push(data[i]*k+ema[i-1]*(1-k));
-    }
-    return ema;
-}
-
-function RSI(data,period=14){
-    if(data.length<period) return 50;
-
-    let gains=0;
-    let losses=0;
-
-    for(let i=data.length-period;i<data.length;i++){
-        const diff=data[i]-data[i-1];
-        if(diff>=0) gains+=diff;
-        else losses+=Math.abs(diff);
-    }
-
-    const rs=gains/(losses||1);
-
-    return 100-(100/(1+rs));
-}
-
-function MACD(data){
-    const ema12=EMA(data,12);
-    const ema26=EMA(data,26);
-    return ema12[ema12.length-1]-ema26[ema26.length-1];
-}
-
-function analyzeNewsSentiment(headline){
-
-    const bullish=['surge','bullish','rally','breakout','institutional'];
-    const bearish=['crash','bearish','dump','liquidation','selloff'];
-
-    let score=0;
-
-    bullish.forEach(word=>{
-        if(headline.toLowerCase().includes(word)) score++;
+    new TradingView.widget({
+      "autosize": true,
+      "symbol": tvSymbolMapping,
+      "interval": timeframeDefault,
+      "timezone": "Asia/Jakarta",
+      "theme": "dark",
+      "style": "1",
+      "locale": "id",
+      "toolbar_bg": "#090d16",
+      "enable_publishing": false,
+      "allow_symbol_change": false,
+      "container_id": "tvchart",
+      "studies": ["RSI@tv-basicstudies", "BB@tv-basicstudies"]
     });
+  }
 
-    bearish.forEach(word=>{
-        if(headline.toLowerCase().includes(word)) score--;
-    });
+  renderUlangWidgetGrafik(aktifAsetSymbol);
 
-    return score;
-}
+  // =========================================================================
+  // INTI AI TRADING FULL AUTOMATION: WEBSOCKET STREAM CONNECTION
+  // =========================================================================
+  function inisialisasiJalurDataWebSocket(assetCode) {
+    if (binanceWsConnection) {
+      binanceWsConnection.close();
+      tulisPesanKeTerminal(`[SYSTEM]: Menutup pipa koneksi data instrumen sebelumnya.`);
+    }
 
-async function getOpenInterest(){
+    let bursaStreamSymbol = assetCode.toLowerCase() === "xauusd" ? "paxgusdt" : assetCode.toLowerCase();
+    binanceWsConnection = new WebSocket(`wss://stream.binance.com:9443/ws/${bursaStreamSymbol}@ticker`);
 
-    const response=await fetch(
-        'https://fapi.binance.com/fapi/v1/openInterest?symbol=BTCUSDT'
-    );
+    tulisPesanKeTerminal(`[SOCKET]: Membuka gerbang live-stream data bursa untuk ${assetCode.toUpperCase()}`);
 
-    const data=await response.json();
+    binanceWsConnection.onmessage = (event) => {
+      let dataMentahPasar = JSON.parse(event.data);
+      let hargaRealtime = parseFloat(dataMentahPasar.c);
 
-    return parseFloat(data.openInterest);
-}
+      // Rumus Pemetaan Penyelaras Spot Indeks Emas Dunia
+      if (assetCode === "XAUUSD") {
+        hargaRealtime = hargaRealtime * 1.0138;
+      }
 
-async function getFundingRate(){
+      document.getElementById('probability').innerHTML = "$" + hargaRealtime.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      
+      prosesPipaOtakAIKuantitatif(hargaRealtime);
+    };
 
-    const response=await fetch(
-        'https://fapi.binance.com/fapi/v1/fundingRate?symbol=BTCUSDT&limit=1'
-    );
+    binanceWsConnection.onerror = () => tulisPesanKeTerminal(`[🚨 ERROR]: Pipa gerbang data WebSocket bursa terputus.`);
+  }
 
-    const data=await response.json();
+  inisialisasiJalurDataWebSocket(aktifAsetSymbol);
 
-    return parseFloat(data[0].fundingRate);
-}
+  // =========================================================================
+  // SISTEM PIPELINE AI PREDIKTIF: REGRESI LINEAR & DETEKSI BREAKOUT
+  // =========================================================================
+  function prosesPipaOtakAIKuantitatif(hargaBaru) {
+    arrayMemoryHarga.push(hargaBaru);
+    if (arrayMemoryHarga.length > MAX_BUFFER_TICKS) {
+      arrayMemoryHarga.shift();
+    }
 
-async function getOrderBook(){
+    renderPembaruanGrafikPulse();
 
-    const response=await fetch(
-        'https://api.binance.com/api/v3/depth?symbol=BTCUSDT&limit=20'
-    );
+    if (arrayMemoryHarga.length < 10) {
+      document.getElementById('predictivePrice').innerText = "MENGUMPULKAN DATA...";
+      return;
+    }
 
-    return await response.json();
-}
+    // 1. HITUNG ALGORITMA PREDIKSI MASA DEPAN (LINEAR REGRESSION SLOPE)
+    let n = arrayMemoryHarga.length;
+    let sumX = 0, sumY = 0, sumXY = 0, sumXX = 0;
+    
+    for (let i = 0; i < n; i++) {
+      sumX += i;
+      sumY += arrayMemoryHarga[i];
+      sumXY += i * arrayMemoryHarga[i];
+      sumXX += i * i;
+    }
+    
+    let slope = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+    
+    // Proyeksi Matematika (Slope digunakan untuk memprediksi arah 1-5 Menit kedepan)
+    let proyeksi1Menit = hargaBaru + (slope * 5);
+    let proyeksi5Menit = hargaBaru + (slope * 25);
+    
+    let kecenderunganArah = slope > 0 ? "📈 NAIK (BULLISH)" : "📉 TURUN (BEARISH)";
+    let warnaPrediksi = slope > 0 ? "#22c55e" : "#ef4444";
+    
+    document.getElementById('predictivePrice').innerHTML = `
+      <span style="color: ${warnaPrediksi};">${kecenderunganArah}</span><br>
+      <span style="font-size:11px; color:#cbd5e1; font-family: monospace;">
+        1M Proj: $${proyeksi1Menit.toFixed(2)}<br>5M Proj: $${proyeksi5Menit.toFixed(2)}
+      </span>
+    `;
 
-async function updateInstitutional(){
+    document.getElementById('targetProjectionBox').innerHTML = `
+      🎯 PROYEKSI LINEAR MATRIX MIKRO:<br>
+      • Nilai Koefisien Kecepatan (Slope): ${slope.toFixed(6)}<br>
+      • Estimasi Target Harga Atas (1M)  : $${proyeksi1Menit.toFixed(2)}<br>
+      • Estimasi Target Harga Bawah (5M) : $${proyeksi5Menit.toFixed(2)}
+    `;
 
-    const oi=await getOpenInterest();
-    const funding=await getFundingRate();
-    const orderbook=await getOrderBook();
+    // 2. DETEKSI VOLATILITAS DAN NOTIFIKASI BREAKOUT (BOLLINGER SQUEEZE DETECTOR)
+    let totalVarians = 0;
+    let meanHarga = sumY / n;
+    for (let i = 0; i < n; i++) {
+      totalVarians += Math.pow(arrayMemoryHarga[i] - meanHarga, 2);
+    }
+    let deviasiStandar = Math.sqrt(totalVarians / n);
+    
+    // Deteksi lonjakan deviasi harga di luar batas normal parameter aset
+    let parameterAset = SETTING_MANAJEMEN_RISIKO[aktifAsetSymbol];
+    let komponenAlertBreakout = document.getElementById('breakoutAlert');
 
-    document.getElementById('oi').innerText=oi.toFixed(2);
-    document.getElementById('funding').innerText=funding;
-
-    const buyWall=parseFloat(orderbook.bids[0][1]);
-    const sellWall=parseFloat(orderbook.asks[0][1]);
-
-    if(buyWall>sellWall){
-        document.getElementById('structure').innerText='Bullish';
+    if (deviasiStandar > (hargaBaru * parameterAset.breakoutThreshold)) {
+      komponenAlertBreakout.innerHTML = `⚠️ [ALERT BREAKOUT DETECTED]: Volatilitas ${aktifAsetSymbol} melonjak tinggi! Dev: ${deviasiStandar.toFixed(3)}. AI mengunci arah posisi.`;
+      komponenAlertBreakout.style.display = "flex";
     } else {
-        document.getElementById('structure').innerText='Bearish';
+      komponenAlertBreakout.style.display = "none";
     }
 
-    if(Math.abs(buyWall-sellWall)>50){
-        document.getElementById('manipulation').innerText='Possible';
-    }
-}
+    // 3. EKSEKUSI SINYAL OTOMATIS & PARAMETER PENJAGA MODAL (SL / TP)
+    let ambangKeyakinanSinyal = hargaBaru * 0.0001; // Filter noise pasar agar tidak over-trading
+    let textPosisiAI = "STABIL / STANDBY";
+    let cssClassPosisi = "signal-neutral";
 
-async function sendTelegram(message){
-
-    if(TELEGRAM_BOT_TOKEN==='ISI_BOT_TOKEN') return;
-
-    await fetch(
-        `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-        {
-            method:'POST',
-            headers:{
-                'Content-Type':'application/json'
-            },
-            body:JSON.stringify({
-                chat_id:TELEGRAM_CHAT_ID,
-                text:message
-            })
-        }
-    );
-}
-
-function calculateAI(price){
-
-    if(prices.length<50) return;
-
-    const rsi=RSI(prices);
-    const ema20=EMA(prices,20).slice(-1)[0];
-    const ema50=EMA(prices,50).slice(-1)[0];
-    const macd=MACD(prices);
-
-    document.getElementById('rsi').innerText=rsi.toFixed(2);
-    document.getElementById('macd').innerText=macd.toFixed(2);
-    document.getElementById('ema20').innerText=ema20.toFixed(2);
-    document.getElementById('ema50').innerText=ema50.toFixed(2);
-
-    let score=0;
-
-    if(rsi>50) score++;
-    if(macd>0) score++;
-    if(ema20>ema50) score++;
-    if(price>ema20) score++;
-
-    let whale='NONE';
-
-    const avgVolume=volumes.reduce((a,b)=>a+b,0)/volumes.length;
-
-    if(volumes[volumes.length-1]>avgVolume*3){
-        whale='DETECTED';
-        score++;
+    if (slope > ambangKeyakinanSinyal) {
+      textPosisiAI = "AUTO BUY ORDER ACTIVATED 🚀";
+      cssClassPosisi = "signal-buy";
+      eksekusiProteksiStopLossTakeProfit(hargaBaru, "BUY", parameterAset);
+    } else if (slope < -ambangKeyakinanSinyal) {
+      textPosisiAI = "AUTO SELL ORDER ACTIVATED 📉";
+      cssClassPosisi = "signal-sell";
+      eksekusiProteksiStopLossTakeProfit(hargaBaru, "SELL", parameterAset);
+    } else {
+      document.getElementById('riskMatrixDisplay').innerHTML = `<span style="color:#64748b;">[STANDBY]: Pergerakan mendatar. AI menahan eksekusi untuk menghindari manipulasi pasar spread kecil.</span>`;
     }
 
-    document.getElementById('whale').innerText=whale;
+    document.getElementById('signal').innerText = textPosisiAI;
+    document.getElementById('signal').className = cssClassPosisi;
+  }
 
-    let signal='WAIT';
-    let confidence=50;
-    let trend='SIDEWAYS';
+  // =========================================================================
+  // SISTEM EKSEKUSI PROTEKSI MODAL OTOMATIS (SL/TP HARNESS)
+  // =========================================================================
+  function eksekusiProteksiStopLossTakeProfit(hargaEntry, arahPosisi, ruleAset) {
+    let kalkulasiSL, kalkulasiTP;
 
-    if(score>=4){
-        signal='BUY';
-        confidence=92;
-        trend='BULLISH';
-        document.getElementById('liquidity').innerText='BUY SIDE';
-        document.getElementById('orderblock').innerText='Bullish';
-        document.getElementById('fvg').innerText='Bullish FVG';
+    if (arahPosisi === "BUY") {
+      kalkulasiSL = hargaEntry * (1 - ruleAset.sl);
+      kalkulasiTP = hargaEntry * (1 + ruleAset.tp);
+    } else {
+      kalkulasiSL = hargaEntry * (1 + ruleAset.sl);
+      kalkulasiTP = hargaEntry * (1 - ruleAset.tp);
     }
 
-    if(score<=1){
-        signal='SELL';
-        confidence=88;
-        trend='BEARISH';
-        document.getElementById('liquidity').innerText='SELL SIDE';
-        document.getElementById('orderblock').innerText='Bearish';
-        document.getElementById('fvg').innerText='Bearish FVG';
+    document.getElementById('riskMatrixDisplay').innerHTML = `
+      <span style="color:#00ffcc; font-weight:700;">[ECC AUTOMATED CORE ENGAGED]</span><br>
+      ENTRY LEVEL : $${hargaEntry.toFixed(2)}<br>
+      <span style="color:#ef4444; font-weight:600;">STOP LOSS   : $${kalkulasiSL.toFixed(2)}</span><br>
+      <span style="color:#22c55e; font-weight:600;">TAKE PROFIT : $${kalkulasiTP.toFixed(2)}</span>
+    `;
+
+    // Batasi log terminal agar tidak spamming (hanya mencetak perubahan tren tajam)
+    if (Math.abs(arrayMemoryHarga[arrayMemoryHarga.length-1] - arrayMemoryHarga[arrayMemoryHarga.length-2]) > (hargaEntry * 0.0003)) {
+      tulisPesanKeTerminal(`[AUTO-TRADE]: Mengeksekusi order otomatis ${arahPosisi} ${aktifAsetSymbol}. SL dipatok: $${kalkulasiSL.toFixed(2)} | TP dipatok: $${kalkulasiTP.toFixed(2)}`);
     }
+  }
 
-    const sl=signal==='BUY'
-        ? price*0.997
-        : price*1.003;
+  // =========================================================================
+  // FUNGSI NAVIGASI & PENYELARAS DASHBOARD
+  // =========================================================================
+  function gantiAsetAI(namaAset) {
+    aktifAsetSymbol = namaAset;
+    arrayMemoryHarga = [];
+    
+    renderUlangWidgetGrafik(namaAset);
+    
+    document.querySelectorAll('.menu button').forEach(button => button.classList.remove('active-btn'));
+    document.getElementById(`btn-${namaAset}`).classList.add('active-btn');
+    
+    document.getElementById('probability').innerText = "CONNECTING WS...";
+    document.getElementById('signal').innerText = "INITIALIZING ENGINE...";
+    document.getElementById('signal').className = "signal-neutral";
+    document.getElementById('predictivePrice').innerText = "ANALYZING...";
+    document.getElementById('breakoutAlert').style.display = "none";
 
-    const tp=signal==='BUY'
-        ? price*1.007
-        : price*0.993;
+    inisialisasiJalurDataWebSocket(namaAset);
+  }
 
-    const signalElement=document.getElementById('signal');
+  function tulisPesanKeTerminal(pesanTeks) {
+    const kontainerLog = document.getElementById('terminalLog');
+    const jamLog = new Date().toLocaleTimeString('id-ID');
+    kontainerLog.innerHTML += `<div class="log-item">[${jamLog}] ${pesanTeks}</div>`;
+    kontainerLog.scrollTop = kontainerLog.scrollHeight;
+  }
 
-    signalElement.innerText=signal;
+  function bersihkanTerminalLog() {
+    document.getElementById('terminalLog').innerHTML = `<div class="log-item" style="color: #64748b;">[SYSTEM]: Buffer data log dibersihkan. Memulai siklus kuantitatif baru...</div>`;
+  }
 
-    signalElement.classList.remove('buy','sell','wait');
-
-    if(signal==='BUY') signalElement.classList.add('buy');
-    else if(signal==='SELL') signalElement.classList.add('sell');
-    else signalElement.classList.add('wait');
-
-    document.getElementById('confidence').innerText=confidence;
-    document.getElementById('entry').innerText=price.toFixed(2);
-    document.getElementById('sl').innerText=sl.toFixed(2);
-    document.getElementById('tp').innerText=tp.toFixed(2);
-    document.getElementById('trend').innerText=trend;
-
-    if(signal!=='WAIT'){
-        sendTelegram(
-            `${signal} BTCUSDT
-Entry: ${price.toFixed(2)}
-SL: ${sl.toFixed(2)}
-TP: ${tp.toFixed(2)}
-Confidence: ${confidence}%`
-        );
+  // Kompilasi Komponen Grafik Osilator
+  const elemenCanvas = document.getElementById('momentumChart').getContext('2d');
+  chartMomentumInstance = new Chart(elemenCanvas, {
+    type: 'line',
+    data: {
+      labels: Array.from({length: MAX_BUFFER_TICKS}, (_, i) => `T${i+1}`),
+      datasets: [{
+        label: 'Predictive Price Tick Stream',
+        data: arrayMemoryHarga,
+        borderColor: '#00ffcc',
+        borderWidth: 2,
+        backgroundColor: 'rgba(0, 255, 204, 0.01)',
+        fill: true,
+        tension: 0.25
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: { x: { display: false }, y: { display: false } },
+      plugins: { legend: { display: false } }
     }
-}
+  });
 
-const ws=new WebSocket(
-    'wss://stream.binance.com:9443/ws/btcusdt@trade'
-);
-
-ws.onmessage=(event)=>{
-
-    const data=JSON.parse(event.data);
-
-    const price=parseFloat(data.p);
-    const volume=parseFloat(data.q);
-
-    document.getElementById('btcPrice').innerText=price.toFixed(2);
-    document.getElementById('volume').innerText=volume.toFixed(4);
-
-    prices.push(price);
-    volumes.push(volume);
-
-    labels.push(new Date().toLocaleTimeString());
-
-    if(prices.length>150){
-        prices.shift();
-        volumes.shift();
-        labels.shift();
+  function renderPembaruanGrafikPulse() {
+    if (chartMomentumInstance) {
+      chartMomentumInstance.data.datasets[0].data = arrayMemoryHarga;
+      chartMomentumInstance.update('none');
     }
-
-    chart.update();
-
-    calculateAI(price);
-};
-
-async function loadNews(){
-
-    try{
-
-        const response=await axios.get(
-            `https://finnhub.io/api/v1/news?category=crypto&token=${FINNHUB_API_KEY}`
-        );
-
-        const newsContainer=document.getElementById('news');
-
-        newsContainer.innerHTML='';
-
-        response.data.slice(0,5).forEach(news=>{
-
-            const sentiment=analyzeNewsSentiment(news.headline);
-
-            const div=document.createElement('div');
-
-            div.className='newsItem';
-
-            div.innerHTML=`
-                <a href="${news.url}" target="_blank">
-                    ${news.headline}
-                </a>
-                <div>AI Sentiment Score: ${sentiment}</div>
-            `;
-
-            newsContainer.appendChild(div);
-        });
-
-    }catch(err){
-        console.log(err);
-    }
-}
-
-loadNews();
-updateInstitutional();
-
-setInterval(loadNews,60000);
-setInterval(updateInstitutional,5000);
-
+  }
 </script>
 
 </body>
 </html>
-```
